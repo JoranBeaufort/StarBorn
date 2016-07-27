@@ -83,13 +83,15 @@ class RegistrationController extends Controller
                 $user->setUid($uid);
                 $user->setRegistrationDateTime($dateTime);
                 
-                $role=$em->getRepository(Role::class)->findOneBy('roleType', 'ROLE_USER');                
-                $user->addRole($role);
-
                 // 4) save the User!
                 $em->persist($user);
                 $em->flush();
                 
+                $role=$em->getRepository(Role::class)->findOneBy('roleType', 'ROLE_USER');   
+                $user=$em->getRepository(User::class)->findOneBy('confirmationToken', $confirmationToken);                
+                $user->addRole($role);
+                $em->persist($user);
+                $em->flush();
 
 
                 $url = $this->generateUrl('neo4j_register_check_email');
