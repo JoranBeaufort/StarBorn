@@ -62,7 +62,7 @@ class AdminController extends Controller
             $statement = $connection->prepare($q);
             $statement->execute();
 
-            $message = 'Game Field Raster Reset Success!';
+            $message = 'Game Field Raster Reset Success! If you changed raster cell size, remember to change polygon display in map.html.twig!';
             return $this->render('AppBundle:Admin:admin.html.twig',array('user' => $user, 'message' => $message));
         } else {
             $user=$em->getRepository(User::class)->findOneBy('usernameCanonical', $this->getUser()->getUsernameCanonical());
