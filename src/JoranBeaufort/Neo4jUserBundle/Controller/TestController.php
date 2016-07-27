@@ -218,6 +218,15 @@ class TestController extends Controller
         //     echo '<p style="color:red">NOT OK</p><br>';
         //     echo '<p style="color:red">Properties were deleted!</p><br>';
         // }
+        // 
+        // echo 'Loading user with name: test <br>';        
+        // $user=$em->getRepository(User::class)->findOneBy('username','admin');
+        // if($user){
+        //     echo '<p style="color:green">OK</p><br>';
+        // }else{
+        //     echo '<p style="color:red">NOT OK</p><br>';
+        //     echo '<p style="color:red">Properties were deleted!</p><br>';
+        // }
 
         
         $user = new User();
