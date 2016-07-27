@@ -1,0 +1,50 @@
+/* YOUR CUSTOM STYLES */
+
+
+html {
+    background:  url(../img/overlays/07.png) repeat, url(../img/space-1228967_960_720.jpg) center / cover no-repeat ;
+    min-height: 100%;
+    min-height: 100vh;
+    }
+    
+body {
+    background:none;
+    margin-top: 100px;
+    }
+
+
+label {
+    color:#cccccc !important;
+}
+
+.full-bg-img{
+    padding-top:60px;
+    overflow: hidden;
+}
+
+.flex-center {
+    color: #fff;
+}
+
+.navbar {
+    background-color: transparent;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+}
+.scrolling-navbar {
+        -webkit-transition: background .5s ease-in-out, padding .5s ease-in-out;
+        -moz-transition: background .5s ease-in-out, padding .5s ease-in-out;
+        transition: background .5s ease-in-out, padding .5s ease-in-out;
+}
+
+.top-nav-collapse {
+    background-color: #000;
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar {
+        background-color: #1C2331;
+    }
+}

@@ -1,0 +1,13 @@
+    body {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        background: none;
+    }
+
+    .full {
+      background: url(http://www.starborn.ch/img/space-1323321.jpg) no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }

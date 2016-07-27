@@ -1,0 +1,52 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+
+    encoders:
+        JoranBeaufort\Neo4jUserBundle\Entity\User: bcrypt
+    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        neo4j_userbundle:
+            id: neo4j.user_provider
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            anonymous: ~
+            pattern:    ^/
+            http_basic: ~
+            provider: neo4j_userbundle
+            form_login:
+                login_path: /login
+                check_path: /login_check
+                success_handler: login_success_handler
+                csrf_token_generator: security.csrf.token_manager
+                # if you are using Symfony < 2.8, use the following config instead:
+                # csrf_provider: form.csrf_provider
+            logout:
+                path:   /logout
+            remember_me:
+                secret:   '%secret%'
+                # 1 week in seconds
+                lifetime: 604800 
+                path:     /
+
+            # activate different ways to authenticate
+
+            # http_basic: ~
+            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: ~
+            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/tile, role: ROLE_USER }
+        - { path: ^/capture, role: ROLE_USER }
+        - { path: ^/map, role: ROLE_USER }
+        - { path: ^/admin/, role: ROLE_ADMIN }

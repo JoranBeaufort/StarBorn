@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+{% block html %}
+<html class="full" lang="en">
+{% block head %} 
+  <head>
+    <title>Star Born - {% block title %}Home{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Carousel Template for Bootstrap</title>
+    
+    {% block css %}
+    <!-- Bootstrap css file-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- Font awesome css file-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Custom styles for this template -->
+    
+    <!-- Navigation css file -->
+    <link rel="stylesheet" href="{{ asset('css/the-big-picture.css') }}">
+
+    {% endblock css %}
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- TODO <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- TODO <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+  </head>
+{% endblock head %} 
+<!-- NAVBAR
+================================================== -->
+{% block body %}
+  <body>
+  
+  {% block navigation %}
+      <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Start Bootstrap</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    <li><a href="#"><i class="fa fa-tachometer"></i>&nbsp;&nbsp;Dashboard</a></li>
+                    <li><a href="#"><i class="fa fa-map"></i>&nbsp;&nbsp;My Ship</a></li>    
+                    <li><a href="#"><i class="fa fa-map-signs"></i>&nbsp;&nbsp;My Tiles</a></li> 
+                    <li><a href="{{ path('neo4j_profile', {'slug': app.user.username}) }}"><i class="fa fa-user"></i>&nbsp;&nbsp;Profile</a></li>  
+                    <li><a href="{{ path('neo4j_logout') }}"><i class="fa fa-sign-out"></i>Logout</a></li>
+                    {% else %}
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="{{ path('neo4j_login') }}"><i class="fa fa-sign-in"></i>Login</a></li>
+                    <li><a href="{{ path('neo4j_register') }}" class="registration-btn">Sign up</a></li>
+                    {% endif %}                    
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+    <!-- end navbar -->
+   {% endblock navigation %}
+   
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    <div class="container">
+
+        {% block content %}
+        {% endblock content %}
+        
+    </div><!-- /.container -->      
+        {% block footer %}
+        {% endblock footer %}
+        
+
+    
+ {% block javascript %}
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+        <script
+			  src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line!
+    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug 
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+ 
+ {% endblock javascript %}   
+  </body>
+{% endblock body%}
+</html>
+{% endblock html %}

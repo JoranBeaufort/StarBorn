@@ -1,0 +1,19 @@
+{% extends "form_div_layout.html.twig" %}
+
+{% block radio_widget %}
+    {% spaceless %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        <label  class="{{ attr.class}}" for="{{ id }}" class=" card text-xs-center">
+                <span style="font-size:100px"><i class="fa {{ attr.icon }}"></i></span>
+                <div class="card-block">                     
+                    <h2 class="card-title">{{ label|trans({}, translation_domain) }}</h2>
+                    <p class="card-text">{{ attr.text }}</p> 
+                </div>
+        </label>
+        </div>
+{% endspaceless %}
+{% endblock radio_widget %}

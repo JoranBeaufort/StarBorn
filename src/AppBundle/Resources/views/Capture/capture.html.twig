@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Capture{% endblock %} 
+{% block css %}
+    {{ parent() }}
+    <!-- capture interface css -->
+    <link href="{{ asset('css/captureinterface.css') }}" rel="stylesheet"/>
+
+{% endblock css %}
+{% block content %}
+        <!--Mask-->
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12"> 
+                    <div class="card text-xs-center">                
+                        <h3 class="card-header primary-color white-text">Dieses Gebiet Einnehmen</h3>
+                        <div class="card-block">
+                            <div class="alert alert-info" role="alert">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <i class="fa fa-2x fa-info-circle"></i>
+                                    </div>
+                                    <div class="col-md-10">
+                                        Übermittle was in diesem Gebiet für Landoberflächen vorkommen, um es für dein Team einzunehmen!
+                                    </div>
+                                </div>
+                            </div>
+                            {% form_theme form 'AppBundle:Capture:Form/fields.html.twig' %}        
+                            {{ form_start(form, {'method': 'post', 'action': path('capture')}) }}
+                            <div class="row">
+                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                <input type="hidden" name="tlat" value="{{ tLat }}">
+                                <input type="hidden" name="tlng" value="{{ tLng }}">
+                                <div class="capture-select">
+                                    {% for child in form.landcover %}
+                                        {{ form_widget(child) }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-xs-12">                            
+                                <button style="height:100px; margin-bottom:20px;"  class="btn-danger-outline waves-effect" type="submit"><i class="fa fa-3x fa-crosshairs" aria-hidden="true"></i><h3><b>Einnehmen!</b></h3></button>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                 </div>
+             </div>
+         </div>
+     </div>     
+{% endblock content %}
+

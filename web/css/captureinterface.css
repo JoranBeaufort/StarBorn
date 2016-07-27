@@ -1,0 +1,29 @@
+.capture-select input[type="checkbox"] {
+    display:none;
+}
+
+.capture-select label {
+    display:inline-block;
+    background-color:#fff;
+    color: #000;
+    padding:10px;
+    font-family:Arial;
+    font-size:16px;
+}
+
+.capture-select label h4{
+    color: #000;
+
+}
+
+.capture-select label p{
+    color: #000;
+}
+
+.capture-select input[type="checkbox"]:checked  + label {
+    background-color:#bbb;
+}
+
+.capture-select input[type="checkbox"]:checked  + label p {
+    color:#fff;
+}

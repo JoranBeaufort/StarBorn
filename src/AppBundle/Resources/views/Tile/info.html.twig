@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Information{% endblock %} 
+{% block content %}
+     <!--Mask-->
+     <div class="container"> 
+         <div class="row">
+             <div class="col-xs-12" style="color:#fff" >                            
+                 <h3>Info</h3>
+             </div>
+         </div>    
+         <div class="row">
+            <div class="card">
+                 <!--Card image-->
+                 <img class="img-fluid" src="http://mdbootstrap.com/images/regular/nature/img%20(28).jpg" alt="Card image cap">
+                 <!--/.Card image-->
+             
+                 <!--Card content-->
+                 <div class="card-block">
+                     <!--Title-->
+                     <h4 class="card-title">Card title</h4>
+                     <!--Text-->
+                     <p class="card-text">Lat: {{ lat }}; Lng: {{ lng }};</p>
+                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                     {% if links.capture == true %}
+                         <a href="#" class="btn btn-primary">Einnehmen</a>
+                     {% else %}
+                         <p>Du bist ausser reichweite um mit diesem Gebiet zu interagieren</p>
+                     {% endif %}
+                 </div>
+                 <!--/.Card content-->
+             
+             </div>
+         </div>
+     </div>
+{% endblock content %}

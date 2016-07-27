@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block title %}Home{% endblock %} 
+    {% block content %}
+        <!--Mask-->
+    <div>
+        <div class="full-bg-img flex-center">
+            <ul>
+                <li>
+                    <h1 class="h1-responsive wow fadeInDown" data-wow-delay="0.2s"><span style="color:#43a2d0;  text-shadow: 0 0 3px #31e8e6; font-size:56px; font-weight:bold;">STAR</span><span style="color:#dd530a;  text-shadow: 0 0 3px #e3b807; font-size:56px; font-weight:bold;">BORN</span></h1></li>
+                <li>
+                    <p class="wow fadeInDown">Die Siedler mal anders! Ein futuristisches Spiel für Bewegung und Entdeckung!</p>
+                    <p class="wow fadeInDown"><i>Kommt bald!</i></p>
+                </li>
+                <li>
+                    <a target="_blank" href="{{ path('neo4j_register') }}" style="background-color: #43a2d0" class="btn btn-inverse btn-lg wow fadeInLeft" data-wow-delay="0.2s">Anmelden!</a>
+                    <a target="_blank" href="{{ path('neo4j_login') }}" style="background-color: #dd530a" class="btn btn-inverse btn-lg wow fadeInRight" data-wow-delay="0.2s">Spielen!</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--/.Mask-->
+    {% endblock content %}
+

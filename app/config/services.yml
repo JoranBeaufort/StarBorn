@@ -1,0 +1,9 @@
+parameters:
+    neo4juserbundle.authentication.handler.login_success_handler.class: JoranBeaufort\Neo4jUserBundle\Security\Authentication\Handler\LoginSuccessHandler
+    
+services:
+    login_success_handler:
+        class:      %neo4juserbundle.authentication.handler.login_success_handler.class%
+        arguments:  ["@router", "@security.authorization_checker"]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }

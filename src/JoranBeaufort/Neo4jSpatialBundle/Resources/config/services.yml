@@ -1,0 +1,8 @@
+parameters:
+    neo4j.spatial_manager.class: JoranBeaufort\Neo4jSpatialBundle\Manager\SpatialManager
+
+        
+services:
+    neo4j.spatial_manager:
+        class: %neo4j.spatial_manager.class%
+        arguments: []

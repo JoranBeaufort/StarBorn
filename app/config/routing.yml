@@ -1,0 +1,15 @@
+neo4j_spatial:
+    resource: "@Neo4jSpatialBundle/Resources/config/routing.yml"
+    prefix:   /
+
+neo4j_user:
+    resource: "@Neo4jUserBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+neo4j_phpogmtest:
+    resource: "@Neo4jPhpOgmTestBundle/Resources/config/routing.yml"
+    prefix:   /
+
+AppBundle:
+    resource: "@AppBundle/Resources/config/routing.yml"
+    prefix:   /

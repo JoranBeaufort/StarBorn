@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Team Auswahl{% endblock %} 
+{% block content %}
+        <!--Mask-->
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12"> 
+                    <div class="card text-xs-center">                
+                        <h3 class="card-header primary-color white-text">Wähle dein Team!</h3>
+                        <div class="card-block">
+                            <div class="alert alert-warning" role="alert">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <i class="fa fa-2x fa-info-circle"></i>
+                                    </div>
+                                    <div class="col-md-10">
+                                        Du gehörst bereits zu einem Team! Einen Teamwechsel ist nicht möglich!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+{% endblock content %}
+

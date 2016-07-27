@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+{% block html %}
+<html class="full" lang="en">
+{% block head %} 
+  <head>
+    <title>Star Born - {% block title %}Home{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Carousel Template for Bootstrap</title>
+    
+    {% block css %}
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css"/>
+
+    <!-- Bootstrap core CSS -->
+    <!-- <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css"> -->
+     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"/> 
+
+    <!-- Material Design Bootstrap -->
+    <link href="{{ asset('css/mdb.min.css') }}" rel="stylesheet"/>
+
+    <!-- Your custom styles (optional) -->
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
+
+    {% endblock css %}
+
+
+  </head>
+{% endblock head %} 
+<!-- NAVBAR
+================================================== -->
+{% block body %}
+  <body>
+  
+  {% block navigation %} 
+    <!--Navbar-->
+    <nav class="navbar navbar-dark navbar-fixed-top scrolling-navbar">
+
+        <!-- Collapse button-->
+        <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#collapseEx">
+            <i class="fa fa-bars"></i>
+        </button>
+
+        <div class="container">
+
+            <!--Collapse content-->
+            <div class="collapse navbar-toggleable-xs" id="collapseEx">
+                <!--Navbar Brand-->
+                <a class="navbar-brand" href="{{ path('home') }}"><i class="fa fa-star-o"></i>&nbsp;&nbsp;<span style="color:#43a2d0; font-weight:bold;">STAR</span><span style="color:#dd530a; font-weight:bold;">BORN</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <!--Links-->
+                <ul class="nav navbar-nav">
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('map') }}"><i class="fa fa-street-view"></i>&nbsp;&nbsp;Radar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa fa-shopping-basket"></i>&nbsp;&nbsp;Kollektor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('dashboard') }}"><i class="fa fa-tachometer"></i>&nbsp;&nbsp;Informationszentrale</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('neo4j_profile', {'slug': app.user.username}) }}"><i class="fa fa-user"></i>&nbsp;&nbsp;Profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('neo4j_logout') }}"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa fa-info"></i>&nbsp;&nbsp;About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('neo4j_login') }}"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</a>                    
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('neo4j_register') }}" class="registration-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Sign up</a>
+                    </li>
+                    {% endif %} 
+                </ul>
+            </div>
+            <!--/.Collapse content-->
+
+        </div>
+
+    </nav>
+    <!--/.Navbar-->
+
+   {% endblock navigation %}
+   
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+        {% block content %}
+        {% endblock content %}
+        
+  
+        {% block footer %}
+        {% endblock footer %}
+        
+
+    
+ {% block javascript %}
+     <!-- SCRIPTS -->
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
+
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="{{ asset('js/tether.min.js') }}"></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script> -->
+
+    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script> -->
+
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="{{ asset('js/mdb.min.js') }}"></script>
+    
+ 
+ {% endblock javascript %}   
+  </body>
+{% endblock body%}
+</html>
+{% endblock html %}

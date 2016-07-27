@@ -1,0 +1,3 @@
+neo4j_spatial_test:
+    path:     /spatial/test
+    defaults: { _controller: Neo4jSpatialBundle:Test:index }

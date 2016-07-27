@@ -1,0 +1,28 @@
+# src/Acme/HelloBundle/Resources/config/routing.yml
+home:
+    path:  /
+    defaults: { _controller: AppBundle:Home:index }
+    
+team_apply:
+    path:  /team/apply
+    defaults: { _controller: AppBundle:Team:apply }
+    
+dashboard:
+    path:  /dashboard
+    defaults: { _controller: AppBundle:Dashboard:index }
+    
+map:
+    path:  /map
+    defaults: { _controller: AppBundle:Map:index }
+    
+radar:
+    path:  /api/geo/json/radar/{lat}/{lng}/{a}
+    defaults: { _controller: AppBundle:Map:getJson }
+    
+capture:
+    path:  /capture
+    defaults: { _controller: AppBundle:Capture:index }
+    
+tile:
+    path:  /tile
+    defaults: { _controller: AppBundle:Tile:index }

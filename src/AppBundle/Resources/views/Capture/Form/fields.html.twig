@@ -1,0 +1,31 @@
+{% extends "form_div_layout.html.twig" %}
+
+{% block choice_widget_expanded %}
+{% spaceless %}
+    <div {{ block('widget_container_attributes') }}>
+    {% for child in form %}
+        <div class="radio col-md-3">
+        {{ form_widget(child) }}
+        </div>
+    {% endfor %}
+    </div>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block checkbox_widget %}
+    {% spaceless %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12">
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        <label  for="{{ id }}" class=" card">
+                <img class="img-fluid" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=250%C3%97200&w=250&h=200" alt="Card image cap">
+                <div class="card-block">                    
+                    <h4 class="card-title">{{ label|trans({}, translation_domain) }}</h4>
+                    <p class="card-text text-xs-center">{{ attr.text }}</p> 
+                </div>
+        </label>
+        </div>
+{% endspaceless %}
+{% endblock checkbox_widget %}

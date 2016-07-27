@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Team Auswahl{% endblock %} 
+{% block css %}
+    {{ parent() }}
+    <!-- team interface css -->
+    <style>
+    .team-select input[type="radio"] {
+        display:none;
+    }
+
+    .team-select label {
+        display:inline-block;
+        font-family:Arial;
+        font-size:16px;
+    }
+    
+    .red_giants {
+        background-color: #ef6c00;
+        border: 3px solid #fff;
+         
+    }
+    
+    .blue_dwarfs {
+        background-color: #0099CC;
+        border: 3px solid #fff;
+    }
+
+    .team-select label h4{
+        color: #000;
+
+    }
+
+    .team-select label p{
+        color: #000;
+    }
+
+    .team-select input[type="radio"]:checked  + .red_giants {
+        background-color:#FF8800;
+        border: 3px solid #fff ;
+        border-radius: 20px;
+    }
+    
+    .team-select input[type="radio"]:checked  + .blue_dwarfs {
+        background-color:#33b5e5;
+        border: 3px solid #fff ;
+        border-radius: 20px;
+    }
+
+    .team-select input[type="radio"]:checked  + label p {
+        color:#fff;
+    }    
+    
+    .team-select input[type="radio"]:checked  + label i {
+        color:#fff;
+    }    
+    
+    .team-select input[type="radio"]:checked  + label h2 {
+        color:#fff;
+    }
+    
+    </style>
+
+{% endblock css %}
+{% block content %}
+        <!--Mask-->
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12"> 
+                    <div class="card text-xs-center">                
+                        <h3 class="card-header primary-color white-text">Wähle dein Team!</h3>
+                        <div class="card-block">
+                            <div class="alert alert-info" role="alert">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <i class="fa fa-2x fa-info-circle"></i>
+                                    </div>
+                                    <div class="col-md-10">
+                                        Trete dem Team bei, welches du zum Sieg verhelfen willst! Die Wahl des Teams kann nicht geändert werden.
+                                    </div>
+                                </div>
+                            </div>
+                            {% form_theme form 'AppBundle:Team:Form/fields.html.twig' %}        
+                            {{ form_start(form, {'method': 'post', 'action': path('team_apply')}) }}
+                            <div class="row">
+                                <div class="team-select">
+                                    {% for child in form.teamapply %}
+                                        {{ form_widget(child) }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-xs-12">                            
+                                <button style="height:80px; margin-bottom:20px; margin-top:20px; font-size:30px;"  class="btn-success-outline waves-effect" type="submit"><i class="fa fa-check" aria-hidden="true"></i><b>Auswahl Bestätigen!</b></button>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                 </div>
+             </div>
+         </div>
+     </div>     
+{% endblock content %}
+
