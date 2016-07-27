@@ -197,6 +197,7 @@ class TestController extends Controller
      public function test3Action()
     {
 
+        echo '<pre>';
         $em = $this->get('neo4j.graph_manager')->getClient();
 
         // DROP ALL DATA IN GRAPH !!!CAREFULL!!!:
