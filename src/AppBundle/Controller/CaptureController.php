@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormError;
 
 use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
+use AppBundle\Entity\Team;
 use AppBundle\Entity\Resources;
 use AppBundle\Entity\UserResource;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
@@ -70,11 +71,9 @@ class CaptureController extends Controller
             
             $statement = $connection->prepare($q);
             $statement->execute();
-            $results = $statement->fetchAll();
-            
-            
-
-            if($results[0]['val'] === '0' || $results[0]['val'] === 0){
+            $results = $statement->fetchAll();   
+            var_dump($results);die;
+            if(!$results || $results[0]['val'] === '0' || $results[0]['val'] === 0){
                 
                 $potentialResources = $form->get('landcover')->getData();
                 $potentialTileResources = array();

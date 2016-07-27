@@ -4,16 +4,24 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Entity\Team;
 
 class MapController extends Controller
 {
     public function indexAction()
     {    
+        
+        $em = $this->get('neo4j.graph_manager')->getClient();
+
         $user = $this->getUser();
-               
+        $red = $em->getRepository(Team::class)->findOneBy('name','red_giants');
+        $redId = $red->getId();
+        $blue = $em->getRepository(Team::class)->findOneBy('name','blue_dwarfs');
+        $blueId = $blue->getId();
+       
         
         return $this->render(
-            'AppBundle:Map:map.html.twig',array('user' => $user)
+            'AppBundle:Map:map.html.twig',array('user' => $user, 'redGiantsId' => $redId, 'blueDwarfsId' => $blueId)
         );
     }
     

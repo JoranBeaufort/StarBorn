@@ -106,13 +106,13 @@ var uLat, uLng;
                     var ttrx = feature.properties.trx;
                     var ttry = feature.properties.try;
                     
-                    if(feature.properties.tid == 127){
+                    if(feature.properties.tid == {{ redGiantsId }}){
                         polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#FF8800 ",fillColor: "#FF8800 ", weight: 1}).addTo(map);
                         popup.title = 'Eroberetes Gebiet';
                         popup.contentTitle = 'Dieses Gebiet angreifen!';     
                         
                         polygon._path.setAttribute('filter', 'url(#blur)');                        
-                    }else if(feature.properties.tid == 128){
+                    }else if(feature.properties.tid == {{ blueDwarfsId }}){
                         polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#0099CC ",fillColor: "#0099CC ", weight: 1}).addTo(map);
                         popup.title = 'Eroberetes Gebiet';
                         popup.contentTitle = 'Dieses Gebiet angreifen!';     
