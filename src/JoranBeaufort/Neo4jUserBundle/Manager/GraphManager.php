@@ -14,6 +14,8 @@ class GraphManager
     private $url;
     private $port;
 
+    private $em;
+
     public function setConfig( $config )
     {
         $this->protocol = $config['protocol'];
@@ -25,14 +27,18 @@ class GraphManager
     
     public function getClient()
     {
-        if($this->user=='' || $this->pass == ''){
-            $connection =  $this->protocol.'://'.$this->url.':'.$this->port;
-        }else{
-            $connection =  $this->protocol.'://'.$this->user.':'.$this->pass.'@'.$this->url.':'.$this->port;
+        if (null === $this->em) {
+            if($this->user=='' || $this->pass == ''){
+                $connection =  $this->protocol.'://'.$this->url.':'.$this->port;
+            }else{
+                $connection =  $this->protocol.'://'.$this->user.':'.$this->pass.'@'.$this->url.':'.$this->port;
+            }
+
+            $this->em = EntityManager::create($connection);
         }
+
+
         
-        $client = EntityManager::create($connection);
-        
-        return $client;
+        return $this->em;
     }
 }
