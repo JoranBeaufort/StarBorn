@@ -75,7 +75,7 @@ var uLat, uLng;
     getLocation();
 
     function populateField(){
-        L.circle([uLat,uLng],400,{fillOpacity:0, color:"#00ff00"}).addTo(map);
+        L.circle([uLat,uLng],500,{fillOpacity:0, color:"#00ff00"}).addTo(map);
         var url = "{{ path('radar', {'lat': 'lat', 'lng':'lng', 'a':user.getUid()|urlencrypt }) }}";
         url = url.replace("lat",uLat);
         url = url.replace("lng",uLng);
