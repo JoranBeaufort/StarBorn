@@ -925,16 +925,16 @@
         },
         {
             "name": "graphaware/neo4j-php-ogm",
-            "version": "1.0.0-beta16",
+            "version": "1.0.0-beta17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/graphaware/neo4j-php-ogm.git",
-                "reference": "8f3e6c8020481f481b9322d35e96dfbb0af0aa32"
+                "reference": "1ed1b484dbe57012895f55f1a8955296e92816a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/graphaware/neo4j-php-ogm/zipball/8f3e6c8020481f481b9322d35e96dfbb0af0aa32",
-                "reference": "8f3e6c8020481f481b9322d35e96dfbb0af0aa32",
+                "url": "https://api.github.com/repos/graphaware/neo4j-php-ogm/zipball/1ed1b484dbe57012895f55f1a8955296e92816a4",
+                "reference": "1ed1b484dbe57012895f55f1a8955296e92816a4",
                 "shasum": ""
             },
             "require": {
@@ -982,7 +982,7 @@
                 "neo4j",
                 "ogm"
             ],
-            "time": "2016-07-26 01:55:22"
+            "time": "2016-07-27 19:57:03"
         },
         {
             "name": "guzzlehttp/guzzle",

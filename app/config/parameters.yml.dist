@@ -16,8 +16,17 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
     
+    secret: ~
+    nzo_secret: ~
+    
     # Neo4jUserBundle parameters
+    
     neo4j_user.directory: '%kernel.root_dir%/../web/users'
     neo4j_user.mail.subject.registration: 'Registration'
     neo4j_user.mail.subject.emailedit: 'Email Updated'
     neo4j_user.mail.subject.passwordreset: 'Password Reset'
+    neo4j.protocol: bolt
+    neo4j.username: neo4j
+    neo4j.password: ~
+    neo4j.url: localhost
+    neo4j.port: 7474
