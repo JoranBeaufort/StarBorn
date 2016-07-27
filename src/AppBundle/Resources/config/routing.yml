@@ -26,3 +26,11 @@ capture:
 tile:
     path:  /tile
     defaults: { _controller: AppBundle:Tile:index }
+    
+admin:
+    path:  /admin
+    defaults: { _controller: AppBundle:Admin:index }
+    
+admin_resetpg:
+    path:  /admin/resetpg
+    defaults: { _controller: AppBundle:Admin:resetpg }

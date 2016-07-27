@@ -42,10 +42,10 @@ class MapController extends Controller
                         SELECT
                             c.UID as UID,
                             c.TID as TID,
-                            ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-49,ST_Y((c.UID).geom)-49),2056),4326) AS BBOX_BL,
-                            ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)+49,ST_Y((c.UID).geom)-49),2056),4326) AS BBOX_BR,
-                            ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-49,ST_Y((c.UID).geom)+49),2056),4326) AS BBOX_TL,
-                            ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)+49,ST_Y((c.UID).geom)+49),2056),4326) AS BBOX_TR
+                            ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-99,ST_Y((c.UID).geom)-99),2056),4326) AS BBOX_BL,
+                            ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)+99,ST_Y((c.UID).geom)-99),2056),4326) AS BBOX_BR,
+                            ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-99,ST_Y((c.UID).geom)+99),2056),4326) AS BBOX_TL,
+                            ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)+99,ST_Y((c.UID).geom)+99),2056),4326) AS BBOX_TR
                         FROM (                        
                             SELECT
                                 (ST_PixelAsCentroids(u.r,1,false)) As UID,
@@ -57,8 +57,8 @@ class MapController extends Controller
                             ) as u
                         ) as c
                             WHERE
-                                ST_Intersects((c.UID).geom, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 400))
-                            AND ST_Intersects((c.TID).geom, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 400))
+                                ST_Intersects((c.UID).geom, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 500))
+                            AND ST_Intersects((c.TID).geom, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 500))
 
                     ) as b   
                 ) as f 
