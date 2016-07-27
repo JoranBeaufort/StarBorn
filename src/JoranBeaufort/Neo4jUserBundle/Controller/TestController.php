@@ -199,6 +199,16 @@ class TestController extends Controller
 
         $em = $this->get('neo4j.graph_manager')->getClient();
         
+        // echo 'Loading user with name: test <br>';        
+        // $user=$em->getRepository(User::class)->findOneBy('username','test');
+        // if($user){
+        //     echo '<p style="color:green">OK</p><br>';
+        // }else{
+        //     echo '<p style="color:red">NOT OK</p><br>';
+        //     echo '<p style="color:red">Properties were deleted!</p><br>';
+        // }
+
+        
         $user = new User();
         echo '<p style="color:green">new user created</p><br>';  
         $user->setUsername('Foobar');
