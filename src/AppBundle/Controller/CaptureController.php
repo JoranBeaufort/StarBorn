@@ -46,7 +46,9 @@ class CaptureController extends Controller
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $em = $this->get('neo4j.graph_manager')->getClient();
+            $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
+            
             // user coords
             $uLat = $request->request->get('ulat');
             $uLng = $request->request->get('ulng');
@@ -70,7 +72,7 @@ class CaptureController extends Controller
             $statement->execute();
             $results = $statement->fetchAll();
             
-            $em = $this->get('neo4j.graph_manager')->getClient();
+            
 
             if($results[0]['val'] === '0' || $results[0]['val'] === 0){
                 
@@ -83,15 +85,11 @@ class CaptureController extends Controller
                 
                 $tileResources = array();
                 for($i=0; $i<3; $i++){
-                    $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
                     $resourceName = $potentialTileResources[array_rand($potentialTileResources)];
                     array_push($tileResources,$resourceName);
                     $urR = $user->getUserResource($resourceName);
-                    $urN = $urR->getResource();
                     $currentResourceCount = $urR->getAmount();
                     $urR->setAmount($currentResourceCount+1);
-                    $em->getRepository(Resources::class);
-                    $em->persist($urN);
                 }
                 
                 $setResources = join(',', $tileResources); 
@@ -104,18 +102,10 @@ class CaptureController extends Controller
                 $em->persist($tile);
 
                 $user->addTile($tile, time(),time());
-                $em->getRepository(User::class);
                 // print_r($user->getUserTiles());die;
                 $em->persist($user);
-                $em->flush();                 
-                
-                $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
-                foreach($user->getUserResources() as $resource){
-                    echo "<i>".$resource->getResource()->getResourceType()." : ".$resource->getAmount()."</i><br>";
-                }
-
-                die; 
-
+                $em->flush();      
+                                
                 $q=   " UPDATE 
                             gameField 
                         SET 
