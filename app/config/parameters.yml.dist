@@ -29,4 +29,4 @@ parameters:
     neo4j.username: neo4j
     neo4j.password: ~
     neo4j.url: localhost
-    neo4j.port: 7474
+    neo4j.port: 7687
