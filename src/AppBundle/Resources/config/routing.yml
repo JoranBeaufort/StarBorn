@@ -23,6 +23,14 @@ capture:
     path:  /capture
     defaults: { _controller: AppBundle:Capture:index }
     
+attack:
+    path:  /attack
+    defaults: { _controller: AppBundle:Attack:index }
+    
+build:
+    path:  /build
+    defaults: { _controller: AppBundle:Build:index }
+    
 tile:
     path:  /tile
     defaults: { _controller: AppBundle:Tile:index }

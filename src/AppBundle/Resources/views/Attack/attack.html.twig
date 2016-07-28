@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Angreifen{% endblock %} 
+{% block content %}
+    <!--Mask-->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12"> 
+                <div class="card text-xs-center">                
+                    <h3 class="card-header primary-color white-text">Dieses Gebiet Angreifen</h3>
+                    <div class="card-block">
+                        <div class="alert alert-info" role="alert">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <i class="fa fa-2x fa-info-circle"></i>
+                                </div>
+                                <div class="col-md-10">
+                                    Du hast in diesem Gebiet eine feindliche Presänz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <p>Dein Scanner hat folgende feindliche einheiten entdeckt:</p> 
+                            <div class="col-md-6">
+                                <div class="card text-xs-center">
+                                    <h3 class="card-header warning-color white-text">Aufklärungsdrohne</h3>
+                                    <div class="card-block">
+                                        <div class="col-md-12">
+                                            <p>Drohnen Modell: {{ drone.name }}</p>
+                                            <p>Lebenspunkte: {{ drone.hp }}</p>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card text-xs-center">
+                                    <h3 class="card-header warning-color white-text">Gebäude</h3>
+                                    <div class="card-block">
+                                        <div class="col-md-12">
+                                            <p>Gebäude Typ: {{ building.name }}</p>
+                                            <p>Lebenspunkte: {{ building.hp }}</p>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>     
+{% endblock content %}
+
