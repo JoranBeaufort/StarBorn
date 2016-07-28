@@ -79,17 +79,17 @@ class AdminController extends Controller
             $statement->execute();
             
             // BHP building   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 5, '32BSI'::text, -9999, null)";
+            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 6, '32BSI'::text, -9999, null)";
             $statement = $connection->prepare($q);
             $statement->execute();
             
             // SID shield   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 5, '32BUI'::text, 0, null)";
+            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 7, '32BUI'::text, 0, null)";
             $statement = $connection->prepare($q);
             $statement->execute();
             
             // SHP shield   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 5, '32BSI'::text, -9999, null)";
+            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 8, '32BSI'::text, -9999, null)";
             $statement = $connection->prepare($q);
             $statement->execute();
 
