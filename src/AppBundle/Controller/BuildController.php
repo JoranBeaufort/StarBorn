@@ -38,8 +38,6 @@ class BuildController extends Controller
         $ttrx = $request->request->get('ttrx');
         $ttry = $request->request->get('ttry');
         
-        $test;
-        
         return $this->render('AppBundle:Capture:capture.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'building' => $building, 'drone' => $drone));
         
     }
