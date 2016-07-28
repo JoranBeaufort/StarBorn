@@ -15,9 +15,9 @@ class MapController extends Controller
 
         $user = $this->getUser();
         $red = $em->getRepository(Team::class)->findOneBy('name','red_giants');
-        $redId = $red->getId();
+        $redId = $red->getTid();
         $blue = $em->getRepository(Team::class)->findOneBy('name','blue_dwarfs');
-        $blueId = $blue->getId();
+        $blueId = $blue->getTid();
        
         
         return $this->render(

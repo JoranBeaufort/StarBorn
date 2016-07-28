@@ -48,7 +48,7 @@ class AdminController extends Controller
                     ST_Tile(
                         ST_AddBand(
                             ST_MakeEmptyRaster( 1850, 1200, 2483800, 1301000, 200, -200, 0, 0, 2056)
-                        , 1, '32BUI'::text, 0, 0)
+                        , 1, '32BUI'::text, 0, null)
                     , 10,10, TRUE, NULL)
                 );";
             $statement = $connection->prepare($q);
@@ -58,7 +58,7 @@ class AdminController extends Controller
             $statement = $connection->prepare($q);
             $statement->execute();
             
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 2, '32BUI'::text, 0, 0)";
+            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 2, '32BUI'::text, 0, null)";
             $statement = $connection->prepare($q);
             $statement->execute();
 

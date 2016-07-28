@@ -15,6 +15,12 @@ class Team
      * @var int
      */
     protected $id;
+    
+    /**
+     * @OGM\GraphId()
+     * @var int
+     */
+    protected $tid;
         
     /**
      * @OGM\Property(type="string")
@@ -45,6 +51,11 @@ class Team
     public function getId()
     {
         return $this->id;
+    }    
+    
+    public function getTid()
+    {
+        return $this->tid;
     }    
     
     

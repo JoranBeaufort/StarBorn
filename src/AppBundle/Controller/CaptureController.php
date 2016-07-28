@@ -72,7 +72,7 @@ class CaptureController extends Controller
             $statement = $connection->prepare($q);
             $statement->execute();
             $results = $statement->fetchAll();   
-            var_dump($results);die;
+
             if(!$results || $results[0]['val'] === '0' || $results[0]['val'] === 0){
                 
                 $potentialResources = $form->get('landcover')->getData();
@@ -83,12 +83,14 @@ class CaptureController extends Controller
                 }
                 
                 $tileResources = array();
+                $newResources = array();
                 for($i=0; $i<3; $i++){
                     $resourceName = $potentialTileResources[array_rand($potentialTileResources)];
                     array_push($tileResources,$resourceName);
                     $urR = $user->getUserResource($resourceName);
                     $currentResourceCount = $urR->getAmount();
                     $urR->setAmount($currentResourceCount+1);
+                    array_push($newResources, $urR->getResource());
                 }
                 
                 $setResources = join(',', $tileResources); 
@@ -118,19 +120,61 @@ class CaptureController extends Controller
                 $q=   " UPDATE 
                             gameField 
                         SET 
-                            rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$user->getUserTeam()->getTeam()->getId().")
+                            rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$user->getUserTeam()->getTeam()->getTid().")
                         WHERE 
                             ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
             
                 $statement = $connection->prepare($q);
                 $statement->execute();
-                
+                return $this->render('AppBundle:Capture:success.html.twig',array('user' => $user, 'newResources' =>$newResources));
             }elseif($results[0]['val'] !== '0' || $results[0]['val'] !== 0){
-                
+                $user = $this->getUser();
+                $tileUser = $em->getRepository(User::class)->findOneById(intval($results[0]['val']));                
+                if($user ===  $tileUser){
+                    $error = null;
+                    $info = 'Dieses Gebiet gehört bereits dir!';     
+                }else{
+                    $error = 'Gebiet wurde bereits Eingenommen.';     
+                    if($user->getUserTeam()->getTeam()->getTid() ===  $tileUser->getUserTeam()->getTeam()->getTid()){
+                        $info = 'Dieses Gebiet gehört bereits deinem Team!';
+                    }else{
+                        $info = 'Dieses Gebiet gehört dem gegnerischen Team. Du musst dieses Gebiet angreifen bevor du es einnehmen kannst!';
+                    }
+                }
+                return $this->render('AppBundle:Capture:error.html.twig',array('user' => $user, 'error' =>$error, 'info'=>$info));
             }
             
-            return $this->render('AppBundle:Dashboard:index.html.twig',array('user' => $user));
-        }else{        
+        }else{      
+            $em_pgsql = $this->getDoctrine()->getManager();
+            $em = $this->get('neo4j.graph_manager')->getClient();
+            $connection = $em_pgsql->getConnection();
+            $q=   " SELECT 
+                        rid, 
+                        ST_Value(rast, 1, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat."),4326),2056),false) val 
+                    FROM 
+                        gameField 
+                    WHERE
+                        ST_Intersects(rast, 1, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat.") ,4326),2056))";
+            
+            $statement = $connection->prepare($q);
+            $statement->execute();
+            $results = $statement->fetchAll();   
+            if($results[0]['val'] != '0' || $results[0]['val'] != 0){
+                $user = $this->getUser();
+                $tileUser = $em->getRepository(User::class)->findOneById(intval($results[0]['val']));                
+                if($user ===  $tileUser){
+                    $error = null;
+                    $info = 'Dieses Gebiet gehört bereits dir!';     
+                }else{
+                    $error = 'Gebiet wurde bereits Eingenommen.';     
+                    if($user->getUserTeam()->getTeam()->getTid() ===  $tileUser->getUserTeam()->getTeam()->getTid()){
+                        $info = 'Dieses Gebiet gehört bereits deinem Team!';
+                    }else{
+                        $info = 'Dieses Gebiet gehört dem gegnerischen Team. Du musst dieses Gebiet angreifen bevor du es einnehmen kannst!';
+                    }
+                }
+                return $this->render('AppBundle:Capture:error.html.twig',array('user' => $user, 'error' =>$error, 'info'=>$info));
+            }            
             return $this->render('AppBundle:Capture:capture.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'form' => $form->createView()));
         }
     }
