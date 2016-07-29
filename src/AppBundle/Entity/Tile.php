@@ -3,6 +3,10 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
+ 
+use JoranBeaufort\Neo4jUserBundle\Entity\User;
+use AppBundle\Entity\UserTile;
+
 
 /**
  * @OGM\Node(label="Tile")
@@ -45,9 +49,9 @@ class Tile
     protected $resources;    
 
     /**
-     * @var AppBundle\Entity\UserTile
-     *
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", direction="INCOMING", collection=false, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=true, mappedBy="tile")
+     * @OGM\Lazy()
+     * @var ArrayCollection|\AppBundle\Entity\UserTile[]
      */
      
     protected $userTile;    
@@ -64,6 +68,7 @@ class Tile
         $this->rid = $rid;
         $this->tLat = $tLat;
         $this->tLng = $tLng;
+        $this->userTile = new ArrayCollection();
     }
 
     
@@ -102,7 +107,7 @@ class Tile
      */
     public function getUserTile()
     {
-        return $this->userTile;
+        return $this->userTile->first();
     }
     
     /**
@@ -110,7 +115,7 @@ class Tile
      */
     public function setUserTile($userTile)
     {
-        $this->userTile = $userTile;
+        $this->userTile->add($userTile);
     }
 
     

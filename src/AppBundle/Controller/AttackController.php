@@ -57,6 +57,11 @@ class AttackController extends Controller
         
         $em = $this->get('neo4j.graph_manager')->getClient();
         $tile = $em->getRepository(Tile::class)->findOneById(intval($results[0]['val']));
+        
+        // $user = $em->getRepository(User::class)->findOneById(1784);
+        // foreach($user->getUserTiles() as $t){
+        //     var_dump($t->getTile()->getResources());
+        // }die;
         var_dump($tile->getUserTile()->getUser()->getUid());die;
 
 
