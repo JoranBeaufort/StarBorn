@@ -98,7 +98,7 @@ class CaptureController extends Controller
                     
                     
                                     
-                    $tile = new Tile($results[0]['rid'], $tLat, $tLng); 
+                    $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng); 
                    
                     $tile->setResources($setResources); 
                     

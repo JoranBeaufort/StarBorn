@@ -62,11 +62,11 @@ class AttackController extends Controller
         // foreach($user->getUserTiles() as $t){
         //     var_dump($t->getTile()->getResources());
         // }die;
-        var_dump($tile->getUserTile()->getUser()->getUid());die;
-
-
         
-        return $this->render('AppBundle:Capture:capture.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'building' => $building, 'drone' => $drone));
+        $userTile = $em->getRepository(User::class)->findOneBy('uid',$tile->getUid());
+        var_dump($userTile->getUsername());die;
+        
+        return $this->render('AppBundle:Capture:capture.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'userTile' => $userTile, 'building' => $building, 'drone' => $drone));
         
     }
 }

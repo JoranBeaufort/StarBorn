@@ -2,6 +2,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\AbstractLazyCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
  
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
@@ -20,6 +21,13 @@ class Tile
      */
     protected $id;
         
+    /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+     
+    protected $uid;
+    
     /**
      * @OGM\Property(type="int")
      * @var int
@@ -49,32 +57,38 @@ class Tile
     protected $resources;    
 
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=true, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=false, mappedBy="tile")
      * @OGM\Lazy()
-     * @var ArrayCollection|\AppBundle\Entity\UserTile[]
+     * @var ArrayCollection|\AppBundle\Entity\UserTile
      */
      
     protected $userTile;    
     
     /**
      * UserResource constructor.
-     * @param float $rid
+     * @param int $uid
+     * @param int $rid
      * @param float $tLat
      * @param float $tLng
      */
      
-    public function __construct($rid, $tLat, $tLng)
+    public function __construct($uid, $rid, $tLat, $tLng)
     {
+        $this->uid = $uid;
         $this->rid = $rid;
         $this->tLat = $tLat;
         $this->tLng = $tLng;
-        $this->userTile = new ArrayCollection();
     }
 
     
     public function getId()
     {
         return $this->id;
+    }
+    
+    public function getUid()
+    {
+        return $this->uid;
     }
     
     public function getRid()
@@ -115,7 +129,7 @@ class Tile
      */
     public function setUserTile($userTile)
     {
-        $this->userTile->add($userTile);
+        $this->userTile = $userTile;
     }
 
     
