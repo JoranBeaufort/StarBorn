@@ -57,7 +57,10 @@ class ScanController extends Controller
         $results = $statement->fetchAll();  
         
         $em = $this->get('neo4j.graph_manager')->getClient();
-        $tile = $em->getRepository(Tile::class)->findOneById(intval($results[0]['val']));
+        $tile = $em->getRepository(Tile::class)->findOneById(1842);
+        
+        $t = $tile->getUserTile()->getUser()->getUserTeam()->getTeam()->getName();
+        var_dump($t);die;
 
         return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'tile' => $tile));
         

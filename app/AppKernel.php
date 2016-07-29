@@ -19,7 +19,6 @@ class AppKernel extends Kernel
             new JoranBeaufort\Neo4jUserBundle\Neo4jUserBundle(),
             new AppBundle\AppBundle(),
             new JoranBeaufort\Neo4jSpatialBundle\Neo4jSpatialBundle(),
-            new JoranBeaufort\Neo4jPhpOgmTestBundle\Neo4jPhpOgmTestBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

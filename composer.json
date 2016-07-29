@@ -34,9 +34,8 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
-        "graphaware/neo4j-php-ogm": "^1.0.0@beta",
-        "nzo/url-encryptor-bundle": "~3.0",
-        "joranbeaufort/neo4jphpogmtestbundle":"dev-master"
+        "graphaware/neo4j-php-ogm": "dev-master",
+        "nzo/url-encryptor-bundle": "~3.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
