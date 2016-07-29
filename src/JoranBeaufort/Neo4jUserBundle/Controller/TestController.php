@@ -1,6 +1,7 @@
 <?php
 namespace JoranBeaufort\Neo4jUserBundle\Controller;
 
+use GraphAware\Neo4j\OGM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,19 +16,23 @@ use JoranBeaufort\Neo4jUserBundle\Entity\User;
 use JoranBeaufort\Neo4jUserBundle\Entity\Role;
 use AppBundle\Entity\Resources;
 use AppBundle\Entity\UserResource;
+use AppBundle\Entity\Tile;
 
 class TestController extends Controller
 {
     
      public function testAction($token)
-    { 
+    {
+
+        /** @var EntityManager $em */
+        $em = $this->get('neo4j.graph_manager')->getClient();
 
         $usernameInput = 'test';
         $resourceInput1 = 'stone';
         $resourceInput2 = 'water';
         $resourceInput3 = 'food';
         
-        $em = $this->get('neo4j.graph_manager')->getClient();
+
         
         echo 'Loading user with token: '.$token.'<br>';        
         $user=$em->getRepository(User::class)->findOneBy('confirmationToken', $token);
@@ -138,8 +143,20 @@ class TestController extends Controller
     
      public function test2Action()
     { 
-
+        echo '<pre>';
         $em = $this->get('neo4j.graph_manager')->getClient();
+        $tile = $em->getRepository(Tile::class)->findOneById(intval(1823));
+
+        // $user = $em->getRepository(User::class)->findOneById(1784);
+        // foreach($user->getUserTiles() as $t){
+        //     var_dump($t->getTile()->getResources());
+        // }die;
+        echo sys_get_temp_dir();
+        var_dump(is_writable(sys_get_temp_dir()));
+        var_dump($tile->getUserTile()->getCollected());
+        var_dump($tile->getUserTile());
+        exit();
+        $userTile = $em->getRepository(User::class)->findOneBy('uid',$tile->getUid());
         $testUser = 'test';
         echo 'Loading user with name: '.$testUser.'<br>';        
         $user=$em->getRepository(User::class)->findOneBy('username', $testUser);

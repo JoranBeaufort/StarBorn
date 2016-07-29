@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-xs-12"> 
                 <div class="card text-xs-center">                
-                    <h3 class="card-header primary-color white-text">Dieses Gebiet Angreifen</h3>
+                    <h3 class="card-header primary-color white-text">Scan erfolgreich!</h3>
                     <div class="card-block">
                         <div class="alert alert-danger" role="alert">
                             <div class="row">
@@ -53,6 +53,24 @@
                                         <div class="col-md-12">
                                             <p>Modell: <strong>{{ tile.getTileDrone.getDrone.getName_DE }}</strong></p>
                                             <p>Lebenspunkte: <strong>{{ tile.getTileDrone.getHp }} / {{ tile.getTileDrone.getDrone.getHp }}</strong></p>
+                                            {% if tile.getTileBuilding == null %}
+                                            <form method="post" action="{{ path('attack')}}">
+                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                <input type="hidden" name="tlat" value="{{ tLat }}">
+                                                <input type="hidden" name="tlng" value="{{ tLng }}">
+                                                <input type="hidden" name="tblx" value="{{ tblx }}">
+                                                <input type="hidden" name="tbly" value="{{ tbly }}">
+                                                <input type="hidden" name="ttrx" value="{{ ttrx }}">
+                                                <input type="hidden" name="ttry" value="{{ ttry }}">
+                                                <input type="hidden" name="tid" value="{{ tile.getTileDrone.getDrone.getId }}">                                                
+                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
+                                                <button class="btn btn-primary-outline waves-effect" type="submit"><i class="fa fa-3x fa-crosshair" aria-hidden="true"></i>Angreiffen!</button>
+                                            </form>
+                                            {% else %}
+                                                <button class="btn btn-primary-outline waves-effect" disabled><i class="fa fa-3x fa-crosshair" aria-hidden="true"></i>Angreiffen!</button>
+                                                <p>Du musst zuerst das feindliche Gebäude zerstören, bevor du die Aufklärungsdrohne angreifen kannst!</p>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -68,6 +86,20 @@
                                             {% else %}
                                                 <p>Gebäude Typ: {{ building }}</p>
                                                 <p>Lebenspunkte: {{ building }}</p>
+                                                <form method="post" action="{{ path('attack')}}">
+                                                    <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                    <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                    <input type="hidden" name="tlat" value="{{ tLat }}">
+                                                    <input type="hidden" name="tlng" value="{{ tLng }}">
+                                                    <input type="hidden" name="tblx" value="{{ tblx }}">
+                                                    <input type="hidden" name="tbly" value="{{ tbly }}">
+                                                    <input type="hidden" name="ttrx" value="{{ ttrx }}">
+                                                    <input type="hidden" name="ttry" value="{{ ttry }}">
+                                                    <input type="hidden" name="type" value="building">                                                
+                                                    <input type="hidden" name="bid" value="{{ tile.getTileBuilding.getBuilding.getId }}">                                                
+                                                    <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
+                                                    <button class="btn btn-primary-outline waves-effect" type="submit"><i class="fa fa-3x fa-info-circle" aria-hidden="true"></i>Angreiffen!</button>
+                                                </form>
                                             {% endif %}
                                         </div>
                                     </div>
