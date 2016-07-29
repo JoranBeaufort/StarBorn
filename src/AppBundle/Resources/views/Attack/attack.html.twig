@@ -59,13 +59,9 @@
                                                 <input type="hidden" name="ulng" value="{{ uLng }}">
                                                 <input type="hidden" name="tlat" value="{{ tLat }}">
                                                 <input type="hidden" name="tlng" value="{{ tLng }}">
-                                                <input type="hidden" name="tblx" value="{{ tblx }}">
-                                                <input type="hidden" name="tbly" value="{{ tbly }}">
-                                                <input type="hidden" name="ttrx" value="{{ ttrx }}">
-                                                <input type="hidden" name="ttry" value="{{ ttry }}">
                                                 <input type="hidden" name="tid" value="{{ tile.getTileDrone.getDrone.getId }}">                                                
                                                 <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
-                                                <button class="btn btn-primary-outline waves-effect" type="submit"><i class="fa fa-3x fa-crosshair" aria-hidden="true"></i>Angreiffen!</button>
+                                                <button class="btn btn-primary-outline waves-effect" type="submit"><i class="fa fa-crosshairs" aria-hidden="true"></i>Angreiffen!</button>
                                             </form>
                                             {% else %}
                                                 <button class="btn btn-primary-outline waves-effect" disabled><i class="fa fa-3x fa-crosshair" aria-hidden="true"></i>Angreiffen!</button>
@@ -91,10 +87,6 @@
                                                     <input type="hidden" name="ulng" value="{{ uLng }}">
                                                     <input type="hidden" name="tlat" value="{{ tLat }}">
                                                     <input type="hidden" name="tlng" value="{{ tLng }}">
-                                                    <input type="hidden" name="tblx" value="{{ tblx }}">
-                                                    <input type="hidden" name="tbly" value="{{ tbly }}">
-                                                    <input type="hidden" name="ttrx" value="{{ ttrx }}">
-                                                    <input type="hidden" name="ttry" value="{{ ttry }}">
                                                     <input type="hidden" name="type" value="building">                                                
                                                     <input type="hidden" name="bid" value="{{ tile.getTileBuilding.getBuilding.getId }}">                                                
                                                     <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       

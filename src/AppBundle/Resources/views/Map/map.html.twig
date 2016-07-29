@@ -79,7 +79,7 @@ var uLat, uLng;
         var url = "{{ path('radar', {'lat': 'lat', 'lng':'lng', 'a':user.getUid()|urlencrypt }) }}";
         url = url.replace("lat",uLat);
         url = url.replace("lng",uLng);
-        console.log(url);
+        
        
        var svg = map.getPanes().overlayPane.firstChild,
         svgFilter = document.createElementNS('http://www.w3.org/2000/svg', 'filter'),
@@ -91,12 +91,12 @@ var uLat, uLng;
 
         svgFilter.appendChild(svgBlur);
         svg.appendChild(svgFilter);
-
         
         $.getJSON(url,  function( json ) {
-        
+            console.log('da');
             L.geoJson(json, {
                 onEachFeature: function (feature, layer) {
+                console.log(bla);
                     var tile;
                     var popup = {pretitle:'', title:'', posttitle:'',contentTitle:'', contentText:''};
                     var tLat = feature.geometry.coordinates[1];

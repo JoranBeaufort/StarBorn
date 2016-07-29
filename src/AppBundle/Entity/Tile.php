@@ -156,7 +156,7 @@ class Tile
      */
     public function getTileDrone()
     {
-        return $this->tileDrone->first();
+        return $this->tileDrone;
     }
     
     public function getTileBuilding()
