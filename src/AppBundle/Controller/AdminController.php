@@ -41,7 +41,7 @@ class AdminController extends Controller
             $q='CREATE TABLE gameField (rid SERIAL PRIMARY KEY, rast raster);';
             $statement = $connection->prepare($q);
             $statement->execute();
-            // UID user
+            // UID user id
             $q ="  INSERT INTO 
                     gameField(rast) 
                 VALUES(
@@ -58,38 +58,13 @@ class AdminController extends Controller
             $statement = $connection->prepare($q);
             $statement->execute();
             
-            // TID team   
+            // TID team id   
             $q ="UPDATE gameField SET rast = ST_AddBand(rast, 2, '32BUI'::text, 0, null)";
             $statement = $connection->prepare($q);
             $statement->execute();
-            
-            // DID drone   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 3, '32BUI'::text, 0, null)";
-            $statement = $connection->prepare($q);
-            $statement->execute();
-            
-            // DHP drone   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 4, '32BSI'::text, -9999, null)";
-            $statement = $connection->prepare($q);
-            $statement->execute();            
-            
-            // BID building   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 5, '32BUI'::text, 0, null)";
-            $statement = $connection->prepare($q);
-            $statement->execute();
-            
-            // BHP building   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 6, '32BSI'::text, -9999, null)";
-            $statement = $connection->prepare($q);
-            $statement->execute();
-            
-            // SID shield   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 7, '32BUI'::text, 0, null)";
-            $statement = $connection->prepare($q);
-            $statement->execute();
-            
-            // SHP shield   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 8, '32BSI'::text, -9999, null)";
+                        
+            // NID node id   
+            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 9, '32BSI'::text, -9999, null)";
             $statement = $connection->prepare($q);
             $statement->execute();
 

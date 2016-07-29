@@ -44,12 +44,36 @@ class MapController extends Controller
                     (ST_AsGeoJSON(ST_Transform(ST_SetSRID((b.UID).geom,2056),4326))::json ) as geometry,
                     (
                     SELECT row_to_json(t) 
-                        FROM (select ST_X(b.BBOX_BL) as blx, ST_Y(b.BBOX_BL) as bly, ST_X(b.BBOX_BR) as brx, ST_Y(b.BBOX_BR) as bry, ST_X(b.BBOX_TL) as tlx, ST_Y(b.BBOX_TL) as tly, ST_X(b.BBOX_TR) as trx, ST_Y(b.BBOX_TR) as try, (b.UID).val as UID, (b.TID).val as TID ) t
+                        FROM (
+                            SELECT 
+                            ST_X(b.BBOX_BL) as blx, 
+                            ST_Y(b.BBOX_BL) as bly, 
+                            ST_X(b.BBOX_BR) as brx, 
+                            ST_Y(b.BBOX_BR) as bry, 
+                            ST_X(b.BBOX_TL) as tlx, 
+                            ST_Y(b.BBOX_TL) as tly, 
+                            ST_X(b.BBOX_TR) as trx, 
+                            ST_Y(b.BBOX_TR) as try, 
+                            (b.UID).val as UID, 
+                            (b.TID).val as TID, 
+                            (b.DID).val as DID, 
+                            (b.DHP).val as DHP, 
+                            (b.BID).val as BID, 
+                            (b.BHP).val as BHP, 
+                            (b.SID).val as SID, 
+                            (b.SHP).val as SHP
+                        ) t                
                     ) as properties
                     FROM (
                         SELECT
                             c.UID as UID,
                             c.TID as TID,
+                            c.DID as DID,
+                            c.DHP as DHP,
+                            c.BID as BID,
+                            c.BHP as BHP,
+                            c.SID as SID,
+                            c.SHP as SHP,
                             ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-99,ST_Y((c.UID).geom)-99),2056),4326) AS BBOX_BL,
                             ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)+99,ST_Y((c.UID).geom)-99),2056),4326) AS BBOX_BR,
                             ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-99,ST_Y((c.UID).geom)+99),2056),4326) AS BBOX_TL,
@@ -57,7 +81,13 @@ class MapController extends Controller
                         FROM (                        
                             SELECT
                                 (ST_PixelAsCentroids(u.r,1,false)) As UID,
-                                (ST_PixelAsCentroids(u.r,2,false)) As TID
+                                (ST_PixelAsCentroids(u.r,2,false)) As TID,
+                                (ST_PixelAsCentroids(u.r,3,false)) As DID,
+                                (ST_PixelAsCentroids(u.r,4,false)) As DHP,
+                                (ST_PixelAsCentroids(u.r,5,false)) As BID,
+                                (ST_PixelAsCentroids(u.r,6,false)) As BHP,
+                                (ST_PixelAsCentroids(u.r,7,false)) As SID,
+                                (ST_PixelAsCentroids(u.r,8,false)) As SHP
                             FROM(
                                 SELECT ST_Union(rast) as r
                                 FROM gameField
