@@ -168,9 +168,9 @@ class User implements AdvancedUserInterface, \Serializable
     protected $userResources;
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTeam", type="IN_TEAM", direction="OUTGOING", collection=true, mappedBy="user")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTeam", type="IN_TEAM", direction="OUTGOING", collection=false, mappedBy="user")
      * @OGM\Lazy()
-     * @var ArrayCollection|\AppBundle\Entity\UserTeam[]
+     * @var \AppBundle\Entity\UserTeam
      */
     protected $userTeam;
     
@@ -482,11 +482,11 @@ class User implements AdvancedUserInterface, \Serializable
     }
     
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\UserTeam[]
+     * @return \AppBundle\Entity\UserTeam
      */   
     public function getUserTeam()
     {        
-        return $this->userTeam->first();
+        return $this->userTeam;
     }
     
     /**
@@ -495,15 +495,10 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function addTeam(Team $team, $joined)
     {
-        foreach ( $this->userTeam as $team) {
-            if ($team->getTeam()->getName() === $team->getName()) {
-                return;
-            }
-        }
 
         $ut = new UserTeam($this, $team, $joined);
-        $this->userTeam->add($ut);
-        $team->getMemberships()->add($ut);
+        $this->userTeam = $ut;
+        $team->userTeam = $ut;
         
     }
     

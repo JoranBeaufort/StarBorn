@@ -30,16 +30,16 @@ class Team
     protected $name;  
     
     /**
-     * @var AppBundle\Entity\UserTeam[]
+     * @var AppBundle\Entity\UserTeam
      *
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTeam", direction="INCOMING", collection=true, mappedBy="team")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTeam", direction="INCOMING", collection=false, mappedBy="team")
      */
-    protected $memberships;
+    protected $userTeam;
     
-    public function __construct($teamname)
+    public function __construct($tid,$teamname)
     {
+        $this->tid = $tid;
         $this->name = $teamname;
-        $this->memberships = new ArrayCollection();
     }
     
     
@@ -60,10 +60,10 @@ class Team
     
     
     /**
-     * @return \AppBundle\Entity\UserTeam[]
+     * @return \AppBundle\Entity\UserTeam
      */
-    public function getMemberships()
+    public function getUserTeam()
     {
-        return $this->memberships;
+        return $this->userTeam;
     }
 }

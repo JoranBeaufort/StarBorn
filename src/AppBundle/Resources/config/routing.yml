@@ -23,6 +23,10 @@ capture:
     path:  /capture
     defaults: { _controller: AppBundle:Capture:index }
     
+scan:
+    path:  /scan
+    defaults: { _controller: AppBundle:Scan:index }
+    
 attack:
     path:  /attack
     defaults: { _controller: AppBundle:Attack:index }

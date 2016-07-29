@@ -93,10 +93,8 @@ var uLat, uLng;
         svg.appendChild(svgFilter);
         
         $.getJSON(url,  function( json ) {
-            console.log('da');
             L.geoJson(json, {
                 onEachFeature: function (feature, layer) {
-                console.log(bla);
                     var tile;
                     var popup = {pretitle:'', title:'', posttitle:'',contentTitle:'', contentText:''};
                     var tLat = feature.geometry.coordinates[1];
@@ -215,7 +213,7 @@ var uLat, uLng;
                                             '               </form> '+
                                             '           </div> '+
                                             '           <div class="col-xs-6"> '+
-                                            '               <form method="post" action="{{ path('attack')}}"> '+
+                                            '               <form method="post" action="{{ path('scan')}}"> '+
                                             '                   <input type="hidden" name="ulat" value="'+uLat+'"> '+
                                             '                   <input type="hidden" name="ulng" value="'+uLng+'"> '+
                                             '                   <input type="hidden" name="tlat" value="'+tLat+'"> '+

@@ -12,11 +12,12 @@ use Symfony\Component\Form\FormError;
 use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
 use AppBundle\Entity\Team;
+use AppBundle\Entity\UserTeam;
 use AppBundle\Entity\Resources;
 use AppBundle\Entity\UserResource;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 
-class AttackController extends Controller
+class ScanController extends Controller
 {
     public function indexAction(Request $request)
     {    
@@ -57,23 +58,8 @@ class AttackController extends Controller
         
         $em = $this->get('neo4j.graph_manager')->getClient();
         $tile = $em->getRepository(Tile::class)->findOneById(intval($results[0]['val']));
-        //$user = $em->getRepository(User::class)->findOneBy('uid',$tile->getUid());
-        // $user = $em->getRepository(User::class)->findOneById(1784);
-        // foreach($user->getUserTiles() as $t){
-        //     var_dump($t->getTile()->getResources());
-        // }die;
-        // var_dump($tile->getUserTile()->getCollected());
-        //echo '<br>';
-        //$user->getUsername();
-        //var_dump($tile->getUserTile()->getUser()->getUsername());die;
-        
-        $userTile = $em->getRepository(User::class)->findOneBy('uid',$tile->getUid());
-        
-        $drone = $tile->getTileDrone();
-        $building = null;
-        $shield = null;
 
-        return $this->render('AppBundle:Attack:attack.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'userTile' => $userTile, 'tile' => $tile));
+        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'tile' => $tile));
         
     }
 }
