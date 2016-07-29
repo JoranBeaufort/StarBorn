@@ -69,7 +69,7 @@ class AttackController extends Controller
         $building = null;
         $shield = null;
 
-        return $this->render('AppBundle:Attack:attack.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'userTile' => $userTile, 'drone' => $drone, 'building' => $building, 'shield' => $shield));
+        return $this->render('AppBundle:Attack:attack.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'userTile' => $userTile, 'tile' => $tile));
         
     }
 }

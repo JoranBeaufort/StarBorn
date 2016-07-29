@@ -28,10 +28,10 @@
                                     Du hast in diesem Gebiet eine feindliche Presänz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                         <div class="row">
                             <p>Dein Scanner hat folgende feindliche einheiten entdeckt:</p>
-                            {% if shield != null %}
+                            {% if tile.getTileShield != null %}
                             <div class="col-md-6 col-md-offset-3">
                                 <div class="card text-xs-center">
                                     <h3 class="card-header warning-color white-text">Schild</h3>
@@ -51,8 +51,8 @@
                                     <h3 class="card-header warning-color white-text">Aufklärungsdrohne</h3>
                                     <div class="card-block">
                                         <div class="col-md-12">
-                                            <p>Modell: <strong>{{ drone.getDrone.getName_DE }}</strong></p>
-                                            <p>Lebenspunkte: <strong>{{ drone.getHp }} / {{ drone.getDrone.getHp }}</strong></p>
+                                            <p>Modell: <strong>{{ tile.getTileDrone.getDrone.getName_DE }}</strong></p>
+                                            <p>Lebenspunkte: <strong>{{ tile.getTileDrone.getHp }} / {{ tile.getTileDrone.getDrone.getHp }}</strong></p>
                                         </div>
                                     </div>
                                 </div>
@@ -62,8 +62,9 @@
                                     <h3 class="card-header warning-color white-text">Gebäude</h3>
                                     <div class="card-block">
                                         <div class="col-md-12">
-                                            {% if building == null %}
+                                            {% if tile.getTileBuilding == null %}
                                                 <p>Kein Gebäude vorhanden</p>
+                                                <p>&nbsp;</p>
                                             {% else %}
                                                 <p>Gebäude Typ: {{ building }}</p>
                                                 <p>Lebenspunkte: {{ building }}</p>

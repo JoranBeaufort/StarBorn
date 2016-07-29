@@ -159,4 +159,14 @@ class Tile
         return $this->tileDrone->first();
     }
     
+    public function getTileBuilding()
+    {
+        return null;
+    }
+    
+    
+    public function getTileShield()
+    {
+        return null;
+    }
 }
