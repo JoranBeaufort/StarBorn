@@ -67,7 +67,7 @@ class Tile
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=false, mappedBy="tile")
      * @OGM\Lazy()
-     * @var ArrayCollection|\AppBundle\Entity\UserTile
+     * @var \AppBundle\Entity\UserTile
      */
      
     protected $userTile;    
@@ -129,7 +129,7 @@ class Tile
      */
     public function getUserTile()
     {
-        return $this->userTile->first();
+        return $this->userTile;
     }
     
     /**

@@ -62,7 +62,8 @@ class AttackController extends Controller
         // foreach($user->getUserTiles() as $t){
         //     var_dump($t->getTile()->getResources());
         // }die;
-        
+        var_dump($tile->getUserTile()->getCollected());
+        var_dump($tile->getUserTile()->getUser()->getUsername());die;
         $userTile = $em->getRepository(User::class)->findOneBy('uid',$tile->getUid());
         
         $drone = $tile->getTileDrone();
