@@ -64,7 +64,7 @@ class AdminController extends Controller
             $statement->execute();
                         
             // NID node id   
-            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 9, '32BSI'::text, -9999, null)";
+            $q ="UPDATE gameField SET rast = ST_AddBand(rast, 9, '64BF'::text, -9999, null)";
             $statement = $connection->prepare($q);
             $statement->execute();
 

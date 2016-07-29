@@ -56,24 +56,14 @@ class MapController extends Controller
                             ST_Y(b.BBOX_TR) as try, 
                             (b.UID).val as UID, 
                             (b.TID).val as TID, 
-                            (b.DID).val as DID, 
-                            (b.DHP).val as DHP, 
-                            (b.BID).val as BID, 
-                            (b.BHP).val as BHP, 
-                            (b.SID).val as SID, 
-                            (b.SHP).val as SHP
+                            (b.NID).val as NID 
                         ) t                
                     ) as properties
                     FROM (
                         SELECT
                             c.UID as UID,
                             c.TID as TID,
-                            c.DID as DID,
-                            c.DHP as DHP,
-                            c.BID as BID,
-                            c.BHP as BHP,
-                            c.SID as SID,
-                            c.SHP as SHP,
+                            c.NID as NID,
                             ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-99,ST_Y((c.UID).geom)-99),2056),4326) AS BBOX_BL,
                             ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)+99,ST_Y((c.UID).geom)-99),2056),4326) AS BBOX_BR,
                             ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-99,ST_Y((c.UID).geom)+99),2056),4326) AS BBOX_TL,
@@ -82,12 +72,7 @@ class MapController extends Controller
                             SELECT
                                 (ST_PixelAsCentroids(u.r,1,false)) As UID,
                                 (ST_PixelAsCentroids(u.r,2,false)) As TID,
-                                (ST_PixelAsCentroids(u.r,3,false)) As DID,
-                                (ST_PixelAsCentroids(u.r,4,false)) As DHP,
-                                (ST_PixelAsCentroids(u.r,5,false)) As BID,
-                                (ST_PixelAsCentroids(u.r,6,false)) As BHP,
-                                (ST_PixelAsCentroids(u.r,7,false)) As SID,
-                                (ST_PixelAsCentroids(u.r,8,false)) As SHP
+                                (ST_PixelAsCentroids(u.r,3,false)) As NID
                             FROM(
                                 SELECT ST_Union(rast) as r
                                 FROM gameField

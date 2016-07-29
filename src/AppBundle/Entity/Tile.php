@@ -45,12 +45,12 @@ class Tile
     protected $resources;    
 
     /**
-     * @var AppBundle\Entity\UserTile[]
+     * @var AppBundle\Entity\UserTile
      *
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", direction="INCOMING", collection=true, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", direction="INCOMING", collection=false, mappedBy="tile")
      */
      
-    protected $memberships;    
+    protected $userTile;    
     
     /**
      * UserResource constructor.
@@ -64,9 +64,13 @@ class Tile
         $this->rid = $rid;
         $this->tLat = $tLat;
         $this->tLng = $tLng;
-        $this->memberships = new ArrayCollection();
     }
 
+    
+    public function getId()
+    {
+        return $this->id;
+    }
     
     public function getRid()
     {
@@ -94,11 +98,19 @@ class Tile
     }
     
     /**
-     * @return \AppBundle\Entity\UserTile[]
+     * @return \AppBundle\Entity\UserTile
      */
-    public function getMemberships()
+    public function getUserTile()
     {
-        return $this->memberships;
+        return $this->userTile;
+    }
+    
+    /**
+     * @var \AppBundle\Entity\UserTile
+     */
+    public function setUserTile($userTile)
+    {
+        $this->userTile = $userTile;
     }
 
     

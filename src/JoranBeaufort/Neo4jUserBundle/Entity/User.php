@@ -526,7 +526,7 @@ class User implements AdvancedUserInterface, \Serializable
         if (!$this->userTiles->contains($tile)) {
             $ut = new UserTile($this, $tile, $captured, $collected);
             $this->userTiles->add($ut);
-            $tile->getMemberships()->add($ut);
+            $tile->setUserTile($ut);
         }
     }
 
