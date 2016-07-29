@@ -54,7 +54,15 @@ class Tile
      * @var string
      */
      
-    protected $resources;    
+    protected $resources;      
+    
+    /**
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="OUTGOING", collection=false, mappedBy="tile")
+     * @OGM\Lazy()
+     * @var ArrayCollection|\AppBundle\Entity\TileDrone
+     */
+     
+    protected $tileDrone;    
 
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=false, mappedBy="tile")
@@ -131,6 +139,24 @@ class Tile
     {
         $this->userTile = $userTile;
     }
-
+    
+    /**
+     * @param \AppBundle\Entity\Drone $drone
+     * @param int $hp
+     */
+    public function setTileDrone(Drone $drone, $hp)
+    {
+        $td = new TileDrone($this, $drone, $hp);
+        $this->tileDrone = $td;
+        $drone->setTileDrone($td);
+    }
+    
+    /**
+     * @return \AppBundle\Entity\TileDrone
+     */
+    public function getTileDrone()
+    {
+        return $this->tileDrone->first();
+    }
     
 }

@@ -9,36 +9,65 @@
                 <div class="card text-xs-center">                
                     <h3 class="card-header primary-color white-text">Dieses Gebiet Angreifen</h3>
                     <div class="card-block">
+                        <div class="alert alert-danger" role="alert">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <i class="fa fa-2x fa-info-circle"></i>
+                                </div>
+                                <div class="col-md-10">
+                                    Dieses gebiet geh√∂rt einem feindlichen Spieler, bekannt unter dem Namen <strong>"{{ userTile.getUsername }}"</strong>!
+                                </div>
+                            </div>
+                        </div> 
                         <div class="alert alert-info" role="alert">
                             <div class="row">
                                 <div class="col-md-2">
                                     <i class="fa fa-2x fa-info-circle"></i>
                                 </div>
                                 <div class="col-md-10">
-                                    Du hast in diesem Gebiet eine feindliche Pres‰nz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!
+                                    Du hast in diesem Gebiet eine feindliche Pres√§nz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!
                                 </div>
                             </div>
                         </div> 
                         <div class="row">
-                            <p>Dein Scanner hat folgende feindliche einheiten entdeckt:</p> 
-                            <div class="col-md-6">
+                            <p>Dein Scanner hat folgende feindliche einheiten entdeckt:</p>
+                            {% if shield != null %}
+                            <div class="col-md-6 col-md-offset-3">
                                 <div class="card text-xs-center">
-                                    <h3 class="card-header warning-color white-text">Aufkl‰rungsdrohne</h3>
+                                    <h3 class="card-header warning-color white-text">Schild</h3>
                                     <div class="card-block">
                                         <div class="col-md-12">
-                                            <p>Drohnen Modell: {{ drone.name }}</p>
-                                            <p>Lebenspunkte: {{ drone.hp }}</p>                                            
+                                            <p>Schild Modell: {{ shield }}</p>
+                                            <p>Lebenspunkte: {{ shield }}</p>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card text-xs-center">
+                                    <h3 class="card-header warning-color white-text">Aufkl√§rungsdrohne</h3>
+                                    <div class="card-block">
+                                        <div class="col-md-12">
+                                            <p>Modell: <strong>{{ drone.getDrone.getName_DE }}</strong></p>
+                                            <p>Lebenspunkte: <strong>{{ drone.getHp }} / {{ drone.getDrone.getHp }}</strong></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="card text-xs-center">
-                                    <h3 class="card-header warning-color white-text">Geb‰ude</h3>
+                                    <h3 class="card-header warning-color white-text">Geb√§ude</h3>
                                     <div class="card-block">
                                         <div class="col-md-12">
-                                            <p>Geb‰ude Typ: {{ building.name }}</p>
-                                            <p>Lebenspunkte: {{ building.hp }}</p>                                            
+                                            {% if building == null %}
+                                                <p>Kein Geb√§ude vorhanden</p>
+                                            {% else %}
+                                                <p>Geb√§ude Typ: {{ building }}</p>
+                                                <p>Lebenspunkte: {{ building }}</p>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

@@ -64,9 +64,12 @@ class AttackController extends Controller
         // }die;
         
         $userTile = $em->getRepository(User::class)->findOneBy('uid',$tile->getUid());
-        var_dump($userTile->getUsername());die;
         
-        return $this->render('AppBundle:Capture:capture.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'userTile' => $userTile, 'building' => $building, 'drone' => $drone));
+        $drone = $tile->getTileDrone();
+        $building = null;
+        $shield = null;
+
+        return $this->render('AppBundle:Attack:attack.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'userTile' => $userTile, 'drone' => $drone, 'building' => $building, 'shield' => $shield));
         
     }
 }

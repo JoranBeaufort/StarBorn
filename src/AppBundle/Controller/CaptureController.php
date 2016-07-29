@@ -11,6 +11,8 @@ use Symfony\Component\Form\FormError;
 
 use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
+use AppBundle\Entity\TileDrone;
+use AppBundle\Entity\Drone;
 use AppBundle\Entity\Team;
 use AppBundle\Entity\Resources;
 use AppBundle\Entity\UserResource;
@@ -108,7 +110,8 @@ class CaptureController extends Controller
                     $user->addTile($tile, time(),time());
                     // print_r($user->getUserTiles());die;
                     $em->persist($user);
-                    $em->flush();     
+                    $em->flush();
+                    
                     $q=   " UPDATE 
                                 gameField 
                             SET 
@@ -138,6 +141,11 @@ class CaptureController extends Controller
                 
                     $statement = $connection->prepare($q);
                     $statement->execute();
+                    
+                    $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
+                    $tile->setTileDrone($drone,$drone->getHp());
+                    $em->persist($tile);
+                    $em->flush();
                     
                     return $this->render('AppBundle:Capture:success.html.twig',array('user' => $user, 'newResources' =>$newResources));
                 }elseif($results[0]['val'] !== '0' || $results[0]['val'] !== 0){
