@@ -19,6 +19,7 @@ use AppBundle\Entity\UserResource;
 use AppBundle\Entity\Tile;
 use AppBundle\Entity\Team;
 use AppBundle\Entity\UserTeam;
+use AppBundle\Entity\UserTile;
 
 class TestController extends Controller
 {
@@ -326,6 +327,44 @@ class TestController extends Controller
             echo '<p style="color:red">NOT OK</p><br>';
         }
         
+        echo 'Clear EM<br>';        
+        $em->clear();
+        echo '<p style="color:green">OK</p><br>';        
+
+       die;
+       return false;
+    }
+    
+    
+     public function test5Action()
+    {
+
+    
+        $em = $this->get('neo4j.graph_manager')->getClient();
+     
+        $em->getDatabaseDriver()->run("match (n:Tile{uid:'test'})<-[c:CAPTURED]-(u:User) delete c,n");     
+        
+        $user=$em->getRepository(User::class)->findOneBy('username', 'test');  
+
+                    
+        echo 'Create new tile<br>';        
+        $tile = new Tile('test',1234, 4.66, 8.77, '[1,2],[2,3],[3,4],[4,5]'); 
+        echo '<p style="color:green">OK</p><br>';
+
+        echo 'persist tile <br>';        
+        $em->persist($tile);
+        echo '<p style="color:green">OK</p><br>';
+
+        echo 'add tile to user<br>';
+        $user->addTile($tile, time(),time());
+        echo '<p style="color:green">OK</p><br>';
+        
+        echo 'persist tile <br>'; 
+        $em->persist($user);
+        
+        echo 'flush<br>'; 
+        $em->flush();
+                
         echo 'Clear EM<br>';        
         $em->clear();
         echo '<p style="color:green">OK</p><br>';        

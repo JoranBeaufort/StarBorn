@@ -45,8 +45,8 @@ class CaptureController extends Controller
         $tbry = $request->request->get('tbry');
         
         $bBox = '['.$tblx.','.$tbly.'],['.$ttlx.','.$ttly.'],['.$ttrx.','.$ttry.'],['.$tbrx.','.$tbry.']';
-        
-        //var_dump($uLat);die;
+        // var_dump($bBox);die;
+        // var_dump($uLat);die;
        
         $a = $encoder->decrypt($request->request->get('a'));
         
@@ -104,10 +104,8 @@ class CaptureController extends Controller
                     
                     $setResources = join(',', $tileResources); 
                     
-                    
                                     
                     $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox); 
-                   
                     $tile->setResources($setResources); 
                     
                     $em->persist($tile);
@@ -117,7 +115,7 @@ class CaptureController extends Controller
                     // print_r($user->getUserTiles());die;
                     $em->persist($user);
                     $em->flush();
-                    
+                    print('blablabla');
                     $q=   " UPDATE 
                                 gameField 
                             SET 
