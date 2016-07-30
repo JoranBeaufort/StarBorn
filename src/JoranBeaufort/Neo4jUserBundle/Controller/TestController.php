@@ -17,6 +17,8 @@ use JoranBeaufort\Neo4jUserBundle\Entity\Role;
 use AppBundle\Entity\Resources;
 use AppBundle\Entity\UserResource;
 use AppBundle\Entity\Tile;
+use AppBundle\Entity\Team;
+use AppBundle\Entity\UserTeam;
 
 class TestController extends Controller
 {
