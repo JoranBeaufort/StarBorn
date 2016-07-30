@@ -253,38 +253,11 @@ var uLat, uLng;
                         }else if(feature.properties.tid == 0){
                         
                             popup.contentText = '<div class="alert alert-info">Dein Radar registriert kein Signal... Nimm dieses Gebiet ein. Schnell!</div>'; 
-                            var canvas = document.createElement("canvas");
-                            canvas.setAttribute("id",'gauge-'+tLat+'-'+tLng);
-                            
-                                                                                                        var opts = {
-                              lines: 12, // The number of lines to draw
-                              angle: 0.15, // The length of each line
-                              lineWidth: 0.44, // The line thickness
-                              pointer: {
-                                length: 0.9, // The radius of the inner circle
-                                strokeWidth: 0.035, // The rotation offset
-                                color: '#000000' // Fill color
-                              },
-                              limitMax: 'false',   // If true, the pointer will not go past the end of the gauge
-                              colorStart: '#6FADCF',   // Colors
-                              colorStop: '#8FC0DA',    // just experiment with them
-                              strokeColor: '#E0E0E0',   // to see which ones work best for you
-                              generateGradient: true
-                            };
-                            
-                            var gauge = new Gauge(canvas).setOptions(opts); // create sexy gauge!
-                            gauge.maxValue = 3000; // set max gauge value
-                            gauge.animationSpeed = 32; // set animation speed (32 is default value)
-                            gauge.set(1250); // set actual value
-                            
-                            console.log(gauge);
-            
-
-            
+                          //   popup.contentText = '<canvas id="gauge-'+tLat+'-'+tLng+'"></canvas>';
 
                             polygon.bindPopup( '<div style="width:240px">'+ 
                                             '   <div class="card text-xs-center">' +
-                                                    canvas.outerHTML+
+                                                    popup.pretitle+popup.title+popup.posttitle+
                                             '       <div class="card-block"> ' +
                                             '           <div class="card-text">'+popup.contentText+'</div> '+
                                             '           <div class="row"><div class="col-xs-6"> '+
@@ -365,11 +338,15 @@ var uLat, uLng;
                 }                
                 
             });  
+            
+            
         });
 
     }
     
     var lc = L.control.locate({setView:'always',markerStyle:{radius:'15',fillColor:'#ff0000'},circleStyle:{fillColor:'#ff0000'}}).addTo(map);
+    
+    map
     
     lc.start();
     
