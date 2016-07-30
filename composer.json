@@ -11,12 +11,6 @@
             "app/AppCache.php"
         ]
     },
-    "repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/joranbeaufort/neo4jphpogmtestbundle"
-        }
-    ],
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"

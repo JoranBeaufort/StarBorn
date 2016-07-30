@@ -17,7 +17,7 @@ use AppBundle\Entity\Resources;
 use AppBundle\Entity\UserResource;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 
-class ScanController extends Controller
+class AttackController extends Controller
 {
     public function indexAction(Request $request)
     {    
@@ -62,7 +62,7 @@ class ScanController extends Controller
         // $t = $tile->getUserTile()->getUser()->getUserTeam()->getTeam()->getName();
         // var_dump($t);die;
 
-        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'tile' => $tile));
+        return $this->render('AppBundle:Attack:attack.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'tile' => $tile));
         
     }
 }

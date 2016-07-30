@@ -37,8 +37,14 @@ class CaptureController extends Controller
         // tile BBOX
         $tblx = $request->request->get('tblx');
         $tbly = $request->request->get('tbly');
+        $ttlx = $request->request->get('ttlx');
+        $ttly = $request->request->get('ttly');
         $ttrx = $request->request->get('ttrx');
         $ttry = $request->request->get('ttry');
+        $tbrx = $request->request->get('tbrx');
+        $tbry = $request->request->get('tbry');
+        
+        $bBox = '['.$tblx.','.$tbly.'],['.$ttlx.','.$ttly.'],['.$ttrx.','.$ttry.'],['.$tbrx.','.$tbry.']';
         
         //var_dump($uLat);die;
        
@@ -100,7 +106,7 @@ class CaptureController extends Controller
                     
                     
                                     
-                    $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng); 
+                    $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox); 
                    
                     $tile->setResources($setResources); 
                     

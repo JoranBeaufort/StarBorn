@@ -47,7 +47,14 @@ class Tile
      * @var float
      */
      
-    protected $tLng;  
+    protected $tLng; 
+    
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
+    protected $bBox;  
     
     /**
      * @OGM\Property(type="string")
@@ -78,14 +85,16 @@ class Tile
      * @param int $rid
      * @param float $tLat
      * @param float $tLng
+     * @param string $bBox
      */
      
-    public function __construct($uid, $rid, $tLat, $tLng)
+    public function __construct($uid, $rid, $tLat, $tLng, $bBox)
     {
         $this->uid = $uid;
         $this->rid = $rid;
         $this->tLat = $tLat;
         $this->tLng = $tLng;
+        $this->bBox = $bBox;
     }
 
     
@@ -112,6 +121,17 @@ class Tile
     public function getLng()
     {
         return $this->tLng;
+    }
+    
+    public function setBBox($bBox)
+    {
+        // BB = array([BLX,BLY],[TLX,TLY],[TRX,TRY],[BRX,BRY])
+        $this->bBox = $bBox;
+    }
+    
+    public function getBBox($bBox)
+    {
+        return $this->bBox;
     }
     
     public function setResources($resources)
