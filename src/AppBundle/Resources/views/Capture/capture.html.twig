@@ -32,6 +32,7 @@
                                 <input type="hidden" name="ulng" value="{{ uLng }}">
                                 <input type="hidden" name="tlat" value="{{ tLat }}">
                                 <input type="hidden" name="tlng" value="{{ tLng }}">
+                                <input type="hidden" name="bBox" value="{{ bBox }}">
                                 <div class="capture-select">
                                     {% for child in form.landcover %}
                                         {{ form_widget(child) }}

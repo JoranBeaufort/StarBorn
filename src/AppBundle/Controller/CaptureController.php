@@ -65,7 +65,9 @@ class CaptureController extends Controller
                 
                 // tile centroid
                 $tLat = $request->request->get('tlat');
-                $tLng = $request->request->get('tlng');        
+                $tLng = $request->request->get('tlng'); 
+
+                $bBox = $request->request->get('bBox');
                 
 
                 $em_pgsql = $this->getDoctrine()->getManager();
@@ -201,7 +203,7 @@ class CaptureController extends Controller
                 }
                 return $this->render('AppBundle:Capture:error.html.twig',array('user' => $user, 'error' =>$error, 'info'=>$info));
             }            
-            return $this->render('AppBundle:Capture:capture.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'form' => $form->createView()));
+            return $this->render('AppBundle:Capture:capture.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'bBox'=>$bBox, 'form' => $form->createView()));
         
         }
         
