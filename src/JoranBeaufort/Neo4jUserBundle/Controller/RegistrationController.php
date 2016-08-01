@@ -74,6 +74,8 @@ class RegistrationController extends Controller
                 $dateTime = new \dateTime;
                 $dateTime = $dateTime->format('Y-m-d H:i:s');
                 
+                $role=$em->getRepository(Role::class)->findOneBy('roleType', 'ROLE_USER'); 
+                
                 $user->setPassword($password);
                 $user->setConfirmationToken($confirmationToken);
                 $user->setIsEnabled(false);
@@ -81,15 +83,9 @@ class RegistrationController extends Controller
                 $user->setIsAccountNonLocked(true);
                 $user->setIsCredentialsNonExpired(true);
                 $user->setUid($uid);
-                $user->setRegistrationDateTime($dateTime);
-                
-                // 4) save the User!
-                $em->persist($user);
-                $em->flush();
-                
-                $role=$em->getRepository(Role::class)->findOneBy('roleType', 'ROLE_USER');   
-                $user=$em->getRepository(User::class)->findOneBy('confirmationToken', $confirmationToken);                
+                $user->setRegistrationDateTime($dateTime);                
                 $user->addRole($role);
+                
                 $em->persist($user);
                 $em->flush();
 

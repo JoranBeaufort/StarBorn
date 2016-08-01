@@ -372,5 +372,69 @@ class TestController extends Controller
        die;
        return false;
     }
+    
+     public function test6Action()
+    {
+
+        $em = $this->get('neo4j.graph_manager')->getClient();
+        $em->getDatabaseDriver()->run("match (n:User{username:'foo'})-[r:HAS_ROLE]->(s:Role) delete r,n");     
+        $em->getDatabaseDriver()->run("match (n:User{username:'foo'}) delete n");     
+        
+        echo 'Create new user';
+        $user = new User();
+        echo '... <p style="color:green">[OK]</p><br>';
+        echo 'Add a few attr';
+        $user->setUsername('foo');
+        $user->setPassword('bar');
+        $user->setIsEnabled(false);
+        $user->setIsAccountNonExpired(true);
+        $user->setIsAccountNonLocked(true);
+        $user->setIsCredentialsNonExpired(true);
+        echo '... <p style="color:green">[OK]</p><br>';
+        
+        /*
+        echo 'Persist';
+        $em->persist($user);
+        echo '... <p style="color:green">[OK]</p><br>';
+        echo 'Flush';
+        $em->flush();
+        echo '... <p style="color:green">[OK]</p><br>';
+        
+        $em->clear();
+        */
+        
+        echo 'Get Role';
+        $role=$em->getRepository(Role::class)->findOneBy('roleType', 'ROLE_USER');   
+        echo '... <p style="color:green">[OK]</p><br>';
+        echo 'Add role to user';
+        $user->addRole($role);
+        echo '... <p style="color:green">[OK]</p><br>';
+       
+        echo 'Persist';
+        $em->persist($user);
+        echo '... <p style="color:green">[OK]</p><br>';
+        echo 'Flush';
+        $em->flush();
+        echo '... <p style="color:green">[OK]</p><br>';
+        
+        $em->clear();
+        
+        echo 'Get User out of DB';
+        $user=$em->getRepository(User::class)->findOneBy('username', 'foo');
+        if($user){
+            echo '... <p style="color:green">[OK]</p><br>';
+        }else{
+            echo '... <p style="color:red">[error] - User is null</p><br>';
+        }
+        echo 'Get role of user';
+        $r = $user->getRoles();
+        echo '... <p style="color:green">[OK]</p><br>';
+        
+        echo 'Count resource nodes';
+        $countResources = $em->getDatabaseDriver()->run("match (n:Resources) return count(*)");  
+        print_r($countResources);
+       die;
+       return false;
+    }
 
 }
