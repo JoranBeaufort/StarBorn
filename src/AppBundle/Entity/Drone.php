@@ -50,12 +50,17 @@ class Drone
     protected $name_DE;
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="INCOMING", collection=false, mappedBy="drone")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="INCOMING", collection=true, mappedBy="drone")
      * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\TileDrone
      */
      
-    protected $tileDrone;    
+    protected $tileDrone;  
+    
+    public function __construct()
+    {
+        $this->tileDrone = new ArrayCollection();
+    }
 
     
     public function getId()
@@ -97,7 +102,7 @@ class Drone
      */
     public function setTileDrone($tileDrone)
     {
-        $this->tileDrone = $tileDrone;
+        $this->tileDrone->add($tileDrone);
     }
     
 }

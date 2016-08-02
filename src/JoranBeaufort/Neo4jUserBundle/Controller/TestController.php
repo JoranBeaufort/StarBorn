@@ -299,9 +299,17 @@ class TestController extends Controller
         
         
         
-        echo 'Loading tile with id: 1842 <br>';        
-        $tile = $em->getRepository(Tile::class)->findOneById(1842);
-        if($tile->getRid() == 4726){
+        echo 'Loading drone with id: 2226 <br>';        
+        $drone = $em->getRepository(Drone::class)->findOneById(2226);
+        if($drone->getName() == 'nova_xs'){
+            echo '<p style="color:green">OK</p><br>';
+        }else{
+            echo '<p style="color:red">NOT OK</p><br>';
+        }
+        
+        echo 'Loading tile connected to drone <br>';        
+        $tile = $drone->getTileDrone()->first()->getTile();
+        if($tile->getUid() == 'lHCOoxc0'){
             echo '<p style="color:green">OK</p><br>';
         }else{
             echo '<p style="color:red">NOT OK</p><br>';
@@ -323,7 +331,7 @@ class TestController extends Controller
         }
         
         echo 'Loading team of user connected to the tile. Starting at (tile) node';        
-        if($tile->getUserTile()->getUser()->getUserTeam()->getTeam()->getName() == 'red_giants'){
+        if($drone->getTileDrone()->first()->getTile()->getUserTile()->getUser()->getUserTeam()->getTeam()->getName() == 'red_giants'){
             echo '<p style="color:green">OK</p><br>';
         }else{
             echo '<p style="color:red">NOT OK</p><br>';
