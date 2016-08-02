@@ -196,35 +196,47 @@ var uLat, uLng;
 
         //Path inner and outer radius is adjusted
         var arc1 = d3.arc()
-            .innerRadius(width / 3)
-            .outerRadius(width/2)
+            .innerRadius(width / 4)
+            .outerRadius(width/3)
             .startAngle(100 * (Math.PI/180))
-            .endAngle(119 * (Math.PI/180));        
+            .endAngle(119 * (Math.PI/180));
             
        var arc11 = d3.arc()
-            .innerRadius(width / 3)
-            .outerRadius((width/2)-10)
+            .innerRadius(width / 4)
+            .outerRadius((width/3)-10)
             .startAngle(120 * (Math.PI/180))
+            .endAngle(159 * (Math.PI/180));       
+            
+       var arc1L1 = d3.arc()
+            .innerRadius((width / 3)+10)
+            .outerRadius((width/2))
+            .startAngle(100 * (Math.PI/180))
             .endAngle(159 * (Math.PI/180));
             
         var arc2 = d3.arc()
-            .innerRadius(width / 3)
-            .outerRadius((width/2)-20)
+            .innerRadius(width / 4)
+            .outerRadius((width/3)-20)
             .startAngle(160 * (Math.PI/180))
             .endAngle(200 * (Math.PI/180));
             
         var arc3 = d3.arc()
-            .innerRadius(width / 3)
-            .outerRadius((width/2)-10)
+            .innerRadius(width / 4)
+            .outerRadius((width/3)-10)
             .startAngle(201 * (Math.PI/180))
             .endAngle(240 * (Math.PI/180));
             
         var arc31 = d3.arc()
-            .innerRadius(width / 3)
-            .outerRadius(width/2)
+            .innerRadius(width / 4)
+            .outerRadius(width/3)
             .startAngle(241 * (Math.PI/180))
             .endAngle(260 * (Math.PI/180));
-
+            
+       var arc3L1 = d3.arc()
+            .innerRadius((width / 3)+10)
+            .outerRadius((width/2))
+            .startAngle(201 * (Math.PI/180))
+            .endAngle(260 * (Math.PI/180));
+            
         var plot = svg
             .append("g")
             .attr("class", "arc");
@@ -235,13 +247,22 @@ var uLat, uLng;
             .attr("class", "gauge")
             .style("fill", "#0099CC")
             .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
-
+            
         var arc = plot
             .append("path")
             .attr("d", arc11)
             .attr("class", "gauge")
             .style("fill", "#33b5e5")
             .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+            
+        var arc = plot
+            .append("path")
+            .attr("d", arc1L1)
+            .attr("class", "gauge")
+            .style("fill", "#33b5e5")
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)")
+            .attr("class","arc")   
+            .attr("id","blue-dwarf-arc");    
             
         var arc = plot
             .append("path")
@@ -256,15 +277,42 @@ var uLat, uLng;
             .attr("class", "gauge")
             .style("fill", "#ffbb33")
             .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+
             
         var arc = plot
             .append("path")
             .attr("d", arc31)
             .attr("class", "gauge")
             .style("fill", "#FF8800")
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)"); 
             
+        var arc = plot
+            .append("path")
+            .attr("d", arc3L1)
+            .attr("class", "gauge")
+            .style("fill", "#FF8800")
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)")
+            .attr("class","arc")   
+            .attr("id","red-giant-arc");            
             
+            plot   
+            .append("text")
+            .attr("dy", 20) //Move the text down
+            .style('fill', 'white')
+            .style("font-size","18px")
+            .append("textPath")
+            .attr("xlink:href","#red-giant-arc")
+            .text("Red Giants");            
+            plot   
+            
+            .append("text")
+            .attr("dy", 20) //Move the text down
+            .style('fill', 'white')
+            .style("font-size","18px")
+            .append("textPath")
+            .attr("xlink:href","#blue-dwarf-arc")
+            .text("Blue Dwarfs");	       
+           
 
         var needle = svg
             .append("g")
@@ -402,7 +450,7 @@ var uLat, uLng;
                             });
                     }
                     
-                    L.circleMarker([feature.geometry.coordinates[1],feature.geometry.coordinates[0]],20,{color:"#545454"}).addTo(map);
+                    // L.circleMarker([feature.geometry.coordinates[1],feature.geometry.coordinates[0]],20,{color:"#545454"}).addTo(map);
 
 
 
@@ -417,11 +465,18 @@ var uLat, uLng;
    	var LeafIcon = L.Icon.extend({
 		options: {
 			iconSize:     [54, 54],
-			iconAnchor:   [27, 47],
+			iconAnchor:   [27, 48],
 		}
 	});
         
-    var greenIcon = new LeafIcon({iconUrl: '{{ asset("img/Street View Filled-50.png")}}'});
+    {% if user.getUserTeam.getTeam.getTid == 1 %}
+        var greenIcon = new LeafIcon({iconUrl: '{{ asset("img/Street View Filled-50-red1.png")}}'});
+    {% elseif user.getUserTeam.getTeam.getTid == 2 %}
+        var greenIcon = new LeafIcon({iconUrl: '{{ asset("img/Street View Filled-50-blue2.png")}}'});
+    {% else %}
+        var greenIcon = new LeafIcon({iconUrl: '{{ asset("img/Street View Filled-50.png")}}'});
+    {% endif %}
+    console.log({{user.getUserTeam.getTeam.getTid}})
     var lc = L.control.locate({setView:'always',markerStyle:{icon: greenIcon},circleStyle:{fillColor:'#ff0000'}}).addTo(map);
     
     lc.start();

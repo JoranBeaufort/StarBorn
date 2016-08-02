@@ -17,7 +17,7 @@ class Team
     protected $id;
     
     /**
-     * @OGM\GraphId()
+     * @OGM\Property(type="int")
      * @var int
      */
     protected $tid;
