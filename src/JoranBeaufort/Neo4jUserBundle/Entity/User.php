@@ -186,7 +186,6 @@ class User implements AdvancedUserInterface, \Serializable
         $this->isActive = true;
         $this->roles = new ArrayCollection();
         $this->userResources = new ArrayCollection();
-        $this->userTeam = new ArrayCollection();
         $this->userTiles = new ArrayCollection();
         
         // may not be needed, see section on salt below

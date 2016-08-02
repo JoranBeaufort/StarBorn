@@ -445,7 +445,7 @@ class TestController extends Controller
 
         $em = $this->get('neo4j.graph_manager')->getClient();
         
-        $em->getDatabaseDriver()->run("match (n:User{username:'test'}), (t:Team{name:'blue_dwarfs'}) create (n)-[it:IN_TEAM]->(t)");     
+     //   $em->getDatabaseDriver()->run("match (n:User{username:'test'}), (t:Team{name:'red_giants'}) create (n)-[it:IN_TEAM]->(t)");     
 
         $user = $em->getRepository(User::class)->findOneBy('username','test');
         
