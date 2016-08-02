@@ -31,7 +31,8 @@
 {% block javascript %}
 {{ parent() }}
 <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
-<script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+<!--<script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>-->
+<script src="{{ asset('js/L.Control.Locate.js') }}"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
@@ -413,111 +414,15 @@ var uLat, uLng;
         });
 
     }
-    
-    var lc = L.control.locate({setView:'always',markerStyle:{radius:'15',fillColor:'#ff0000'},circleStyle:{fillColor:'#ff0000'}}).addTo(map);
-    
-    map.on('popupopen',function(e){
-    var tid = e.popup._source.options.properties.tid;
-    console.log(tid);
-    // src: http://jsfiddle.net/akashtyagi40/u28n234k/
-    var width = 200, height = 200;
-        var svg = d3.select("#gauge").append("svg")
-            .attr("width", width)
-            .attr("height", height);
-
-        //Path inner and outer radius is adjusted
-        var arc1 = d3.arc()
-            .innerRadius(60)
-            .outerRadius(100)
-            .startAngle(100 * (Math.PI/180))
-            .endAngle(119 * (Math.PI/180));        
-            
-       var arc11 = d3.arc()
-            .innerRadius(60)
-            .outerRadius(100)
-            .startAngle(120 * (Math.PI/180))
-            .endAngle(159 * (Math.PI/180));
-            
-        var arc2 = d3.arc()
-            .innerRadius(60)
-            .outerRadius(90)
-            .startAngle(160 * (Math.PI/180))
-            .endAngle(200 * (Math.PI/180));
-            
-        var arc3 = d3.arc()
-            .innerRadius(60)
-            .outerRadius(100)
-            .startAngle(201 * (Math.PI/180))
-            .endAngle(240 * (Math.PI/180));
-            
-        var arc31 = d3.arc()
-            .innerRadius(60)
-            .outerRadius(100)
-            .startAngle(241 * (Math.PI/180))
-            .endAngle(260 * (Math.PI/180));
-
-        var plot = svg
-            .append("g")
-            .attr("class", "arc");
-
-        var gauge = plot
-            .append("path")
-            .attr("d", arc1)
-            .attr("class", "gauge")
-            .style("fill", "#0099CC")
-            .attr("transform", "translate(100,130) rotate(180)");
-
-        var gauge = plot
-            .append("path")
-            .attr("d", arc11)
-            .attr("class", "gauge")
-            .style("fill", "#33b5e5")
-            .attr("transform", "translate(100,130) rotate(180)");
-            
-        var gauge = plot
-            .append("path")
-            .attr("d", arc2)
-            .attr("class", "gauge")
-            .style("fill", "#aa66cc")
-            .attr("transform", "translate(100,130) rotate(180)");
-            
-        var gauge = plot
-            .append("path")
-            .attr("d", arc3)
-            .attr("class", "gauge")
-            .style("fill", "#ffbb33")
-            .attr("transform", "translate(100,130) rotate(180)");
-            
-        var gauge = plot
-            .append("path")
-            .attr("d", arc31)
-            .attr("class", "gauge")
-            .style("fill", "#FF8800")
-            .attr("transform", "translate(100,130) rotate(180)");
-            
-            
-
-        var needle = svg
-            .append("g")
-            .attr("class", "needle")
-            .attr("transform", "translate( 0 , 0 )")
-            .append("path")
-            .attr("class", "tri")
-            .attr("d", "M" + (200/2 + 2) + " " + (120 + 10) + " L" + 200/2 + " 0 L" + (200/2 - 3) + " " + (120 + 10) + " C" + (200/2 - 3) + " " + (120 + 20) + " " + (200/2 + 3) + " " + (120 + 20) + " " + (200/2 + 3) + " " + (120 + 10) + " Z");
-            
-        if(tid == {{ redGiantsId }}){
-            needle.attr("transform", "rotate(60, " + 200/2 + "," + (120 + 10) + ")");
-        }else if(tid == {{ redGiantsId }}){
-            needle.attr("transform", "rotate(-60, " + 200/2 + "," + (120 + 10) + ")");
-        }else if(tid == 0){
-            needle.attr("transform", "rotate(0, " + 200/2 + "," + (120 + 10) + ")");
-        }
-   
-    });
-    
-    map.on('popupclose',function(e){
-        var svg = d3.select("#gauge").selectAll("*").remove();
-    });
+   	var LeafIcon = L.Icon.extend({
+		options: {
+			iconSize:     [54, 54],
+			iconAnchor:   [27, 47],
+		}
+	});
+        
+    var greenIcon = new LeafIcon({iconUrl: '{{ asset("img/Street View Filled-50.png")}}'});
+    var lc = L.control.locate({setView:'always',markerStyle:{icon: greenIcon},circleStyle:{fillColor:'#ff0000'}}).addTo(map);
     
     lc.start();
     
