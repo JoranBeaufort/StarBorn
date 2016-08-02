@@ -16,8 +16,8 @@
     </div>
     
 <!-- Large modal -->
-<div id="modal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+<div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
     <div class="modal-content">
     
     </div>
@@ -81,15 +81,16 @@ var uLat, uLng;
     }).addTo(map);
         
         
-   function generateModal(modal, coords){
+   function generateModal(modal, coords, gauge){
     var capture;
    
            var modalTemplate =  '   <div class="card text-xs-center">' +
                              modal.pretitle+modal.title+modal.posttitle+
                      '       <div class="card-block"> ' +
+                     '           <div class="col-xs-12" id="gauge-wrap"><div display:block;" id="gauge"></div></div>' +
                      '           <div class="card-text">'+modal.contentText+'</div> '+
                      '           <div class="row"> '+
-                     '           <div class="col-xs-6 col-md-3"> '+
+                     '           <div class="col-xs-6 col-lg-3"> '+
                      '               <form method="post" action="{{ path('tile')}}"> '+
                      '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
                      '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
@@ -107,7 +108,7 @@ var uLat, uLng;
                      '                   <button style="width:95%; height:80px" class="btn '+(modal.info != true ? 'disabled rgba-grey-strong' :  'rgba-indigo-strong')+' waves-effect" '+(modal.info != true ? 'disabled="true"' :  void 0)+' type="submit"><i class="fa fa-3x fa-info-circle" aria-hidden="true"></i></button> '+
                      '               </form> '+
                      '           </div> '+ 
-                     '           <div class="col-xs-6 col-md-3"> '+
+                     '           <div class="col-xs-6 col-lg-3"> '+
                      '               <form method="post" action="{{ path('capture')}}"> '+
                      '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
                      '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
@@ -125,7 +126,7 @@ var uLat, uLng;
                      '                   <button style="width:95%; height:80px" class="btn '+(modal.capture != true ? 'disabled rgba-grey-strong' :  'rgba-purple-strong')+' waves-effect" '+(modal.capture != true ? 'disabled="true"' :  void 0)+' type="submit"><i class="fa fa-3x fa-flag-o" aria-hidden="true"></i></button> '+
                      '               </form> '+
                      '           </div> '+
-                     '           <div class="col-xs-6 col-md-3"> '+
+                     '           <div class="col-xs-6 col-lg-3"> '+
                      '               <form method="post" action="{{ path('build')}}"> '+
                      '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
                      '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
@@ -143,7 +144,7 @@ var uLat, uLng;
                      '                   <button style="width:95%; height:80px" class="btn '+(modal.build != true ? 'disabled rgba-grey-strong' : 'rgba-green-strong')+' waves-effect" '+(modal.build != true ? 'disabled="true"' :  void 0)+' type="submit"><i class="fa fa-3x fa-building-o" aria-hidden="true"></i></button> '+
                      '               </form> '+
                      '           </div> '+
-                     '           <div class="col-xs-6 col-md-3"> '+
+                     '           <div class="col-xs-6 col-lg-3"> '+
                      '               <form method="post" action="{{ path('scan')}}"> '+
                      '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
                      '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
@@ -162,13 +163,119 @@ var uLat, uLng;
                      '               </form> '+
                      '           </div> '+
                      '          </div> '+
+                     '           <br><div class="row"><div class="col-xs-12"><button style="border-radius:33px; width:66px;height:66px" type="button" class="btn btn-default-outline waves-effect" data-dismiss="modal"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></button></div></div>' +
                      '       </div> '+
-                     '   </div>'+
-                     '</div>';
+                     '   </div>';
         
-
        $("#modal").modal("show"); 
        $(".modal-content").html(modalTemplate);
+        var svg = d3.select("#gauge").selectAll("*").remove();
+        // src: http://jsfiddle.net/akashtyagi40/u28n234k/
+
+        if ($(window).width() < 768) {
+            var width = 190;
+            var height = 130;
+        }
+        else if ($(window).width() >= 768 &&  $(window).width() <= 992) {
+            var width = 290;
+            var height = 200;
+        }
+        else if ($(window).width() > 992 &&  $(window).width() <= 1200) {
+            var width = 390;
+            var height = 250;
+        }
+        else  {
+            var width = 390;
+            var height = 250;
+        }
+        
+        var svg = d3.select("#gauge").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        //Path inner and outer radius is adjusted
+        var arc1 = d3.arc()
+            .innerRadius(width / 3)
+            .outerRadius(width/2)
+            .startAngle(100 * (Math.PI/180))
+            .endAngle(119 * (Math.PI/180));        
+            
+       var arc11 = d3.arc()
+            .innerRadius(width / 3)
+            .outerRadius((width/2)-10)
+            .startAngle(120 * (Math.PI/180))
+            .endAngle(159 * (Math.PI/180));
+            
+        var arc2 = d3.arc()
+            .innerRadius(width / 3)
+            .outerRadius((width/2)-20)
+            .startAngle(160 * (Math.PI/180))
+            .endAngle(200 * (Math.PI/180));
+            
+        var arc3 = d3.arc()
+            .innerRadius(width / 3)
+            .outerRadius((width/2)-10)
+            .startAngle(201 * (Math.PI/180))
+            .endAngle(240 * (Math.PI/180));
+            
+        var arc31 = d3.arc()
+            .innerRadius(width / 3)
+            .outerRadius(width/2)
+            .startAngle(241 * (Math.PI/180))
+            .endAngle(260 * (Math.PI/180));
+
+        var plot = svg
+            .append("g")
+            .attr("class", "arc");
+
+        var arc = plot
+            .append("path")
+            .attr("d", arc1)
+            .attr("class", "gauge")
+            .style("fill", "#0099CC")
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+
+        var arc = plot
+            .append("path")
+            .attr("d", arc11)
+            .attr("class", "gauge")
+            .style("fill", "#33b5e5")
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+            
+        var arc = plot
+            .append("path")
+            .attr("d", arc2)
+            .attr("class", "gauge")
+            .style("fill", "#aa66cc")
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+            
+        var arc = plot
+            .append("path")
+            .attr("d", arc3)
+            .attr("class", "gauge")
+            .style("fill", "#ffbb33")
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+            
+        var arc = plot
+            .append("path")
+            .attr("d", arc31)
+            .attr("class", "gauge")
+            .style("fill", "#FF8800")
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+            
+            
+
+        var needle = svg
+            .append("g")
+            .attr("class", "needle")
+            .attr("transform", "translate( 0 , 0 )")
+            .append("path")
+            .attr("class", "tri")
+            .attr("d", "M" + (width/2 + 2) + " " + (height-20) + " L" + width/2 + " "+(height-(height*0.75))+" L" + (width/2 - 3) + " " + (height-20) + " C" + (width/2 - 3) + " " + (height-10) + " " + (width/2 + 3) + " " + (height-10) + " " + (width/2 + 3) + " " + (height-20) + " Z");
+            
+        needle.attr("transform", "rotate("+gauge.nPos+", " + width/2 + "," + (height-20) + ")");
+   
+
    }
 
     
@@ -214,7 +321,8 @@ var uLat, uLng;
                     coords.ttry = feature.properties.try;
                     coords.tbrx = feature.properties.brx;
                     coords.tbry = feature.properties.bry;
-                    
+                    var gauge = {};
+                    gauge.nPos = '0';
                     if(feature.properties.tid == {{ redGiantsId }}){
                         polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#FF8800 ",fillColor: "#FF8800 ", weight: 1}).addTo(map);
                         
@@ -222,6 +330,7 @@ var uLat, uLng;
                         modal.title = 'Gebiet der <br> "Red Giants"';
                         modal.posttitle = '</b></h6>';
                         modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>'; 
+                        gauge.nPos = '30';
                         
                         polygon._path.setAttribute('filter', 'url(#blur)');                        
                     }else if(feature.properties.tid == {{ blueDwarfsId }}){
@@ -231,6 +340,7 @@ var uLat, uLng;
                         modal.title = 'Gebiet der <br> "Blue Dwarfs"';
                         modal.posttitle = '</b></h6>';
                         modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>'; 
+                        gauge.nPos = '-30';
                         
                         polygon._path.setAttribute('filter', 'url(#blur)');                        
                     }else{
@@ -250,30 +360,44 @@ var uLat, uLng;
                        if(feature.properties.tid != 0 && feature.properties.tid == {{ user.getUserTeam.getTeam.getTid }}){
                             modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>starkes</b> freundliches Signal!</div>'; 
                             modal.build = true;
+                            
+                            if(feature.properties.tid == {{ redGiantsId }}){
+                                gauge.nPos = 70;
+                            }else{
+                                gauge.nPos = -70;
+                            }
+                            
                             polygon.on('click', function() { 
                             
-                                generateModal(modal,coords);
+                                generateModal(modal,coords, gauge);
                             });
 
                         }else if(feature.properties.tid != 0 && feature.properties.tid != {{ user.getUserTeam.getTeam.getTid }}){
                             modal.contentText = '<div class="alert alert-danger">Dein Radar registriert ein <b>starkes</b> feindliches Signal!</div>'; 
                             modal.scan = true; 
+                            
+                           if(feature.properties.tid == {{ redGiantsId }}){
+                                gauge.nPos = 70;
+                            }else{
+                                gauge.nPos = -70;
+                            }
+
+                            
                             polygon.on('click', function() {  
-                                console.log('blu');
-                                generateModal(modal,coords);
+                                generateModal(modal,coords, gauge);
                             });
                         }else if(feature.properties.tid == 0||feature.properties.tid == '0'){
                         
                             modal.contentText = '<div class="alert alert-info">Dein Radar registriert kein Signal... Nimm dieses Gebiet ein. Schnell!</div>'; 
                             modal.capture = true;                 
                             polygon.on('click', function() {  
-                                generateModal(modal,coords);
+                                generateModal(modal,coords, gauge);
                             });
                         }
                     }else{
                             polygon.on('click', function() {  
                             console.log(feature.properties.tid)
-                                generateModal(modal,coords);
+                                generateModal(modal,coords, gauge);
                             });
                     }
                     
