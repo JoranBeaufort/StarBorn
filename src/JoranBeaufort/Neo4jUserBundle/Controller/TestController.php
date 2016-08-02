@@ -445,16 +445,13 @@ class TestController extends Controller
 
         $em = $this->get('neo4j.graph_manager')->getClient();
         
-     //   $em->getDatabaseDriver()->run("match (n:User{username:'test'}), (t:Team{name:'red_giants'}) create (n)-[it:IN_TEAM]->(t)");     
+        $em->getDatabaseDriver()->run("match (n:User{username:'test'}), (t:Team{name:'red_giants'}) create (n)-[it:IN_TEAM]->(t)");     
 
         $user = $em->getRepository(User::class)->findOneBy('username','test');
-        
-        $tile = new Tile($user->getUid(),'123', 456, 789, 'bbox'); 
-        $tile->setResources('1,2,3'); 
-        $em->persist($tile);
-        
-        
         $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
+        
+        $tile = new Tile($user->getUid(),'123', 456, 789, 'bbox');
+        $tile->setResources('1,2,3');    
         $tile->setTileDrone($drone,$drone->getHp());
 
         $user->addTile($tile, time(),time());
