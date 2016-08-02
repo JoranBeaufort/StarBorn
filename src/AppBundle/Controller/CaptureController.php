@@ -106,18 +106,21 @@ class CaptureController extends Controller
                     
                     $setResources = join(',', $tileResources); 
                     
-                                    
                     $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox); 
                     $tile->setResources($setResources); 
-                    
                     $em->persist($tile);
-
+                    
+                    
+                    $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
+                    $tile->setTileDrone($drone,$drone->getHp());
 
                     $user->addTile($tile, time(),time());
-                    // print_r($user->getUserTiles());die;
+      
                     $em->persist($user);
                     $em->flush();
-                    print('blablabla');
+                    
+
+
                     $q=   " UPDATE 
                                 gameField 
                             SET 
@@ -148,10 +151,8 @@ class CaptureController extends Controller
                     $statement = $connection->prepare($q);
                     $statement->execute();
                     
-                    $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
-                    $tile->setTileDrone($drone,$drone->getHp());
-                    $em->persist($tile);
-                    $em->flush();
+
+
                     
                     return $this->render('AppBundle:Capture:success.html.twig',array('user' => $user, 'newResources' =>$newResources));
                 }elseif($results[0]['val'] !== '0' || $results[0]['val'] !== 0){

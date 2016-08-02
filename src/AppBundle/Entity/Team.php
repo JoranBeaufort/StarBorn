@@ -60,6 +60,14 @@ class Team
     
     
     /**
+     * @var \AppBundle\Entity\UserTeam
+     */
+    public function addUserTeam($userTeam)
+    {
+        return $this->userTeam = $userTeam;
+    }
+    
+    /**
      * @return \AppBundle\Entity\UserTeam
      */
     public function getUserTeam()

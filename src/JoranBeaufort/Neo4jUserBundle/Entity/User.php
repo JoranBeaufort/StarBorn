@@ -498,7 +498,7 @@ class User implements AdvancedUserInterface, \Serializable
 
         $ut = new UserTeam($this, $team, $joined);
         $this->userTeam = $ut;
-        $team->userTeam = $ut;
+        $team->addUserTeam($ut);
         
     }
     

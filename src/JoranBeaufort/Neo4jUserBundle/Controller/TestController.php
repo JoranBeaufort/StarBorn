@@ -20,6 +20,8 @@ use AppBundle\Entity\Tile;
 use AppBundle\Entity\Team;
 use AppBundle\Entity\UserTeam;
 use AppBundle\Entity\UserTile;
+use AppBundle\Entity\TileDrone;
+use AppBundle\Entity\Drone;
 
 class TestController extends Controller
 {
@@ -433,6 +435,37 @@ class TestController extends Controller
         echo 'Count resource nodes';
         $countResources = $em->getDatabaseDriver()->run("match (n:Resources) return count(*)");  
         print_r($countResources);
+       die;
+       return false;
+    }
+    
+     public function test7Action()
+    {
+        
+
+        $em = $this->get('neo4j.graph_manager')->getClient();
+        
+        $em->getDatabaseDriver()->run("match (n:User{username:'test'}), (t:Team{name:'blue_dwarfs'}) create (n)-[it:IN_TEAM]->(t)");     
+
+        $user = $em->getRepository(User::class)->findOneBy('username','test');
+        
+        $tile = new Tile($user->getUid(),'123', 456, 789, 'bbox'); 
+        $tile->setResources('1,2,3'); 
+        $em->persist($tile);
+        
+        
+        $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
+        $tile->setTileDrone($drone,$drone->getHp());
+
+        $user->addTile($tile, time(),time());
+        
+        $em->persist($user);
+        $em->flush();
+        
+        $em->clear();
+        $user = $em->getRepository(User::class)->findOneBy('username','test');
+        var_dump($user->getUserTeam()->getTeam());
+
        die;
        return false;
     }
