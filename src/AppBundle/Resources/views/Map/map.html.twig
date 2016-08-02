@@ -82,8 +82,7 @@ var uLat, uLng;
     }).addTo(map);
         
         
-   function generateModal(modal, coords, gauge){
-    var capture;
+   function generateModal(modal, coords, gauge){    
    
            var modalTemplate =  '   <div class="card text-xs-center">' +
                              modal.pretitle+modal.title+modal.posttitle+
@@ -168,26 +167,39 @@ var uLat, uLng;
                      '       </div> '+
                      '   </div>';
         
-       $("#modal").modal("show"); 
-       $(".modal-content").html(modalTemplate);
+        $("#modal").modal("show"); 
+        $(".modal-content").html(modalTemplate);
+
         var svg = d3.select("#gauge").selectAll("*").remove();
         // src: http://jsfiddle.net/akashtyagi40/u28n234k/
-
+        var label = {};
         if ($(window).width() < 768) {
-            var width = 190;
-            var height = 130;
+            var width = 210;
+            var height = 150;
+            label.offsetblue = 5;
+            label.offsetred = 25;
+            label.textsize = 14;
         }
         else if ($(window).width() >= 768 &&  $(window).width() <= 992) {
             var width = 290;
             var height = 200;
+            label.offsetblue = 10;
+            label.offsetred = 30;
+            label.textsize = 18;
         }
         else if ($(window).width() > 992 &&  $(window).width() <= 1200) {
             var width = 390;
             var height = 250;
+            label.offsetblue = 10;
+            label.offsetred = 70;
+            label.textsize = 22;
         }
         else  {
             var width = 390;
             var height = 250;
+            label.offsetblue = 10;
+            label.offsetred = 70;
+            label.textsize = 22;
         }
         
         var svg = d3.select("#gauge").append("svg")
@@ -210,6 +222,12 @@ var uLat, uLng;
        var arc1L1 = d3.arc()
             .innerRadius((width / 3)+10)
             .outerRadius((width/2))
+            .startAngle(100 * (Math.PI/180))
+            .endAngle(159 * (Math.PI/180));
+            
+       var arc1L2 = d3.arc()
+            .innerRadius((width / 5))
+            .outerRadius((width/5)+4)
             .startAngle(100 * (Math.PI/180))
             .endAngle(159 * (Math.PI/180));
             
@@ -237,6 +255,12 @@ var uLat, uLng;
             .startAngle(201 * (Math.PI/180))
             .endAngle(260 * (Math.PI/180));
             
+       var arc3L2 = d3.arc()
+            .innerRadius((width / 5))
+            .outerRadius((width/5)+4)
+            .startAngle(201 * (Math.PI/180))
+            .endAngle(260 * (Math.PI/180));
+            
         var plot = svg
             .append("g")
             .attr("class", "arc");
@@ -259,10 +283,11 @@ var uLat, uLng;
             .append("path")
             .attr("d", arc1L1)
             .attr("class", "gauge")
-            .style("fill", "#33b5e5")
+            .style("fill", "none")
             .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)")
             .attr("class","arc")   
             .attr("id","blue-dwarf-arc");    
+            
             
         var arc = plot
             .append("path")
@@ -286,32 +311,62 @@ var uLat, uLng;
             .style("fill", "#FF8800")
             .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)"); 
             
+            
         var arc = plot
             .append("path")
             .attr("d", arc3L1)
             .attr("class", "gauge")
-            .style("fill", "#FF8800")
+            .style("fill", "none")
             .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)")
             .attr("class","arc")   
-            .attr("id","red-giant-arc");            
+            .attr("id","red-giant-arc"); 
+
+            if(gauge.uTeam == 'red'){
+                var l1col = 'red';
+                var l3col = 'green';
+                
+            }else if(gauge.uTeam == 'blue'){
+                var l1col = 'green';
+                var l3col = 'red';
+            }         
+
+
+        var arc = plot
+            .append("path")
+            .attr("d", arc1L2)
+            .attr("class", "gauge")
+            .style("fill", l1col)
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");    
+            
+        var arc = plot
+            .append("path")
+            .attr("d", arc3L2)
+            .attr("class", "gauge")
+            .style("fill", l3col)
+            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");      
+            
             
             plot   
             .append("text")
+            .attr("dx", label.offsetred) //Move the text down
             .attr("dy", 20) //Move the text down
-            .style('fill', 'white')
-            .style("font-size","18px")
+            .style('fill', 'black')
+            .style("font-size",label.textsize+"px")
             .append("textPath")
             .attr("xlink:href","#red-giant-arc")
             .text("Red Giants");            
-            plot   
             
+            plot               
             .append("text")
+            .attr("dx", label.offsetblue) //Move the text down
             .attr("dy", 20) //Move the text down
-            .style('fill', 'white')
-            .style("font-size","18px")
+            .style('fill', 'black')
+            .style("font-size",label.textsize+"px")
             .append("textPath")
             .attr("xlink:href","#blue-dwarf-arc")
-            .text("Blue Dwarfs");	       
+            .text("Blue Dwarfs");	  
+
+            
            
 
         var needle = svg
@@ -372,15 +427,29 @@ var uLat, uLng;
                     coords.tbry = feature.properties.bry;
                     var gauge = {};
                     gauge.nPos = '0';
+                    {% if user.getUserTeam.getTeam.getTid == redGiantsId %}
+                        gauge.uTeam = 'red';
+                    {% elseif user.getUserTeam.getTeam.getTid == blueDwarfsId %}
+                        gauge.uTeam = 'blue';
+                    {% else %}
+                        gauge.uTeam = '';
+                    {% endif %}
+                    
                     if(feature.properties.tid == {{ redGiantsId }}){
                         polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#FF8800 ",fillColor: "#FF8800 ", weight: 1}).addTo(map);
                         
                         modal.pretitle = '<h6 class="card-header warning-color white-text"><b>';
                         modal.title = 'Gebiet der <br> "Red Giants"';
                         modal.posttitle = '</b></h6>';
-                        modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>'; 
-                        gauge.nPos = '30';
+                        {% if user.getUserTeam.getTeam.getTid == redGiantsId %}
+                            modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>'; 
+                        {% elseif user.getUserTeam.getTeam.getTid == blueDwarfsId %}
+                            modal.contentText = '<div class="alert alert-danger">Dein Radar registriert ein <b>schwaches</b> feindliches Signal!</div>'; 
+                        {% endif %}
+
+                       gauge.nPos = '30';
                         
+                       
                         polygon._path.setAttribute('filter', 'url(#blur)');                        
                     }else if(feature.properties.tid == {{ blueDwarfsId }}){
                         polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#0099CC ",fillColor: "#0099CC ", weight: 1}).addTo(map);
@@ -388,7 +457,11 @@ var uLat, uLng;
                         modal.pretitle = '<h6 class="card-header info-color white-text"><b>';
                         modal.title = 'Gebiet der <br> "Blue Dwarfs"';
                         modal.posttitle = '</b></h6>';
-                        modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>'; 
+                        {% if user.getUserTeam.getTeam.getTid == redGiantsId %}
+                            modal.contentText = '<div class="alert alert-danger">Dein Radar registriert ein <b>schwaches</b> feindliches Signal!</div>'; 
+                        {% elseif user.getUserTeam.getTeam.getTid == blueDwarfsId %}
+                            modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>'; 
+                        {% endif %}
                         gauge.nPos = '-30';
                         
                         polygon._path.setAttribute('filter', 'url(#blur)');                        
@@ -445,7 +518,6 @@ var uLat, uLng;
                         }
                     }else{
                             polygon.on('click', function() {  
-                            console.log(feature.properties.tid)
                                 generateModal(modal,coords, gauge);
                             });
                     }

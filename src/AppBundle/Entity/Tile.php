@@ -64,17 +64,17 @@ class Tile
     protected $resources;      
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="OUTGOING", collection=false, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="OUTGOING", collection=true, mappedBy="tile")
      * @OGM\Lazy()
-     * @var ArrayCollection|\AppBundle\Entity\TileDrone
+     * @var ArrayCollection|\AppBundle\Entity\TileDrone[]
      */
      
     protected $tileDrone;    
 
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=false, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=true, mappedBy="tile")
      * @OGM\Lazy()
-     * @var \AppBundle\Entity\UserTile
+     * @var ArrayCollection|\AppBundle\Entity\UserTile[]
      */
      
     protected $userTile;    
@@ -95,6 +95,9 @@ class Tile
         $this->tLat = $tLat;
         $this->tLng = $tLng;
         $this->bBox = $bBox;
+         $this->tileDrone = new ArrayCollection();
+        $this->userTile = new ArrayCollection();
+
     }
 
     
@@ -149,7 +152,7 @@ class Tile
      */
     public function getUserTile()
     {
-        return $this->userTile;
+        return $this->userTile->first();
     }
     
     /**
@@ -157,8 +160,9 @@ class Tile
      */
     public function setUserTile($userTile)
     {
-        $this->userTile = $userTile;
+        $this->userTile->add($userTile);
     }
+    
     
     /**
      * @param \AppBundle\Entity\Drone $drone
