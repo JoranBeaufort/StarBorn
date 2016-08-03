@@ -48,6 +48,7 @@ class UserController extends Controller
             $form->handleRequest($request);
          
             if ($form->isSubmitted() && $form->isValid()) {
+                
             $profileImage = $user->getProfileImageFile();  
                 if($profileImage){
                     $profileImageName = md5(uniqid()).'.'.$profileImage->guessExtension();
@@ -94,10 +95,10 @@ class UserController extends Controller
                 }
                 
                 // 4) save the User!
+                
                 $em->persist($user);
                 $em->flush();
-    
-                return new RedirectResponse($this->generateUrl('neo4j_profile', array('slug' => $user->getUsername())));
+                return new RedirectResponse($this->generateUrl('neo4j_profile_edit', array('slug' => $user->getUsername())));
             }
             
             return $this->render('Neo4jUserBundle:Profile:edit.html.twig',array('error'=>$error, 'form' => $form->createView(),'slug'=>$slug, 'user'=>$user));

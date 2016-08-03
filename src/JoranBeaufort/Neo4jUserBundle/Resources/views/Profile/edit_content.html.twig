@@ -14,7 +14,7 @@
         <div class="row">
         <!--Card image-->
             <div class="col-md-3">
-                {% if user.profileImage is null %}
+                {% if user.getProfileImage is null %}
                 <img style="padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">    
                 {% else %}
                 <img style="padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~user.uid~'/'~user.profileImage) }}"> 
