@@ -76,12 +76,12 @@ class MapController extends Controller
                             FROM(
                                 SELECT ST_Union(rast) as r
                                 FROM gameField
-                                WHERE ST_Intersects(rast, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 500))
+                                WHERE ST_Intersects(rast, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 700))
                             ) as u
                         ) as c
                             WHERE
-                                ST_Intersects((c.UID).geom, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 500))
-                            AND ST_Intersects((c.TID).geom, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 500))
+                                ST_Intersects((c.UID).geom, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 700))
+                            AND ST_Intersects((c.TID).geom, ST_Buffer(ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat.") ,4326),2056), 700))
 
                     ) as b   
                 ) as f 

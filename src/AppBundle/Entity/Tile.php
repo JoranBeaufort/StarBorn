@@ -7,6 +7,9 @@ use GraphAware\Neo4j\OGM\Annotations as OGM;
  
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 use AppBundle\Entity\UserTile;
+use AppBundle\Entity\TileDrone;
+use AppBundle\Entity\TileBuilding;
+use AppBundle\Entity\TileShield;
 
 
 /**
@@ -64,12 +67,28 @@ class Tile
     protected $resources;      
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="OUTGOING", collection=true, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="OUTGOING", collection=false, mappedBy="tile")
      * @OGM\Lazy()
-     * @var ArrayCollection|\AppBundle\Entity\TileDrone[]
+     * @var \AppBundle\Entity\TileDrone
      */
      
     protected $tileDrone;    
+    
+    /**
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileBuilding", type="HAS_BUILDING", direction="OUTGOING", collection=false, mappedBy="tile")
+     * @OGM\Lazy()
+     * @var \AppBundle\Entity\TileBuilding
+     */
+     
+    protected $tileBuilding;    
+    
+    /**
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileShield", type="HAS_SHIELD", direction="OUTGOING", collection=false, mappedBy="tile")
+     * @OGM\Lazy()
+     * @var \AppBundle\Entity\TileShield
+     */
+     
+    protected $tileShield;    
 
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=true, mappedBy="tile")
@@ -95,7 +114,6 @@ class Tile
         $this->tLat = $tLat;
         $this->tLng = $tLng;
         $this->bBox = $bBox;
-         $this->tileDrone = new ArrayCollection();
         $this->userTile = new ArrayCollection();
 
     }
@@ -183,14 +201,43 @@ class Tile
         return $this->tileDrone;
     }
     
-    public function getTileBuilding()
+    /**
+     * @param \AppBundle\Entity\Building $building
+     * @param int $hp
+     */
+    public function setTileBuilding(Building $building, $hp)
     {
-        return null;
+        $tb = new TileBuilding($this, $building, $hp);
+        $this->tileBuilding = $tb;
+        $drone->setTileBuilding($tb);
     }
     
+    /**
+     * @return \AppBundle\Entity\TileBuilding
+     */
+
+    public function getTileBuilding()
+    {
+        return $this->tileBuilding;
+    }
     
+    /**
+     * @param \AppBundle\Entity\Shield $shield
+     * @param int $hp
+     */
+    public function setTileShield(Shield $shield, $hp)
+    {
+        $ts = new TileShield($this, $shield, $hp);
+        $this->tileShield = $ts;
+        $drone->setTileShield($ts);
+    }
+    
+    /**
+     * @return \AppBundle\Entity\TileShield
+     */
+
     public function getTileShield()
     {
-        return null;
+        return $this->tileShield;
     }
 }
