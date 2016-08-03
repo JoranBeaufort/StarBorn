@@ -47,10 +47,16 @@ class Building
      * @var string
      */
      
+    protected $img;    
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
     protected $name_DE;
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileBuilding", type="HAS_BUILDING", direction="INCOMING", collection=false, mappedBy="building")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileBuilding", type="HAS_BUILDING", direction="INCOMING", collection=true, mappedBy="building")
      * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\TileBuilding
      */
@@ -78,6 +84,11 @@ class Building
         return $this->name;
     }
     
+    public function getImg()
+    {
+        return $this->img;
+    }
+    
     public function getName_DE()
     {
         return $this->name_DE;
@@ -97,7 +108,15 @@ class Building
      */
     public function setTileBuilding($tileBuilding)
     {
-        $this->tileBuilding = $tileBuilding;
+        $this->tileBuilding->add($tileBuilding);
+    }
+    
+    /**
+     * @var \AppBundle\Entity\TileBuilding
+     */
+    public function removeTileBuilding($tileBuilding)
+    {
+        $this->tileBuilding->removeElement($tileBuilding);
     }
     
 }

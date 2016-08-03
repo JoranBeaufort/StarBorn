@@ -67,25 +67,25 @@ class Tile
     protected $resources;      
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="OUTGOING", collection=false, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="OUTGOING", collection=true, mappedBy="tile")
      * @OGM\Lazy()
-     * @var \AppBundle\Entity\TileDrone
+     * @var ArrayCollection|\AppBundle\Entity\TileDrone[]
      */
      
     protected $tileDrone;    
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileBuilding", type="HAS_BUILDING", direction="OUTGOING", collection=false, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileBuilding", type="HAS_BUILDING", direction="OUTGOING", collection=true, mappedBy="tile")
      * @OGM\Lazy()
-     * @var \AppBundle\Entity\TileBuilding
+     * @var ArrayCollection|\AppBundle\Entity\TileBuilding[]
      */
      
     protected $tileBuilding;    
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileShield", type="HAS_SHIELD", direction="OUTGOING", collection=false, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileShield", type="HAS_SHIELD", direction="OUTGOING", collection=true, mappedBy="tile")
      * @OGM\Lazy()
-     * @var \AppBundle\Entity\TileShield
+     * @var ArrayCollection|\AppBundle\Entity\TileShield[]
      */
      
     protected $tileShield;    
@@ -115,6 +115,7 @@ class Tile
         $this->tLng = $tLng;
         $this->bBox = $bBox;
         $this->userTile = new ArrayCollection();
+        $this->tileShield = new ArrayCollection();
 
     }
 
@@ -189,7 +190,7 @@ class Tile
     public function setTileDrone(Drone $drone, $hp)
     {
         $td = new TileDrone($this, $drone, $hp);
-        $this->tileDrone = $td;
+        $this->tileDrone->add($td);
         $drone->setTileDrone($td);
     }
     
@@ -198,7 +199,7 @@ class Tile
      */
     public function getTileDrone()
     {
-        return $this->tileDrone;
+        return $this->tileDrone->first();
     }
     
     /**
@@ -208,8 +209,17 @@ class Tile
     public function setTileBuilding(Building $building, $hp)
     {
         $tb = new TileBuilding($this, $building, $hp);
-        $this->tileBuilding = $tb;
-        $drone->setTileBuilding($tb);
+        $this->tileBuilding->add($tb);
+        $building->setTileBuilding($tb);
+    }
+    
+    /**
+     * @param \AppBundle\Entity\TileBuilding $tileBuilding
+     */
+    public function removeTileBuilding(TileBuilding $tileBuilding)
+    {
+        $this->tileBuilding->removeElement($tileBuilding);
+        $tileBuilding->getBuilding()->removeTileBuilding($tileBuilding);
     }
     
     /**
@@ -218,7 +228,7 @@ class Tile
 
     public function getTileBuilding()
     {
-        return $this->tileBuilding;
+        return $this->tileBuilding->first();
     }
     
     /**
@@ -228,8 +238,17 @@ class Tile
     public function setTileShield(Shield $shield, $hp)
     {
         $ts = new TileShield($this, $shield, $hp);
-        $this->tileShield = $ts;
-        $drone->setTileShield($ts);
+        $this->tileShield->add($ts);
+        $shield->setTileShield($ts);
+    }
+    
+    /**
+     * @param \AppBundle\Entity\TileShield $tileShield
+     */
+    public function removeTileShield(TileShield $tileShield)
+    {
+        $this->tileShield->removeElement($tileShield);
+        $tileShield->getShield()->removeTileShield($tileShield);
     }
     
     /**
@@ -238,6 +257,6 @@ class Tile
 
     public function getTileShield()
     {
-        return $this->tileShield;
+        return $this->tileShield->first();
     }
 }

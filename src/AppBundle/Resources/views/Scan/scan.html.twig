@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-xs-12"> 
                 <div class="card text-xs-center">                
-                    <h3 class="card-header primary-color white-text">Scan erfolgreich!&nbsp;&nbsp;
+                    <h3 class="card-header primary-color white-text">Ziele erfasst!&nbsp;&nbsp;
                         <!-- Trigger the modal with a button -->
                         <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
                     </h3>
@@ -71,7 +71,7 @@
                                         <div class="card-header  rgba-green-strong white-text">
                                             <div class="row">
                                                 <div class="col-md-2">
-                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:80px; height:80px" src="{{ asset('img/'~message.img)}}"/>
+                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:80px; height:80px" src="{{ asset(message.img)}}"/>
                                                 </div>
                                                 <div class="col-md-10 text-xs-left">      
                                                      <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
@@ -100,12 +100,12 @@
                                                         <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Schild</button>
                                                     </div>
                                                     <div class="row">
-                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset('img/Shield-96.png')}}"/>
+                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( tile.getTileShield.getShield.getImg)}}"/>
                                                     </div>
                                                     <div class="row">
                                                          <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect"><strong>{{ tile.getTileShield.getShield.getName_DE }}</strong><br>
                                                          {{ tile.getTileShield.getHp }} / {{ tile.getTileShield.getShield.getHp }}<br>
-                                                         <progress class="progress progress-success" value="{{ tile.getTileBuilding.getHp }}" max="{{tile.getTileBuilding.getBuilding.getHp }}" style="color:000">25%</progress>
+                                                         <progress class="progress progress-success" value="{{ tile.getTileShield.getHp }}" max="{{ tile.getTileShield.getShield.getHp }}" style="color:000">25%</progress>
                                                          </button>
                                                     </div>
                                                     <div class="row">
@@ -142,7 +142,7 @@
                                                     <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Gebäude</button>
                                                 </div>
                                                 <div class="row">
-                                                    <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset('img/City Hall-96.png')}}"/>
+                                                    <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset(tile.getTileBuilding.getBuilding.getImg)}}"/>
                                                 </div>
                                                 <div class="row">
                                                      <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect"><strong>{{ tile.getTileBuilding.getBuilding.getName_DE }}</strong><br>
@@ -152,17 +152,33 @@
                                                 </div>
                                                 <div class="row">
                                                     {% if tile.getTileShield == null %}
-                                                    <form method="post" action="{{ path('attack')}}">
-                                                        <input type="hidden" name="ulat" value="{{ uLat }}">
-                                                        <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                        <input type="hidden" name="t" value="building">
-                                                        <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
-                                                        <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
-                                                        <button style="border-radius:30px; font-size:30px" class="btn rgba-red-strong waves-effect" type="submit"><strong><i class="fa fa-crosshairs" aria-hidden="true"></i></strong></button>
-                                                    </form>
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <form method="post" action="{{ path('attack')}}">
+                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                <input type="hidden" name="t" value="building">
+                                                                <input type="hidden" name="w" value="primary">                                                                
+                                                                <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
+                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
+                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Laser Beam-96.png')}}"/></button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <form method="post" action="{{ path('attack')}}">
+                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                <input type="hidden" name="t" value="building">
+                                                                <input type="hidden" name="w" value="secondary">                                                                
+                                                                <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
+                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
+                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Mushroom Cloud Filled-100.png')}}"/></button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                     {% else %}
                                                     <!-- Trigger the modal with a button -->
-                                                      <button type="button" style="border-radius:30px; font-size:30px" class="btn rgba-grey-strong waves-effect" data-toggle="modal" data-target="#modalbuilding"><strong><i class="fa fa-crosshairs" aria-hidden="true"></i></strong></button>
+                                                      <button type="button" style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-strong waves-effect" data-toggle="modal" data-target="#modalbuilding"><strong><i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
 
                                                       <!-- Modal -->
                                                       <div class="modal fade" id="modalbuilding" role="dialog">
@@ -177,7 +193,7 @@
                                                                 <div class="alert alert-danger" role="alert">
                                                                 <h4 class="modal-title">Achtung</h4>
 
-                                                                <p>Du musst zuerst das feindliche Shilde zerstören, bevor du dieses Gebäude angreifen kannst!</p>
+                                                                <p>Du musst zuerst das feindliche Schild zerstören, bevor du dieses Gebäude angreifen kannst!</p>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
@@ -197,7 +213,7 @@
                                                     <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Aufklärungsdrohne</button>
                                                 </div>
                                                 <div class="row">
-                                                    <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset('img/Satellite Sending Signal-96.png')}}"/>
+                                                    <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset(tile.getTileDrone.getDrone.getImg)}}"/>
                                                 </div>
                                                 <div class="row">
                                                      <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect"><strong>{{ tile.getTileDrone.getDrone.getName_DE }}</strong><br>
@@ -207,17 +223,33 @@
                                                 </div>
                                                 <div class="row">
                                                     {% if tile.getTileBuilding == null %}
-                                                    <form method="post" action="{{ path('attack')}}">
-                                                        <input type="hidden" name="ulat" value="{{ uLat }}">
-                                                        <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                        <input type="hidden" name="t" value="drone">
-                                                        <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
-                                                        <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
-                                                        <button style="border-radius:30px; font-size:30px" class="btn rgba-red-strong waves-effect" type="submit"><strong><i class="fa fa-crosshairs" aria-hidden="true"></i></strong></button>
-                                                    </form>
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <form method="post" action="{{ path('attack')}}">
+                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                <input type="hidden" name="t" value="drone">
+                                                                <input type="hidden" name="w" value="primary">                                                                
+                                                                <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
+                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
+                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Laser Beam-96.png')}}"/></button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <form method="post" action="{{ path('attack')}}">
+                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                <input type="hidden" name="t" value="drone">
+                                                                <input type="hidden" name="w" value="secondary">                                                                
+                                                                <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
+                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
+                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Mushroom Cloud Filled-100.png')}}"/></button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                     {% else %}
                                                     <!-- Trigger the modal with a button -->
-                                                      <button type="button" style="border-radius:30px; font-size:30px" class="btn rgba-grey-strong waves-effect" data-toggle="modal" data-target="#modaldrone"><strong><i class="fa fa-crosshairs" aria-hidden="true"></i></strong></button>
+                                                      <button type="button" style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-strong waves-effect" data-toggle="modal" data-target="#modaldrone"><strong><i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
 
                                                       <!-- Modal -->
                                                       <div class="modal fade" id="modaldrone" role="dialog">

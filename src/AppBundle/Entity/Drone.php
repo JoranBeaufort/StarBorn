@@ -41,6 +41,13 @@ class Drone
      */
      
     protected $name;
+
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
+    protected $img;
     
     /**
      * @OGM\Property(type="string")
@@ -83,6 +90,11 @@ class Drone
         return $this->name;
     }
     
+    public function getImg()
+    {
+        return $this->img;
+    }
+    
     public function getName_DE()
     {
         return $this->name_DE;
@@ -103,6 +115,14 @@ class Drone
     public function setTileDrone($tileDrone)
     {
         $this->tileDrone->add($tileDrone);
+    }
+    
+    /**
+     * @var \AppBundle\Entity\TileDrone
+     */
+    public function removeTileDrone($tileDrone)
+    {
+        $this->tileDrone->removeElement($tileDrone);
     }
     
 }

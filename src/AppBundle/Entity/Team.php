@@ -30,9 +30,8 @@ class Team
     protected $name;  
     
     /**
-     * @var AppBundle\Entity\UserTeam
-     *
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTeam", direction="INCOMING", collection=false, mappedBy="team")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTeam", direction="INCOMING", collection=true, mappedBy="team")
+     * @var ArrayCollection|\AppBundle\Entity\UserTeam[]
      */
     protected $userTeam;
     
@@ -40,6 +39,7 @@ class Team
     {
         $this->tid = $tid;
         $this->name = $teamname;
+        $this->userTeam = new ArrayCollection();
     }
     
     
@@ -64,7 +64,7 @@ class Team
      */
     public function addUserTeam($userTeam)
     {
-        return $this->userTeam = $userTeam;
+        return $this->userTeam->add($userTeam);
     }
     
     /**

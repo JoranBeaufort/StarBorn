@@ -47,10 +47,17 @@ class Shield
      * @var string
      */
      
+    protected $img;
+    
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
     protected $name_DE;
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileShield", type="HAS_SHIELD", direction="INCOMING", collection=false, mappedBy="shield")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileShield", type="HAS_SHIELD", direction="INCOMING", collection=true, mappedBy="shield")
      * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\TileShield
      */
@@ -78,6 +85,11 @@ class Shield
         return $this->name;
     }
     
+    public function getImg()
+    {
+        return $this->img;
+    }
+    
     public function getName_DE()
     {
         return $this->name_DE;
@@ -97,7 +109,15 @@ class Shield
      */
     public function setTileShield($tileShield)
     {
-        $this->tileShield = $tileShield;
+        $this->tileShield->add($tileShield);
+    }
+    
+    /**
+     * @var \AppBundle\Entity\TileShield
+     */
+    public function removeTileShield($tileShield)
+    {
+        $this->tileShield->removeElement($tileShield);
     }
     
 }

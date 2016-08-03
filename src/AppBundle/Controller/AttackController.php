@@ -11,13 +11,6 @@ use Symfony\Component\Form\FormError;
 
 use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
-use AppBundle\Entity\TileShield;
-use AppBundle\Entity\TileBuilding;
-use AppBundle\Entity\TileDrone;
-use AppBundle\Entity\Team;
-use AppBundle\Entity\UserTeam;
-use AppBundle\Entity\Resources;
-use AppBundle\Entity\UserResource;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 
 
@@ -62,36 +55,47 @@ class AttackController extends Controller
         $message['type'] = 'as';
         
         if($w == 'primary'){
-            $message['text'] = '10 Schaden verursacht!';
-            $dmg = 5;
+            $dmg = 1;
+            $message['text'] = $dmg.' Schaden verursacht!';
         }elseif($w == 'secondary'){
-            $message['text'] = '50 Schaden verursacht!';
-            $dmg = 100;
+            $dmg = 2;
+            $message['text'] = $dmg.' Schaden verursacht!';
         }
-
-
 
         if($t == "shield"){
             $structure = $tile->getTileShield()->getShield();
-            $message['img'] = 'Shield-96.png';
+            $message['img'] = $structure->getImg();
             $hp = $tile->getTileShield()->getHp();
             $hpNew = $hp-$dmg;
             if($hpNew <=0){
-                $tile->removeTileShield($structure);
+                $tile->removeTileShield($tile->getTileShield());
             }else{
                 $tile->getTileShield()->setHp($hpNew);
             }            
         }elseif($t == "building"){
             $structure = $tile->getTileBuilding()->getBuilding();
-            $message['img'] = 'City Hall-96.png';
+            $message['img'] = $structure->getImg();
+            $hp = $tile->getTileBuilding()->getHp();
+            $hpNew = $hp-$dmg;
+            if($hpNew <=0){
+                $tile->removeTileBuilding($tile->getTileBuilding());
+            }else{
+                $tile->getTileBuilding()->setHp($hpNew);
+            }
         }elseif($t == "drone"){
             $structure = $tile->getTileDrone()->getDrone();
-            $message['img'] = 'Satellite Sending Signal-96.png';
-        }else{
+            $message['img'] = $structure->getImg();
+            $hp = $tile->getTileDrone()->getHp();
+            $hpNew = $hp-$dmg;
+            if($hpNew <=0){
+                $tile->removeTileDrone($tile->getTileDrone());
+            }else{
+                $tile->getTileDrone()->setHp($hpNew);
+            }     
+            }else{
             $error = 'error';
         }
         
-        $em->persist($tile);                
         $em->flush(); 
         
         return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, "message" => $message));
