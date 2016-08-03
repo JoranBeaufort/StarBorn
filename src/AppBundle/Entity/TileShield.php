@@ -52,6 +52,11 @@ class TileShield
         $this->hp = $hp;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+        
         
     /**
      * @return \AppBundle\Entity\Tile

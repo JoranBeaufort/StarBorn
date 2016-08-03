@@ -11,11 +11,15 @@ use Symfony\Component\Form\FormError;
 
 use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
+use AppBundle\Entity\TileShield;
+use AppBundle\Entity\TileBuilding;
+use AppBundle\Entity\TileDrone;
 use AppBundle\Entity\Team;
 use AppBundle\Entity\UserTeam;
 use AppBundle\Entity\Resources;
 use AppBundle\Entity\UserResource;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
+
 
 class AttackController extends Controller
 {
@@ -30,15 +34,10 @@ class AttackController extends Controller
         $uLng = $request->request->get('ulng');
         
         // tile centroid
-        $tLat = $request->request->get('tlat');
-        $tLng = $request->request->get('tlng');
-        
-        // tile BBOX
-        $tblx = $request->request->get('tblx');
-        $tbly = $request->request->get('tbly');
-        $ttrx = $request->request->get('ttrx');
-        $ttry = $request->request->get('ttry');
-        
+        $t = $request->request->get('t');
+        $w = $request->request->get('w');
+        $tid = $request->request->get('tid');
+                
         $a = $encoder->decrypt($request->request->get('a'));
         
         // Get the node ID
@@ -57,12 +56,45 @@ class AttackController extends Controller
         $results = $statement->fetchAll();  
         
         $em = $this->get('neo4j.graph_manager')->getClient();
-        $tile = $em->getRepository(Tile::class)->findOneById(1842);
+        $tile = $em->getRepository(Tile::class)->findOneById(intval($tid));
         
-        // $t = $tile->getUserTile()->getUser()->getUserTeam()->getTeam()->getName();
-        // var_dump($t);die;
+        $message = array();
+        $message['type'] = 'as';
+        
+        if($w == 'primary'){
+            $message['text'] = '10 Schaden verursacht!';
+            $dmg = 5;
+        }elseif($w == 'secondary'){
+            $message['text'] = '50 Schaden verursacht!';
+            $dmg = 100;
+        }
 
-        return $this->render('AppBundle:Attack:attack.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'tile' => $tile));
+
+
+        if($t == "shield"){
+            $structure = $tile->getTileShield()->getShield();
+            $message['img'] = 'Shield-96.png';
+            $hp = $tile->getTileShield()->getHp();
+            $hpNew = $hp-$dmg;
+            if($hpNew <=0){
+                $tile->removeTileShield($structure);
+            }else{
+                $tile->getTileShield()->setHp($hpNew);
+            }            
+        }elseif($t == "building"){
+            $structure = $tile->getTileBuilding()->getBuilding();
+            $message['img'] = 'City Hall-96.png';
+        }elseif($t == "drone"){
+            $structure = $tile->getTileDrone()->getDrone();
+            $message['img'] = 'Satellite Sending Signal-96.png';
+        }else{
+            $error = 'error';
+        }
+        
+        $em->persist($tile);                
+        $em->flush(); 
+        
+        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, "message" => $message));
         
     }
 }

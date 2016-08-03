@@ -61,8 +61,8 @@ class ScanController extends Controller
         
         // $t = $tile->getUserTile()->getUser()->getUserTeam()->getTeam()->getName();
         // var_dump($t);die;
-
-        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile));
+        $message = null;
+        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'message' => $message));
         
     }
 }

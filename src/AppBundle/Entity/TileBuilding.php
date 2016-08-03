@@ -51,6 +51,11 @@ class TileBuilding
         $this->building = $building;
         $this->hp = $hp;
     }
+    
+    public function getId()
+    {
+        return $this->id;
+    }
 
         
     /**

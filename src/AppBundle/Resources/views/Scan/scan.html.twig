@@ -20,14 +20,17 @@
                               <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                               </div>
-                              <div class="modal-body">
+                              <div class="modal-body text-xs-left ">
                                   <div class="alert alert-danger" role="alert">
                                       <h4 class="modal-title">Achtung:</h4>
                                       <p>Dieses gebiet gehört einem feindlichen Spieler, bekannt unter dem Namen <strong>"{{ tile.getUserTile.getUser.getUsername }}"</strong>!</p>
                                   </div>
                                   <div class="alert alert-info" role="alert">
                                       <h4 class="modal-title">Zur Info:</h4>
-                                      <p> Du hast in diesem Gebiet eine feindliche Presänz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!</p>
+                                      <p>Du hast in diesem Gebiet eine feindliche Presänz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!</p>
+                                      <br>
+                                      <h4 class="modal-title">Angriff!</h4>
+                                      <p>Brauche entweder deine Laserkanone (kurze Wiederaufladezeit) oder eine mächtige Photonenbombe (lange Wiederaufladezeit) um den Feind anzugreiffen.</p>
                                   </div>
                               </div>
                               <div class="modal-footer">
@@ -59,6 +62,32 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        {% if message != null %}
+                            {% if message.type == 'as' %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="card">
+                                        <div class="card-header  rgba-green-strong white-text">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:80px; height:80px" src="{{ asset('img/'~message.img)}}"/>
+                                                </div>
+                                                <div class="col-md-10 text-xs-left">      
+                                                     <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
+                                                         <strong>Angriff erfolgreich!</strong><br>
+                                                         <p>{{ message.text }}</p>
+                                                     </div>
+                                                </div>
+                                            </div>
+                                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                         {% endif %}
+                         
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="card text-xs-center ">
@@ -67,29 +96,42 @@
                                             {% if tile.getTileShield != null %}
                                             <div class="col-md-4">
                                                 <div style="margin-bottom:5px; border-radius:20px;" class="rgba-grey-light">
-                                                <div class="row">
-                                                    <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Schild</button>
-                                                </div>
-                                                <div class="row">
-                                                    <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset('img/Shield-96.png')}}"/>
-                                                </div>
-                                                <div class="row">
-                                                     <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect"><strong>{{ tile.getTileShield.getShield.getName_DE }}</strong><br>
-                                                     {{ tile.getTileShield.getHp }} / {{ tile.getTileShield.getShield.getHp }}<br>
-                                                     <progress class="progress progress-success" value="{{ tile.getTileBuilding.getHp }}" max="{{tile.getTileBuilding.getBuilding.getHp }}" style="color:000">25%</progress>
-                                                     </button>
-                                                </div>
-                                                <div class="row">
-                                                    <form method="post" action="{{ path('attack')}}">
-                                                        <input type="hidden" name="ulat" value="{{ uLat }}">
-                                                        <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                        <input type="hidden" name="tlat" value="{{ tile.getLat }}">
-                                                        <input type="hidden" name="tlng" value="{{ tile.getLng }}">
-                                                        <input type="hidden" name="tid" value="{{ tile.getTileDrone.getDrone.getId }}">                                                
-                                                        <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
-                                                        <button style="border-radius:30px; font-size:30px" class="btn rgba-red-strong waves-effect" type="submit"><strong><i class="fa fa-crosshairs" aria-hidden="true"></i></strong></button>
-                                                    </form>
-                                                </div>
+                                                    <div class="row">
+                                                        <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Schild</button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset('img/Shield-96.png')}}"/>
+                                                    </div>
+                                                    <div class="row">
+                                                         <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect"><strong>{{ tile.getTileShield.getShield.getName_DE }}</strong><br>
+                                                         {{ tile.getTileShield.getHp }} / {{ tile.getTileShield.getShield.getHp }}<br>
+                                                         <progress class="progress progress-success" value="{{ tile.getTileBuilding.getHp }}" max="{{tile.getTileBuilding.getBuilding.getHp }}" style="color:000">25%</progress>
+                                                         </button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <form method="post" action="{{ path('attack')}}">
+                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                <input type="hidden" name="t" value="shield">
+                                                                <input type="hidden" name="w" value="primary">                                                                
+                                                                <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
+                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
+                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Laser Beam-96.png')}}"/></button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <form method="post" action="{{ path('attack')}}">
+                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                <input type="hidden" name="t" value="shield">
+                                                                <input type="hidden" name="w" value="secondary">                                                                
+                                                                <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
+                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
+                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Mushroom Cloud Filled-100.png')}}"/></button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             {% endif %}
@@ -113,9 +155,8 @@
                                                     <form method="post" action="{{ path('attack')}}">
                                                         <input type="hidden" name="ulat" value="{{ uLat }}">
                                                         <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                        <input type="hidden" name="tlat" value="{{ tile.getLat }}">
-                                                        <input type="hidden" name="tlng" value="{{ tile.getLng }}">
-                                                        <input type="hidden" name="tid" value="{{ tile.getTileDrone.getDrone.getId }}">                                                
+                                                        <input type="hidden" name="t" value="building">
+                                                        <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
                                                         <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
                                                         <button style="border-radius:30px; font-size:30px" class="btn rgba-red-strong waves-effect" type="submit"><strong><i class="fa fa-crosshairs" aria-hidden="true"></i></strong></button>
                                                     </form>
@@ -169,9 +210,8 @@
                                                     <form method="post" action="{{ path('attack')}}">
                                                         <input type="hidden" name="ulat" value="{{ uLat }}">
                                                         <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                        <input type="hidden" name="tlat" value="{{ tile.getLat }}">
-                                                        <input type="hidden" name="tlng" value="{{ tile.getLng }}">
-                                                        <input type="hidden" name="tid" value="{{ tile.getTileDrone.getDrone.getId }}">                                                
+                                                        <input type="hidden" name="t" value="drone">
+                                                        <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
                                                         <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
                                                         <button style="border-radius:30px; font-size:30px" class="btn rgba-red-strong waves-effect" type="submit"><strong><i class="fa fa-crosshairs" aria-hidden="true"></i></strong></button>
                                                     </form>
