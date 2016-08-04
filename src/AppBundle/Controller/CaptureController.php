@@ -106,21 +106,20 @@ class CaptureController extends Controller
                     
                     $setResources = join(',', $tileResources); 
                     
-                    $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox); 
+                    $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox);
                     $tile->setResources($setResources); 
-                    $em->persist($tile);
-                    
                     
                     $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
                     $tile->setTileDrone($drone,$drone->getHp());
-
-                    $user->addTile($tile, time(),time());
-      
-                    $em->persist($user);
-                    $em->flush();
+                    
+                    $em->persist($tile);
+                    
                     
 
-
+                    $user->addTile($tile, time(),time());
+                    
+                    $em->flush();
+                    
                     $q=   " UPDATE 
                                 gameField 
                             SET 
@@ -151,6 +150,7 @@ class CaptureController extends Controller
                     $statement = $connection->prepare($q);
                     $statement->execute();
                     
+
 
 
                     

@@ -7,6 +7,7 @@ use GraphAware\Neo4j\OGM\Annotations as OGM;
  
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 use AppBundle\Entity\UserTile;
+use AppBundle\Entity\UserTileLost;
 use AppBundle\Entity\TileDrone;
 use AppBundle\Entity\TileBuilding;
 use AppBundle\Entity\TileShield;
@@ -99,6 +100,14 @@ class Tile
     protected $userTile;    
     
     /**
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTileLost", type="LOST", direction="INCOMING", collection=true, mappedBy="tile")
+     * @OGM\Lazy()
+     * @var ArrayCollection|\AppBundle\Entity\UserTileLost[]
+     */
+     
+    protected $userTileLost;    
+    
+    /**
      * UserResource constructor.
      * @param int $uid
      * @param int $rid
@@ -115,8 +124,11 @@ class Tile
         $this->tLng = $tLng;
         $this->bBox = $bBox;
         $this->userTile = new ArrayCollection();
+        $this->userTileLost = new ArrayCollection();
         $this->tileShield = new ArrayCollection();
-
+        $this->tileBuilding = new ArrayCollection();
+        $this->tileDrone = new ArrayCollection();
+        
     }
 
     
@@ -182,6 +194,40 @@ class Tile
         $this->userTile->add($userTile);
     }
     
+    /**
+     * @param \AppBundle\Entity\UserTile $userTile
+     */
+    public function removeUserTile(UserTile $userTile)
+    {
+        if ($this->userTile->contains($userTile)) {
+            $this->userTile->removeElement($userTile);
+        }
+    }
+    
+    /**
+     * @return \AppBundle\Entity\UserTileLost
+     */
+    public function getUserTileLost()
+    {
+        return $this->userTileLost->first();
+    }
+    
+    /**
+     * @var \AppBundle\Entity\UserTileLost
+     */
+    public function setUserTileLost($userTileLost)
+    {
+        $this->userTileLost->add($userTileLost);
+    }
+    
+    /**
+     * @param \AppBundle\Entity\UserTileLost $userTileLost
+     */
+    public function removeUserTileLost(UserTileLost $userTileLost)
+    {
+        $this->userTileLost->removeElement($userTileLost);
+    }
+
     
     /**
      * @param \AppBundle\Entity\Drone $drone
@@ -200,6 +246,15 @@ class Tile
     public function getTileDrone()
     {
         return $this->tileDrone->first();
+    }
+    
+    /**
+     * @param \AppBundle\Entity\TileDrone $tileDrone
+     */
+    public function removeTileDrone(TileDrone $tileDrone)
+    {
+        $this->tileDrone->removeElement($tileDrone);
+        $tileDrone->getDrone()->removeTileDrone($tileDrone);
     }
     
     /**

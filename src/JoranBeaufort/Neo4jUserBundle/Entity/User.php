@@ -18,6 +18,8 @@ use AppBundle\Entity\UserTeam;
 use AppBundle\Entity\Team;
 use AppBundle\Entity\UserTile;
 use AppBundle\Entity\Tile;
+use AppBundle\Entity\UserTileLost;
+use AppBundle\Entity\TileLost;
     
 /**
  * @OGM\Node(label="User")
@@ -182,16 +184,22 @@ class User implements AdvancedUserInterface, \Serializable
      */
     protected $userTiles;
     
+    /**
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTileLost", type="LOST", direction="OUTGOING", collection=true, mappedBy="user")
+     * @OGM\Lazy()
+     * @var ArrayCollection|\AppBundle\Entity\UserTileLost[]
+     */
+    protected $userTilesLost;
+    
     public function __construct()
     {
         $this->isActive = true;
         $this->userRoles = new ArrayCollection();
         $this->userResources = new ArrayCollection();
-        $this->userTiles = new ArrayCollection();
         $this->userTeam = new ArrayCollection();
+        $this->userTiles = new ArrayCollection();
+        $this->userTilesLost = new ArrayCollection();
         
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid(null, true));
     }
 
     // other properties and methods
@@ -418,7 +426,7 @@ class User implements AdvancedUserInterface, \Serializable
 
 
     /**
-     * @param JoranBeaufort\Neo4jUserBundle\Entity\Role $role
+     * @param \JoranBeaufort\Neo4jUserBundle\Entity\Role $role
      */
     public function removeRole(Role $role)
     {
@@ -479,7 +487,7 @@ class User implements AdvancedUserInterface, \Serializable
 
         $ur = new UserResource($this, $resources, $amount);
         $this->userResources->add($ur);
-        $resources->getUserResources()->add($ur); 
+        $resources->addUserResources($ur); 
     }
     
     /**
@@ -519,22 +527,33 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function addTile(Tile $tile, $captured, $collected)
     {
-        if (!$this->userTiles->contains($tile)) {
             $ut = new UserTile($this, $tile, $captured, $collected);
             $this->userTiles->add($ut);
             $tile->setUserTile($ut);
-        }
     }
 
     /**
-     * @param AppBundle\Entity\Tile $tile
+     * @param \AppBundle\Entity\Tile $tile
      */
     public function removeTile(Tile $tile)
     {
-        if ($this->userTiles->contains($tile)) {
-            $this->userTiles->removeElement($tile);
+        if ($this->userTiles->contains($tile->getUserTile())) {
+            $this->userTiles->removeElement($tile->getUserTile());
+            $tile->removeUserTile($tile->getUserTile());
         }
     }
+    
+    /**
+     * @param \AppBundle\Entity\Tile $tile
+     * @param int $lost
+     */
+    public function addTileLost(Tile $tile, $lost)
+    {
+            $utl = new UserTileLost($this, $tile, $lost);
+            $this->userTilesLost->add($utl);
+            $tile->setUserTileLost($utl);
+    }
+    
     
     
     public function eraseCredentials()

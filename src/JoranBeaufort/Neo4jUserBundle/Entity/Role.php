@@ -67,7 +67,7 @@ class Role
     }
 
     /**
-     * @param JoranBeaufort\Neo4jUserBundle\Entity\UserRole $userRole
+     * @param \JoranBeaufort\Neo4jUserBundle\Entity\UserRole $userRole
      */
     public function addUserRole(UserRole $userRole)
     {
@@ -77,7 +77,7 @@ class Role
     }
 
     /**
-     * @param JoranBeaufort\Neo4jUserBundle\Entity\UserRole $userRole
+     * @param \JoranBeaufort\Neo4jUserBundle\Entity\UserRole $userRole
      */
     public function removeUserRole(UserRole $userRole)
     {

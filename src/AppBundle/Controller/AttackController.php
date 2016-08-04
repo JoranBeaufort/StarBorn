@@ -88,7 +88,37 @@ class AttackController extends Controller
             $hp = $tile->getTileDrone()->getHp();
             $hpNew = $hp-$dmg;
             if($hpNew <=0){
+                
+                $tLat = $tile->getLat();
+                $tLng = $tile->getLng();
+                
                 $tile->removeTileDrone($tile->getTileDrone());
+                $user->removeTile($tile);
+                $user->addTileLost($tile,time());
+                
+                $q=   " UPDATE 
+                            gameField 
+                        SET 
+                            rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),0)
+                        WHERE 
+                            ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
+                
+                $statement = $connection->prepare($q);
+                $statement->execute();
+                
+                $q=   " UPDATE 
+                            gameField 
+                        SET 
+                            rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),0)
+                        WHERE 
+                            ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
+                
+                $statement = $connection->prepare($q);
+                $statement->execute();
+                    
+                $url = $this->generateUrl('map');
+                return new RedirectResponse($url);
+                
             }else{
                 $tile->getTileDrone()->setHp($hpNew);
             }     

@@ -104,4 +104,13 @@ class Resources
         return $this->userResources;
     }
     
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\UserResource[]
+     */
+    public function addUserResources($userResource)
+    {
+        return $this->userResources->add($userResource);
+        
+    }
+    
 }
