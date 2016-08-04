@@ -31,9 +31,6 @@ class TeamController extends Controller
                 $team = $em->getRepository(Team::class)->findOneBy('name', $team_selected);  
                 $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
                 $user->addTeam($team, time());
-                $em->persist($team);
-                //var_dump($user->getUserTeam()->getTeam());die;
-                $em->persist($user);
                 $em->flush();  
                 
                 $url = $this->generateUrl('dashboard');            

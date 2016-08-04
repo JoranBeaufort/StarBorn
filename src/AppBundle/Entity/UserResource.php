@@ -18,13 +18,13 @@ class UserResource
     protected $id;
     
     /**
-     * @OGM\StartNode(targetEntity="JoranBeaufort\Neo4jUserBundle\Entity\User")
+     * @OGM\StartNode(targetEntity="\JoranBeaufort\Neo4jUserBundle\Entity\User")
      * @var \JoranBeaufort\Neo4jUserBundle\Entity\User
      */
     protected $user;
 
     /**
-     * @OGM\EndNode(targetEntity="AppBundle\Entity\Resources")
+     * @OGM\EndNode(targetEntity="\AppBundle\Entity\Resources")
      * @var \AppBundle\Entity\Resources
      */
     protected $resources;

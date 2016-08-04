@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
+use JoranBeaufort\Neo4jUserBundle\Entity\UserRole;
 use JoranBeaufort\Neo4jUserBundle\Entity\Role;
 use AppBundle\Entity\UserResource;
 use AppBundle\Entity\Resources;
@@ -154,11 +155,11 @@ class User implements AdvancedUserInterface, \Serializable
     private $isEnabled;
     
     /**
-     * @OGM\Relationship(type="HAS_ROLE", direction="OUTGOING", targetEntity="\JoranBeaufort\Neo4jUserBundle\Entity\Role", collection=true, mappedBy="users")
+     * @OGM\Relationship(relationshipEntity="\JoranBeaufort\Neo4jUserBundle\Entity\UserRole", type="HAS_ROLE", direction="OUTGOING", collection=true, mappedBy="user")
      * @OGM\Lazy()
-     * @var ArrayCollection|\JoranBeaufort\Neo4jUserBundle\Entity\Role[]
+     * @var ArrayCollection|\JoranBeaufort\Neo4jUserBundle\Entity\UserRole[]
      */
-    protected $roles;
+    protected $userRoles;
         
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserResource", type="HAS_RESOURCE", direction="OUTGOING", collection=true, mappedBy="user")
@@ -168,9 +169,9 @@ class User implements AdvancedUserInterface, \Serializable
     protected $userResources;
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTeam", type="IN_TEAM", direction="OUTGOING", collection=false, mappedBy="user")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTeam", type="IN_TEAM", direction="OUTGOING", collection=true, mappedBy="user")
      * @OGM\Lazy()
-     * @var \AppBundle\Entity\UserTeam
+     * @var  ArrayCollection|\AppBundle\Entity\UserTeam[]
      */
     protected $userTeam;
     
@@ -184,9 +185,10 @@ class User implements AdvancedUserInterface, \Serializable
     public function __construct()
     {
         $this->isActive = true;
-        $this->roles = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
         $this->userResources = new ArrayCollection();
         $this->userTiles = new ArrayCollection();
+        $this->userTeam = new ArrayCollection();
         
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
@@ -390,30 +392,30 @@ class User implements AdvancedUserInterface, \Serializable
     }
     
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\JoranBeaufort\Neo4jUserBundle\Entity\Role[]
+     * @return \Doctrine\Common\Collections\ArrayCollection|\JoranBeaufort\Neo4jUserBundle\Entity\UserRole[]
      */
     public function getRoles()
     {
         $roles = array();
-        foreach($this->roles as $role){
-            array_push($roles,$role->getRoleType());
+        foreach($this->userRoles as $userRole){
+            array_push($roles,$userRole->getRole()->getRoleType());
         }
-        
         return $roles;
-    }
-        
+    }        
+    
     
     /**
-     * @param JoranBeaufort\Neo4jUserBundle\Entity\Role $role
+     * @param \JoranBeaufort\Neo4jUserBundle\Entity\Role $role
      */
     public function addRole(Role $role)
     {
 
-        if (!$this->roles->contains($role)) {
-            $this->roles->add($role);
-            $role->addUser($this);
-        }
+        $ur = new UserRole($this, $role);
+        $this->userRoles->add($ur);
+        $role->addUserRole($ur);
+        
     }
+
 
     /**
      * @param JoranBeaufort\Neo4jUserBundle\Entity\Role $role
@@ -426,7 +428,7 @@ class User implements AdvancedUserInterface, \Serializable
     }
     
     /**
-     * @return ArrayCollection|\AppBundle\Entity\UserResource[]
+     * @return \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\UserResource[]
      */
     public function getUserResources()
     {        
@@ -464,7 +466,7 @@ class User implements AdvancedUserInterface, \Serializable
     
 
     /**
-     * @param AppBundle\Entity\Resources $resources
+     * @param \AppBundle\Entity\Resources $resources
      * @param int $amount
      */
     public function addResource(Resources $resources, $amount)
@@ -474,10 +476,10 @@ class User implements AdvancedUserInterface, \Serializable
                 return;
             }
         }
-        //$this->userResources->add(new UserResource($this, $resources, $amount));
+
         $ur = new UserResource($this, $resources, $amount);
         $this->userResources->add($ur);
-        $resources->getMemberships()->add($ur);
+        $resources->getUserResources()->add($ur); 
     }
     
     /**
@@ -485,18 +487,18 @@ class User implements AdvancedUserInterface, \Serializable
      */   
     public function getUserTeam()
     {        
-        return $this->userTeam;
+        return $this->userTeam->first();
     }
     
     /**
-     * @param AppBundle\Entity\Team $team
+     * @param \AppBundle\Entity\Team $team
      * @param int $joined
      */
     public function addTeam(Team $team, $joined)
     {
 
         $ut = new UserTeam($this, $team, $joined);
-        $this->userTeam = $ut;
+        $this->userTeam->add($ut);
         $team->addUserTeam($ut);
         
     }

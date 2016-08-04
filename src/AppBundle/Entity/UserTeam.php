@@ -3,7 +3,7 @@ namespace AppBundle\Entity;
 
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
-use AppBundle\Entity\Resources;
+use AppBundle\Entity\Team;
 
 /**
  * @OGM\RelationshipEntity(type="IN_TEAM")

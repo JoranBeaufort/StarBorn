@@ -52,15 +52,14 @@ class Resources
     protected $colour; 
 
      /**
-     * @var AppBundle\Entity\UserResource[]
-     *
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserResource",type="HAS_RESOURCE", direction="INCOMING", collection=true, mappedBy="resources")
+     * @var ArrayCollection|\AppBundle\Entity\UserResource[]
      */
-    protected $memberships;    
+    protected $userResources;    
     
     public function __construct()
     {
-        $this->memberships = new ArrayCollection();
+        $this->userResources = new ArrayCollection();
     }
 
     
@@ -98,11 +97,11 @@ class Resources
     }
     
     /**
-     * @return \AppBundle\Entity\UserResource[]
+     * @return \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\UserResource[]
      */
-    public function getMemberships()
+    public function getUserResources()
     {
-        return $this->memberships;
+        return $this->userResources;
     }
     
 }

@@ -13,6 +13,7 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use JoranBeaufort\Neo4jUserBundle\Form\UserType;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 use JoranBeaufort\Neo4jUserBundle\Entity\Role;
+use JoranBeaufort\Neo4jUserBundle\Entity\UserRole;
 use AppBundle\Entity\Resources;
 use AppBundle\Entity\UserResource;
 
@@ -38,7 +39,6 @@ class RegistrationController extends Controller
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $user->setUsernameCanonical(mb_convert_case($user->getUsername(), MB_CASE_LOWER, "UTF-8"));
             $user->setEmailCanonical(mb_convert_case($user->getEmail(), MB_CASE_LOWER, "UTF-8"));
             $uniqueUsername=$em->getRepository(User::class)->findOneBy('usernameCanonical', $user->getUsernameCanonical());
@@ -72,10 +72,8 @@ class RegistrationController extends Controller
                 $uid=$tokenGenerator->generateUserToken(8);
                 $password=$this->get('security.password_encoder')->encodePassword($user, $user->getPlainPassword());
                 $dateTime = new \dateTime;
-                $dateTime = $dateTime->format('Y-m-d H:i:s');
-                
-                $role=$em->getRepository(Role::class)->findOneBy('roleType', 'ROLE_USER'); 
-                
+                $dateTime = $dateTime->format('Y-m-d H:i:s');                
+        
                 $user->setPassword($password);
                 $user->setConfirmationToken($confirmationToken);
                 $user->setIsEnabled(false);
@@ -83,12 +81,14 @@ class RegistrationController extends Controller
                 $user->setIsAccountNonLocked(true);
                 $user->setIsCredentialsNonExpired(true);
                 $user->setUid($uid);
-                $user->setRegistrationDateTime($dateTime);                
+                $user->setRegistrationDateTime($dateTime);   
+                // Add initial role
+                $role=$em->getRepository(Role::class)->findOneBy('roleType', 'ROLE_USER'); 
                 $user->addRole($role);
+                
                 
                 $em->persist($user);
                 $em->flush();
-
 
                 $url = $this->generateUrl('neo4j_register_check_email');
                 

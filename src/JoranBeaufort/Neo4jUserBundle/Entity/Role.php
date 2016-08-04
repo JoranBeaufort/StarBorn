@@ -19,14 +19,7 @@ class Role
      * @OGM\GraphId()
      * @var int
      */
-    private $id;
-    
-    /**
-     * @OGM\Relationship(type="HAS_ROLE", direction="INCOMING", targetEntity="JoranBeaufort\Neo4jUserBundle\Entity\User", collection=true)
-     * @var ArrayCollection|JoranBeaufort\Neo4jUserBundle\Entity\User[]
-     */
-     
-    protected $users;
+    private $id;    
     
     /**
      * @OGM\Property(type="string")
@@ -34,6 +27,12 @@ class Role
      */
      
     private $roleType;
+    
+    /**
+     * @OGM\Relationship(relationshipEntity="\JoranBeaufort\Neo4jUserBundle\Entity\UserRole", type="HAS_ROLE", direction="INCOMING", collection=true, mappedBy="role")
+     * @var ArrayCollection|\JoranBeaufort\Neo4jUserBundle\Entity\UserRole[]
+     */
+    protected $userRoles;
         
     
     
@@ -42,6 +41,11 @@ class Role
         $this->users = new ArrayCollection();
     }
     
+    
+    public function getId()
+    {
+        return $this->id;
+    }
     
     public function getRoleType()
     {
@@ -55,30 +59,30 @@ class Role
 
     
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection|\JoranBeaufort\Neo4jUserBundle\Entity\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection|\JoranBeaufort\Neo4jUserBundle\Entity\UserRole[]
      */
     public function getUsers()
     {
-        return $this->users;
+        return $this->userRoles;
     }
 
     /**
-     * @param JoranBeaufort\Neo4jUserBundle\Entity\User $user
+     * @param JoranBeaufort\Neo4jUserBundle\Entity\UserRole $userRole
      */
-    public function addUser(User $user)
+    public function addUserRole(UserRole $userRole)
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
+        if (!$this->userRoles->contains($userRole)) {
+            $this->userRoles->add($userRole);
         }
     }
 
     /**
-     * @param JoranBeaufort\Neo4jUserBundle\Entity\User $user
+     * @param JoranBeaufort\Neo4jUserBundle\Entity\UserRole $userRole
      */
-    public function removeUser(User $user)
+    public function removeUserRole(UserRole $userRole)
     {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
+        if ($this->userRoles->contains($userRole)) {
+            $this->userRoles->removeElement($userRole);
         }
     }
 }
