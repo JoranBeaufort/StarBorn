@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormError;
 use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
 use AppBundle\Entity\TileDrone;
+use AppBundle\Entity\UserTileLost;
 use AppBundle\Entity\Drone;
 use AppBundle\Entity\Team;
 use AppBundle\Entity\Resources;
@@ -85,7 +86,6 @@ class CaptureController extends Controller
                 $results = $statement->fetchAll();   
 
                 if(!$results || $results[0]['val'] === '0' || $results[0]['val'] === 0){
-                    
                     $potentialResources = $form->get('landcover')->getData();
                     $potentialTileResources = array();
                     foreach($potentialResources as $pr){
@@ -103,22 +103,24 @@ class CaptureController extends Controller
                         $urR->setAmount($currentResourceCount+1);
                         array_push($newResources, $urR->getResource());
                     }
-                    
+
                     $setResources = join(',', $tileResources); 
                     
-                    $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox);
-                    $tile->setResources($setResources); 
+                    $em->clear();
                     
+                    $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
+                    $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox);
+                    
+                    $tile->setResources($setResources); 
+                    $em->persist($tile);
+
+
                     $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
                     $tile->setTileDrone($drone,$drone->getHp());
-                    
-                    $em->persist($tile);
-                    
-                    
 
                     $user->addTile($tile, time(),time());
                     
-                    $em->flush();
+                    $em->flush();    
                     
                     $q=   " UPDATE 
                                 gameField 

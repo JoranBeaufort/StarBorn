@@ -30,7 +30,7 @@ class Role
     
     /**
      * @OGM\Relationship(relationshipEntity="\JoranBeaufort\Neo4jUserBundle\Entity\UserRole", type="HAS_ROLE", direction="INCOMING", collection=true, mappedBy="role")
-     * @var ArrayCollection|\JoranBeaufort\Neo4jUserBundle\Entity\UserRole[]
+     * @var \JoranBeaufort\Neo4jUserBundle\Entity\UserRole[]
      */
     protected $userRoles;
         
@@ -38,7 +38,7 @@ class Role
     
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
     }
     
     
