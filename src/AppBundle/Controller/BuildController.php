@@ -38,7 +38,28 @@ class BuildController extends Controller
         $ttrx = $request->request->get('ttrx');
         $ttry = $request->request->get('ttry');
         
-        return $this->render('AppBundle:Capture:capture.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'tLat' => $tLat, 'tLng' => $tLng, 'a' => $a, 'user' => $user, 'building' => $building, 'drone' => $drone));
+        $a = $encoder->decrypt($request->request->get('a'));
+        
+        // Get the node ID
+        $em_pgsql = $this->getDoctrine()->getManager();
+        $connection = $em_pgsql->getConnection();
+        $q=   " SELECT 
+                    rid, 
+                    ST_Value(rast, 3, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat."),4326),2056),false) val 
+                FROM 
+                    gameField 
+                WHERE
+                    ST_Intersects(rast, 3, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat.") ,4326),2056))";
+        
+        $statement = $connection->prepare($q);
+        $statement->execute();
+        $results = $statement->fetchAll();  
+        
+        $em = $this->get('neo4j.graph_manager')->getClient();
+        $tile = $em->getRepository(Tile::class)->findOneById(intval($results[0]['val']));
+
+        $message = null;
+        return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'message' => $message));
         
     }
 }
