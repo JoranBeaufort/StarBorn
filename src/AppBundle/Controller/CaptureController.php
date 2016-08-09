@@ -8,15 +8,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
-use AppBundle\Entity\TileDrone;
-use AppBundle\Entity\UserTileLost;
 use AppBundle\Entity\Drone;
-use AppBundle\Entity\Team;
 use AppBundle\Entity\Resources;
-use AppBundle\Entity\UserResource;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 
 class CaptureController extends Controller
@@ -58,7 +55,6 @@ class CaptureController extends Controller
         
         if ($form->isSubmitted() && $form->isValid()) {
                 $em = $this->get('neo4j.graph_manager')->getClient();
-                $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
                 
                 // user coords
                 $uLat = $request->request->get('ulat');
@@ -85,7 +81,9 @@ class CaptureController extends Controller
                 $statement->execute();
                 $results = $statement->fetchAll();   
 
-                if(!$results || $results[0]['val'] === '0' || $results[0]['val'] === 0){
+                if(!$results || $results[0]['val'] === '0' || $results[0]['val'] === 0){                    
+                    
+                    // get potential resources
                     $potentialResources = $form->get('landcover')->getData();
                     $potentialTileResources = array();
                     foreach($potentialResources as $pr){
@@ -93,34 +91,54 @@ class CaptureController extends Controller
                         array_push($potentialTileResources,$r->getResourceType());
                     }
                     
+                    $em->clear(); 
+
+                    $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
+
                     $tileResources = array();
-                    $newResources = array();
-                    for($i=0; $i<3; $i++){
+                    $newResources = new ArrayCollection();
+                   
+                   for($i=0; $i<3; $i++){
                         $resourceName = $potentialTileResources[array_rand($potentialTileResources)];
-                        array_push($tileResources,$resourceName);
+                        array_push($tileResources,$resourceName);                        
                         $urR = $user->getUserResource($resourceName);
                         $currentResourceCount = $urR->getAmount();
                         $urR->setAmount($currentResourceCount+1);
-                        array_push($newResources, $urR->getResource());
-                    }
+                        $newResources->add($urR->getResource());
+                   }
+                    
 
                     $setResources = join(',', $tileResources); 
                     
-                    $em->clear();
+                    $q=   " SELECT 
+                                rid, 
+                                ST_Value(rast, 3, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat."),4326),2056),false) val 
+                            FROM 
+                                gameField 
+                            WHERE
+                                ST_Intersects(rast, 3, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat.") ,4326),2056))";
                     
-                    $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
-                    $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox);
+                    $statement = $connection->prepare($q);
+                    $statement->execute();
+                    $results = $statement->fetchAll(); 
                     
-                    $tile->setResources($setResources); 
-                    $em->persist($tile);
-
+                    // get the tile
+                    if($results[0]['val'] != -9999){
+                        $tile = $em->getRepository(Tile::class)->findOneById(intval($results[0]['val']));
+                    }else{
+                        $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox);
+                    }
+                    
 
                     $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
+                    
+                    $tile->setResources($setResources);
                     $tile->setTileDrone($drone,$drone->getHp());
 
-                    $user->addTile($tile, time(),time());
+                    $user->addUserTile($tile, time(),time());
                     
-                    $em->flush();    
+                    $em->flush();          
+                    $em->clear(); 
                     
                     $q=   " UPDATE 
                                 gameField 
@@ -152,11 +170,8 @@ class CaptureController extends Controller
                     $statement = $connection->prepare($q);
                     $statement->execute();
                     
-
-
-
-                    
                     return $this->render('AppBundle:Capture:success.html.twig',array('user' => $user, 'newResources' =>$newResources));
+                
                 }elseif($results[0]['val'] !== '0' || $results[0]['val'] !== 0){
                     $user = $this->getUser();
                     $tileUser = $em->getRepository(User::class)->findOneById(intval($results[0]['val']));                

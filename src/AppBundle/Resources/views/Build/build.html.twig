@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-xs-12"> 
                 <div class="card text-xs-center">                
-                    <h3 class="card-header primary-color white-text">Ziele erfasst!&nbsp;&nbsp;
+                    <h3 class="card-header primary-color white-text">Gebiet schützen&nbsp;&nbsp;
                         <!-- Trigger the modal with a button -->
                         <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
                     </h3>
@@ -21,16 +21,9 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                               </div>
                               <div class="modal-body text-xs-left ">
-                                  <div class="alert alert-danger" role="alert">
-                                      <h4 class="modal-title">Achtung:</h4>
-                                      <p>Dieses gebiet gehört einem feindlichen Spieler, bekannt unter dem Namen <strong>"{{ tile.getUserTile.getUser.getUsername }}"</strong>!</p>
-                                  </div>
                                   <div class="alert alert-info" role="alert">
                                       <h4 class="modal-title">Zur Info:</h4>
-                                      <p>Du hast in diesem Gebiet eine feindliche Presänz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!</p>
-                                      <br>
-                                      <h4 class="modal-title">Angriff!</h4>
-                                      <p>Brauche entweder deine Laserkanone (kurze Wiederaufladezeit) oder eine mächtige Photonenbombe (lange Wiederaufladezeit) um den Feind anzugreiffen.</p>
+                                      <p>Dieses Gebiet gehört dem freundlichen Team.Baue Strukturen um das Gebiet zu stärken!</p>
                                   </div>
                               </div>
                               <div class="modal-footer">
@@ -75,7 +68,7 @@
                                                 </div>
                                                 <div class="col-md-10 text-xs-left">      
                                                      <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
-                                                         <strong>Angriff erfolgreich!</strong><br>
+                                                         <strong>Bau erfolgreich!</strong><br>
                                                          <p>{{ message.text }}</p>
                                                      </div>
                                                 </div>
@@ -95,7 +88,7 @@
                                         <div class="row">
                                             {% if tile.getTileShield != null %}
                                             <div class="col-md-4">
-                                                <div style="margin-bottom:5px; border-radius:20px;" class="rgba-grey-light">
+                                                <div style="margin-bottom:5px; border-radius:20px; height:400px"" class="rgba-grey-light">
                                                     <div class="row">
                                                         <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Schild</button>
                                                     </div>
@@ -124,10 +117,21 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {% else %}
+                                            <div class="col-md-4">
+                                                <div style="margin-bottom:5px; border-radius:20px; height:400px"" class="rgba-grey-light">
+                                                    <div class="row">
+                                                        <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Schild</button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <button  data-toggle="modal" data-target="#help" style="margin-top:40px; opacity: 0.7; border:none; background-color:transparent; color: #000; font-size:165px; " ><i style="opacity: 0.7;" class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {% endif %}
                                             {% if tile.getTileBuilding != null %}
-                                            <div class="{% if tile.getTileShield == null %}col-md-offset-2 {% endif %} col-md-4">
-                                            <div  style="margin-bottom:5px; border-radius:20px;" class="rgba-grey-light">
+                                            <div class="col-md-4">
+                                            <div  style="margin-bottom:5px; border-radius:20px; height:400px"" class="rgba-grey-light">
                                                 <div class="row">
                                                     <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Gebäude</button>
                                                 </div>
@@ -185,9 +189,20 @@
                                                 </div>
                                                 </div>
                                             </div>
+                                            {% else %}
+                                            <div class="col-md-4" style="height:100%">
+                                                <div style="margin-bottom:5px; border-radius:20px; height:400px" class="rgba-grey-light">
+                                                    <div class="row">
+                                                        <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Gebäude</button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <button  data-toggle="modal" data-target="#help" style="margin-top:40px; opacity: 0.7; border:none; background-color:transparent; color: #000; font-size:165px; " ><i style="opacity: 0.7;" class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {% endif %}
-                                            <div class="{% if tile.getTileBuilding == null %}col-md-offset-4 {% endif %} col-md-4">
-                                            <div  style="margin-bottom:5px; border-radius:20px;" class="rgba-grey-light">
+                                            <div class="col-md-4">
+                                            <div  style="margin-bottom:5px; border-radius:20px; height:400px"" class="rgba-grey-light">
                                                 <div class="row">
                                                     <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Aufklärungsdrohne</button>
                                                 </div>

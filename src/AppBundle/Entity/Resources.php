@@ -4,6 +4,9 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
+use AppBundle\Entity\UserResource;
+
+
 /**
  * @OGM\Node(label="Resources")
  */

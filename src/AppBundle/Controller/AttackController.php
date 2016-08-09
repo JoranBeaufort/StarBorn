@@ -17,9 +17,7 @@ use JoranBeaufort\Neo4jUserBundle\Entity\User;
 class AttackController extends Controller
 {
     public function indexAction(Request $request)
-    {    
-        $user = $this->getUser();               
-        
+    {            
         $encoder = $this->get('nzo_url_encryptor');
         
         // user coords
@@ -50,7 +48,8 @@ class AttackController extends Controller
         
         $em = $this->get('neo4j.graph_manager')->getClient();
         $tile = $em->getRepository(Tile::class)->findOneById(intval($tid));
-        
+        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
+
         $message = array();
         $message['type'] = 'as';
         
@@ -91,10 +90,16 @@ class AttackController extends Controller
                 
                 $tLat = $tile->getLat();
                 $tLng = $tile->getLng();
+                $drone = $tile->getTileDrone();
+                $tile->removeTileDrone($drone);
+                $user->removeUserTile($tile);    
+
+                $em->persist($tile);   
+
+                $user->addUserTileLost($tile,time());
                 
-                $tile->removeTileDrone($tile->getTileDrone());
-                $user->removeTile($tile);
-                $user->addTileLost($tile,time());
+                $em->flush(); 
+               
                 
                 $q=   " UPDATE 
                             gameField 
@@ -115,7 +120,7 @@ class AttackController extends Controller
                 
                 $statement = $connection->prepare($q);
                 $statement->execute();
-                    
+                                
                 $url = $this->generateUrl('map');
                 return new RedirectResponse($url);
                 
@@ -126,9 +131,8 @@ class AttackController extends Controller
             $error = 'error';
         }
         
-        $em->flush(); 
-        
-        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, "message" => $message));
+        $em->flush();
+        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'message' => $message));
         
     }
 }

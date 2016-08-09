@@ -525,7 +525,7 @@ class User implements AdvancedUserInterface, \Serializable
      * @param int $captured
      * @param int $collected
      */
-    public function addTile(Tile $tile, $captured, $collected)
+    public function addUserTile(Tile $tile, $captured, $collected)
     {
             $ut = new UserTile($this, $tile, $captured, $collected);
             $this->userTiles->add($ut);
@@ -535,20 +535,20 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @param \AppBundle\Entity\Tile $tile
      */
-    public function removeTile(Tile $tile)
+    public function removeUserTile(Tile $tile)
     {
-        if ($this->userTiles->contains($tile->getUserTile())) {
-            $this->userTiles->removeElement($tile->getUserTile());
-            $tile->removeUserTile($tile->getUserTile());
-        }
+        $userTile = $tile->getUserTile();
+        $this->userTiles->removeElement($userTile);
+        $tile->removeUserTile($userTile);
     }
     
     /**
      * @param \AppBundle\Entity\Tile $tile
      * @param int $lost
      */
-    public function addTileLost(Tile $tile, $lost)
+    public function addUserTileLost(Tile $tile, $lost)
     {
+        
             $utl = new UserTileLost($this, $tile, $lost);
             $this->userTilesLost->add($utl);
             $tile->setUserTileLost($utl);

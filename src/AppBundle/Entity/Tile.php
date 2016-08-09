@@ -21,7 +21,6 @@ class Tile
 {
     /**
      * @OGM\GraphId()
-     * @var int
      */
     protected $id;
         
@@ -199,9 +198,7 @@ class Tile
      */
     public function removeUserTile(UserTile $userTile)
     {
-        if ($this->userTile->contains($userTile)) {
-            $this->userTile->removeElement($userTile);
-        }
+        $this->userTile->removeElement($userTile);
     }
     
     /**

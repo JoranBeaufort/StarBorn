@@ -13,7 +13,6 @@ class UserResource
 {
     /**
      * @OGM\GraphId()
-     * @var int
      */
     protected $id;
     
@@ -39,8 +38,8 @@ class UserResource
 
     /**
      * UserResource constructor.
-     * @param \JoranBeaufort\Neo4jUserBundle\Entity\User $user
-     * @param \AppBundle\Entity\Resources $resources
+     * @param User $user
+     * @param Resources $resources
      * @param int $amount
      */
     public function __construct(User $user, Resources $resources, $amount)

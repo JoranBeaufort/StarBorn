@@ -37,10 +37,9 @@ class UserTileLost
     protected $lost;    
     
     /**
-     * UserResource constructor.
      * @param \JoranBeaufort\Neo4jUserBundle\Entity\User $user
      * @param \AppBundle\Entity\Tile $tile
-     * @param int $collected
+     * @param int $lost
      */
     public function __construct(User $user, Tile $tile, $lost)
     {

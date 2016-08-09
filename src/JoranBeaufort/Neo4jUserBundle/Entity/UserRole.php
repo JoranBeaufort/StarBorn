@@ -13,7 +13,6 @@ class UserRole
 {
     /**
      * @OGM\GraphId()
-     * @var int
      */
     protected $id;
     
@@ -31,8 +30,8 @@ class UserRole
     
 
     /**
-     * @param \JoranBeaufort\Neo4jUserBundle\Entity\User $user
-     * @param \JoranBeaufort\Neo4jUserBundle\Entity\Role $role
+     * @param User $user
+     * @param Role $role
      */
     public function __construct(User $user, Role $role)
     {

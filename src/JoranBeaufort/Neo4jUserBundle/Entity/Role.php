@@ -1,13 +1,10 @@
 <?php
 namespace JoranBeaufort\Neo4jUserBundle\Entity;
 
-// Remember to create the role nodes in the neo4j graph
-// create (r:Role{roleType:'ROLE_USER'})
-// Add as many roles as needed.
-
 use Doctrine\Common\Collections\ArrayCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
+use JoranBeaufort\Neo4jUserBundle\Entity\UserRole;
 
 /**
  * @OGM\Node(label="Role")
@@ -17,7 +14,6 @@ class Role
 {
     /**
      * @OGM\GraphId()
-     * @var int
      */
     private $id;    
     
@@ -30,7 +26,7 @@ class Role
     
     /**
      * @OGM\Relationship(relationshipEntity="\JoranBeaufort\Neo4jUserBundle\Entity\UserRole", type="HAS_ROLE", direction="INCOMING", collection=true, mappedBy="role")
-     * @var \JoranBeaufort\Neo4jUserBundle\Entity\UserRole[]
+     * @var ArrayCollection|\JoranBeaufort\Neo4jUserBundle\Entity\UserRole[]
      */
     protected $userRoles;
         
@@ -67,7 +63,7 @@ class Role
     }
 
     /**
-     * @param \JoranBeaufort\Neo4jUserBundle\Entity\UserRole $userRole
+     * @param UserRole $userRole
      */
     public function addUserRole(UserRole $userRole)
     {
@@ -77,7 +73,7 @@ class Role
     }
 
     /**
-     * @param \JoranBeaufort\Neo4jUserBundle\Entity\UserRole $userRole
+     * @param UserRole $userRole
      */
     public function removeUserRole(UserRole $userRole)
     {
