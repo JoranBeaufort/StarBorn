@@ -136,6 +136,7 @@ class CaptureController extends Controller
                     $tile->setTileDrone($drone,$drone->getHp());
 
                     $user->addUserTile($tile, time(),time());
+                    // $user->addUserTileLost($tile, time());
                     
                     $em->flush();          
                     $em->clear(); 

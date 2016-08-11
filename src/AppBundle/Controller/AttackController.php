@@ -47,9 +47,13 @@ class AttackController extends Controller
         $results = $statement->fetchAll();  
         
         $em = $this->get('neo4j.graph_manager')->getClient();
-        $tile = $em->getRepository(Tile::class)->findOneById(intval($tid));
-        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
-
+        if($results[0]['val'] == $tid){
+            $tile = $em->getRepository(Tile::class)->findOneById(intval($tid));
+            $tileUserId = $tile->getUserTile()->getUser()->getId();;
+        }else{
+            
+        }
+        
         $message = array();
         $message['type'] = 'as';
         
@@ -90,27 +94,22 @@ class AttackController extends Controller
                 
                 $tLat = $tile->getLat();
                 $tLng = $tile->getLng();
+                
                 $drone = $tile->getTileDrone();
                 $tile->removeTileDrone($drone);
-                $user->removeUserTile($tile);    
+                
+                $tile->getUserTile()->getUser()->removeUserTile($tile);
 
-                $em->persist($tile);   
-
+                $em->flush();
+                $em->clear();
+                
+                $user = $em->getRepository(User::class)->findOneById($tileUserId);
+                $tile = $em->getRepository(Tile::class)->findOneById(intval($tid));
+                
                 $user->addUserTileLost($tile,time());
-                
-                $em->flush(); 
-               
-                
-                $q=   " UPDATE 
-                            gameField 
-                        SET 
-                            rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),0)
-                        WHERE 
-                            ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
-                
-                $statement = $connection->prepare($q);
-                $statement->execute();
-                
+            
+                $em->flush();
+
                 $q=   " UPDATE 
                             gameField 
                         SET 
@@ -120,7 +119,8 @@ class AttackController extends Controller
                 
                 $statement = $connection->prepare($q);
                 $statement->execute();
-                                
+                
+                
                 $url = $this->generateUrl('map');
                 return new RedirectResponse($url);
                 
@@ -132,6 +132,7 @@ class AttackController extends Controller
         }
         
         $em->flush();
+        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
         return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'message' => $message));
         
     }
