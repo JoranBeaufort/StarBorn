@@ -135,19 +135,19 @@ class CaptureController extends Controller
                     $tile->setResources($setResources);
                     $tile->setTileDrone($drone,$drone->getHp());
 
-                    $user->addUserTile($tile, time(),time());
-                    // $user->addUserTileLost($tile, time());
+                    $user->addUserTile($tile, time(),time());                    // $user->addUserTileLost($tile, time());
+                    
                     
                     $em->flush();          
                     $em->clear(); 
-                    
+                  
                     $q=   " UPDATE 
                                 gameField 
                             SET 
                                 rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$user->getId().")
                             WHERE 
                                 ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
-                
+                   
                     $statement = $connection->prepare($q);
                     $statement->execute();
                     
@@ -157,7 +157,7 @@ class CaptureController extends Controller
                                 rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$user->getUserTeam()->getTeam()->getTid().")
                             WHERE 
                                 ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
-                
+                   
                     $statement = $connection->prepare($q);
                     $statement->execute();
                     
@@ -167,9 +167,18 @@ class CaptureController extends Controller
                                 rast = ST_SetValue(rast,3,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$tile->getId().")
                             WHERE 
                                 ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
-                
+                   
                     $statement = $connection->prepare($q);
                     $statement->execute();
+                    
+                    $q=   " INSERT INTO 
+                                tileLog ( uid,tid, timestamp, lat, lng, resources)
+                            VALUES
+                                ('".$user->getUid()."','".$tile->getId()."','".time()."','".$tLat."','".$tLng."','".$setResources."')";
+                    
+                    $statement = $connection->prepare($q);
+                    $statement->execute();
+
                     
                     return $this->render('AppBundle:Capture:success.html.twig',array('user' => $user, 'newResources' =>$newResources));
                 

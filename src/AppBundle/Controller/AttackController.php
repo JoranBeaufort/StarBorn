@@ -98,13 +98,8 @@ class AttackController extends Controller
                 $drone = $tile->getTileDrone();
                 $tile->removeTileDrone($drone);
                 
-                $tile->getUserTile()->getUser()->removeUserTile($tile);
-
-                $em->flush();
-                $em->clear();
-                
-                $user = $em->getRepository(User::class)->findOneById($tileUserId);
-                $tile = $em->getRepository(Tile::class)->findOneById(intval($tid));
+                $user = $tile->getUserTile()->getUser();
+                $user->removeUserTile($tile);
                 
                 $user->addUserTileLost($tile,time());
             
@@ -114,6 +109,16 @@ class AttackController extends Controller
                             gameField 
                         SET 
                             rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),0)
+                        WHERE 
+                            ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
+                
+                $statement = $connection->prepare($q);
+                $statement->execute();
+                
+                $q=   " UPDATE 
+                            gameField 
+                        SET 
+                            rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),0)
                         WHERE 
                             ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
                 

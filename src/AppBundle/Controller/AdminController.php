@@ -67,6 +67,14 @@ class AdminController extends Controller
             $q ="UPDATE gameField SET rast = ST_AddBand(rast, 9, '64BF'::text, -9999, null)";
             $statement = $connection->prepare($q);
             $statement->execute();
+            
+            $q='DROP TABLE tileLog;';
+            $statement = $connection->prepare($q);
+            $statement->execute();
+            
+            $q='CREATE TABLE tileLog (id SERIAL PRIMARY KEY, uid varchar(80), tid varchar(80),timestamp bigint, lat float(24), lng float(24), resources varchar(400));';
+            $statement = $connection->prepare($q);
+            $statement->execute();
 
             $message = 'Game Field Raster Reset Success! If you changed raster cell size, remember to change polygon display in map.html.twig!';
             return $this->render('AppBundle:Admin:admin.html.twig',array('user' => $user, 'message' => $message));

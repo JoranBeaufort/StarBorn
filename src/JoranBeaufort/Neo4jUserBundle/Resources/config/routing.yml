@@ -73,4 +73,8 @@ neo4j_ogm_testing7:
     path: /ogm/test7
     defaults: { _controller: Neo4jUserBundle:Test:test7 }
     
+neo4j_ogm_testing8:
+    path: /ogm/test8
+    defaults: { _controller: Neo4jUserBundle:Test:test8 }
+    
     

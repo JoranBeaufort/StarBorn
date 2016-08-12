@@ -15,12 +15,8 @@ use JoranBeaufort\Neo4jUserBundle\Form\UserType;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 use JoranBeaufort\Neo4jUserBundle\Entity\Role;
 use AppBundle\Entity\Resources;
-use AppBundle\Entity\UserResource;
 use AppBundle\Entity\Tile;
 use AppBundle\Entity\Team;
-use AppBundle\Entity\UserTeam;
-use AppBundle\Entity\UserTile;
-use AppBundle\Entity\TileDrone;
 use AppBundle\Entity\Drone;
 
 class TestController extends Controller
@@ -471,6 +467,40 @@ class TestController extends Controller
         $user = $em->getRepository(User::class)->findOneBy('username','test');
         var_dump($user->getUserTeam()->getTeam());
 
+       die;
+       return false;
+    }
+    
+     public function test8Action()
+    {
+        
+
+       $em = $this->get('neo4j.graph_manager')->getClient();
+       
+       $em->getDatabaseDriver()->run("match (n)-[r]-() delete r,n");    
+       $em->getDatabaseDriver()->run("match (n) delete n");    
+       // $em->getDatabaseDriver()->run("create (u:User{username:'foo'}), (t:Tile{tid:'foobar'}),(w:Drone{did:1,name:'nova_xs',name_DE:'Nova XS', hp:10, img:'img/Satellite Sending Signal-96.png'}), (u)-[c:CAPTURED]->(t)-[hd:HAS_DRONE]->(w)");    
+       $em->getDatabaseDriver()->run("create (u:User{username:'foo'}), (t:Tile{rid:'bar'}),(w:Drone{did:1,name:'nova_xs',name_DE:'Nova XS', hp:10, img:'img/Satellite Sending Signal-96.png'}), (t)-[hd:HAS_DRONE]->(w)");    
+
+
+       $tile = $em->getRepository(Tile::class)->findOneBy('rid','bar');
+       var_dump($tile->getRid());
+
+       $user = $em->getRepository(User::class)->findOneBy('username','foo');
+       $user->setUid('uhfifn');
+       var_dump($user->getUsername());
+       $em->flush();          
+       // $drone = $tile->getTileDrone();
+       // $tile->removeTileDrone($drone);
+       // 
+       // $user = $tile->getUserTile()->getUser();
+       // $user->removeUserTile($tile);
+
+       $user->addUserTile($tile, time(),time());
+       
+       $em->flush();          
+       $em->clear(); 
+                    
        die;
        return false;
     }
