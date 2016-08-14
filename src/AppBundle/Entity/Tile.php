@@ -191,6 +191,7 @@ class Tile
     public function setUserTile($userTile)
     {
         $this->userTile->add($userTile);
+        return $this;
     }
     
     /**
@@ -199,6 +200,7 @@ class Tile
     public function removeUserTile(UserTile $userTile)
     {
         $this->userTile->removeElement($userTile);
+        return $this;
     }
     
     /**
@@ -215,6 +217,7 @@ class Tile
     public function setUserTileLost($userTileLost)
     {
         $this->userTileLost->add($userTileLost);
+        return $this;
     }
     
     /**
@@ -223,6 +226,7 @@ class Tile
     public function removeUserTileLost(UserTileLost $userTileLost)
     {
         $this->userTileLost->removeElement($userTileLost);
+        return $this;
     }
 
     
@@ -235,6 +239,7 @@ class Tile
         $td = new TileDrone($this, $drone, $hp);
         $this->tileDrone->add($td);
         $drone->setTileDrone($td);
+        return $this;
     }
     
     /**
@@ -252,6 +257,7 @@ class Tile
     {
         $this->tileDrone->removeElement($tileDrone);
         $tileDrone->getDrone()->removeTileDrone($tileDrone);
+        return $this;
     }
     
     /**
@@ -263,6 +269,7 @@ class Tile
         $tb = new TileBuilding($this, $building, $hp);
         $this->tileBuilding->add($tb);
         $building->setTileBuilding($tb);
+        return $this;
     }
     
     /**
@@ -272,6 +279,7 @@ class Tile
     {
         $this->tileBuilding->removeElement($tileBuilding);
         $tileBuilding->getBuilding()->removeTileBuilding($tileBuilding);
+        return $this;
     }
     
     /**
@@ -292,6 +300,7 @@ class Tile
         $ts = new TileShield($this, $shield, $hp);
         $this->tileShield->add($ts);
         $shield->setTileShield($ts);
+        return $this;
     }
     
     /**
@@ -301,6 +310,7 @@ class Tile
     {
         $this->tileShield->removeElement($tileShield);
         $tileShield->getShield()->removeTileShield($tileShield);
+        return $this;
     }
     
     /**

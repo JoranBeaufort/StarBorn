@@ -95,16 +95,20 @@ class AttackController extends Controller
                 $tLat = $tile->getLat();
                 $tLng = $tile->getLng();
                 
-                $drone = $tile->getTileDrone();
-                $tile->removeTileDrone($drone);
+                $tileId = $tile->getId();
+                $userId = $tile->getUserTile()->getUser()->getUid();  
                 
-                $user = $tile->getUserTile()->getUser();
-                $user->removeUserTile($tile);
+                //$drone = $tile->getTileDrone();
+                //$tile = $tile->removeTileDrone($drone);
                 
-                $user->addUserTileLost($tile,time());
-            
-                $em->flush();
 
+                //$user = $user->removeUserTile($tile);                
+
+                //$user = $user->addUserTileLost($tile,time());
+                
+                
+                $em->getDatabaseDriver()->run("START s=NODE(".$tileId.") MATCH(s)-[hd:HAS_DRONE]->(d:Drone), (u:User{uid:'".$userId."'})-[c:CAPTURED]->(s) DELETE hd,c CREATE (u)-[l:LOST{lost:".time()."}]->(s)"); 
+                
                 $q=   " UPDATE 
                             gameField 
                         SET 
@@ -135,8 +139,8 @@ class AttackController extends Controller
             }else{
             $error = 'error';
         }
-        
         $em->flush();
+        
         $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
         return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'message' => $message));
         

@@ -217,6 +217,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function setUid($uid)
     {
         $this->uid = $uid;
+        return $this;
     }
 
 
@@ -228,6 +229,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function setEmail($email)
     {
         $this->email = $email;
+        return $this;
     }
 
     public function getEmailCanonical()
@@ -238,6 +240,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function setEmailCanonical($emailCanonical)
     {
         $this->emailCanonical = $emailCanonical;
+        return $this;
     }
 
     public function getUsernameCanonical()
@@ -248,6 +251,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function setUsernameCanonical($usernameCanonical)
     {
         $this->usernameCanonical = $usernameCanonical;
+        return $this;
     }
 
     public function getUsername()
@@ -258,6 +262,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
+        return $this;
     }
 
     public function getPlainPassword()
@@ -268,6 +273,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
+        return $this;
     }
     
     public function getPassword()
@@ -409,6 +415,7 @@ class User implements AdvancedUserInterface, \Serializable
             array_push($roles,$userRole->getRole()->getRoleType());
         }
         return $roles;
+        return $this;
     }        
     
     
@@ -421,6 +428,7 @@ class User implements AdvancedUserInterface, \Serializable
         $ur = new UserRole($this, $role);
         $this->userRoles->add($ur);
         $role->addUserRole($ur);
+        return $this;
         
     }
 
@@ -433,6 +441,7 @@ class User implements AdvancedUserInterface, \Serializable
         if ($this->roles->contains($role)) {
             $this->roles->removeElement($role);
         }
+        return $this;
     }
     
     /**
@@ -454,7 +463,8 @@ class User implements AdvancedUserInterface, \Serializable
             if($resource->getResource()->getResourceType() == $name){
                 return $resource;
             }
-        }        
+        }
+        
     }    
      
     
@@ -488,6 +498,7 @@ class User implements AdvancedUserInterface, \Serializable
         $ur = new UserResource($this, $resources, $amount);
         $this->userResources->add($ur);
         $resources->addUserResources($ur); 
+        return $this;
     }
     
     /**
@@ -508,6 +519,7 @@ class User implements AdvancedUserInterface, \Serializable
         $ut = new UserTeam($this, $team, $joined);
         $this->userTeam->add($ut);
         $team->addUserTeam($ut);
+        return $this;
         
     }
     
@@ -530,6 +542,7 @@ class User implements AdvancedUserInterface, \Serializable
             $ut = new UserTile($this, $tile, $captured, $collected);
             $this->userTiles->add($ut);
             $tile->setUserTile($ut);
+            return $this;
     }
 
     /**
@@ -540,6 +553,7 @@ class User implements AdvancedUserInterface, \Serializable
         $userTile = $tile->getUserTile();
         $this->userTiles->removeElement($userTile);
         $tile->removeUserTile($userTile);
+        return $this;
     }
     
     /**
@@ -552,6 +566,7 @@ class User implements AdvancedUserInterface, \Serializable
             $utl = new UserTileLost($this, $tile, $lost);
             $this->userTilesLost->add($utl);
             $tile->setUserTileLost($utl);
+            return $this;
     }
     
     
