@@ -29,7 +29,7 @@ class Tile
      * @var int
      */
      
-    protected $uid;
+    protected $tid;    
     
     /**
      * @OGM\Property(type="int")
@@ -58,13 +58,7 @@ class Tile
      */
      
     protected $bBox;  
-    
-    /**
-     * @OGM\Property(type="string")
-     * @var string
-     */
      
-    protected $resources;      
     
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="OUTGOING", collection=true, mappedBy="tile")
@@ -108,16 +102,15 @@ class Tile
     
     /**
      * UserResource constructor.
-     * @param int $uid
      * @param int $rid
      * @param float $tLat
      * @param float $tLng
      * @param string $bBox
      */
      
-    public function __construct($uid, $rid, $tLat, $tLng, $bBox)
+    public function __construct($tid, $rid, $tLat, $tLng, $bBox)
     {
-        $this->uid = $uid;
+        $this->tid = $tid;
         $this->rid = $rid;
         $this->tLat = $tLat;
         $this->tLng = $tLng;
@@ -136,9 +129,9 @@ class Tile
         return $this->id;
     }
     
-    public function getUid()
+    public function getTid()
     {
-        return $this->uid;
+        return $this->tid;
     }
     
     public function getRid()
@@ -167,15 +160,6 @@ class Tile
         return $this->bBox;
     }
     
-    public function setResources($resources)
-    {
-        $this->resources = $resources;
-    }
-    
-    public function getResources()
-    {
-        return $this->resources;
-    }
     
     /**
      * @return \AppBundle\Entity\UserTile

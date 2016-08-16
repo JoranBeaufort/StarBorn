@@ -48,10 +48,9 @@ class AttackController extends Controller
         
         $em = $this->get('neo4j.graph_manager')->getClient();
         if($results[0]['val'] == $tid){
-            $tile = $em->getRepository(Tile::class)->findOneById(intval($tid));
-            $tileUserId = $tile->getUserTile()->getUser()->getId();;
+            $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
         }else{
-            
+             throw new \Exception('IDs dont match. Uiuiui!');
         }
         
         $message = array();
@@ -95,7 +94,7 @@ class AttackController extends Controller
                 $tLat = $tile->getLat();
                 $tLng = $tile->getLng();
                 
-                $tileId = $tile->getId();
+                $tileId = $tile->getTid();
                 $userId = $tile->getUserTile()->getUser()->getUid();  
                 
                 //$drone = $tile->getTileDrone();
@@ -107,7 +106,7 @@ class AttackController extends Controller
                 //$user = $user->addUserTileLost($tile,time());
                 
                 
-                $em->getDatabaseDriver()->run("START s=NODE(".$tileId.") MATCH(s)-[hd:HAS_DRONE]->(d:Drone), (u:User{uid:'".$userId."'})-[c:CAPTURED]->(s) DELETE hd,c CREATE (u)-[l:LOST{lost:".time()."}]->(s)"); 
+                $em->getDatabaseDriver()->run("MATCH(t:Tile{tid:'".$tileId."'})-[hd:HAS_DRONE]->(d:Drone), (u:User{uid:'".$userId."'})-[c:CAPTURED]->(s) DELETE hd SET c.lost = ".time()." WITH c call apoc.refactor.setType(c, 'LOST') yield input, output return false"); 
                 
                 $q=   " UPDATE 
                             gameField 

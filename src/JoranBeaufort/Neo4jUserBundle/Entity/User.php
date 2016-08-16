@@ -35,6 +35,13 @@ class User implements AdvancedUserInterface, \Serializable
 
     
     /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+     
+    private $uint;    
+    
+    /**
      * @OGM\Property(type="string")
      * @var string
      */
@@ -207,6 +214,17 @@ class User implements AdvancedUserInterface, \Serializable
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUint()
+    {
+        return $this->uint;
+    }
+
+    public function setUint($uint)
+    {
+        $this->uint = $uint;
+        return $this;
     }
 
     public function getUid()
@@ -537,9 +555,9 @@ class User implements AdvancedUserInterface, \Serializable
      * @param int $captured
      * @param int $collected
      */
-    public function addUserTile(Tile $tile, $captured, $collected)
+    public function addUserTile(Tile $tile, $captured, $collected, $resources)
     {
-            $ut = new UserTile($this, $tile, $captured, $collected);
+            $ut = new UserTile($this, $tile, $captured, $collected, $resources);
             $this->userTiles->add($ut);
             $tile->setUserTile($ut);
             return $this;

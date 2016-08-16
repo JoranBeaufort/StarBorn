@@ -69,6 +69,7 @@ class RegistrationController extends Controller
                 
                 $tokenGenerator=$this->get('neo4j.token_generator');
                 $confirmationToken=$tokenGenerator->generateConfirmationToken(24);
+                $uint=$tokenGenerator->generateUserIntToken(9);
                 $uid=$tokenGenerator->generateUserToken(8);
                 $password=$this->get('security.password_encoder')->encodePassword($user, $user->getPlainPassword());
                 $dateTime = new \dateTime;
@@ -80,6 +81,7 @@ class RegistrationController extends Controller
                 $user->setIsAccountNonExpired(true);
                 $user->setIsAccountNonLocked(true);
                 $user->setIsCredentialsNonExpired(true);
+                $user->setUint($uint);
                 $user->setUid($uid);
                 $user->setRegistrationDateTime($dateTime);   
                 // Add initial role

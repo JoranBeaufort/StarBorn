@@ -124,18 +124,21 @@ class CaptureController extends Controller
                     
                     // get the tile
                     if($results[0]['val'] != -9999){
-                        $tile = $em->getRepository(Tile::class)->findOneById(intval($results[0]['val']));
+                        $tile = $em->getRepository(Tile::class)->findOneBy('tid',$results[0]['val']);
                     }else{
-                        $tile = new Tile($user->getUid(),$results[0]['rid'], $tLat, $tLng, $bBox);
+                        $tokenGenerator=$this->get('tile.token_generator');
+                        $tid=$tokenGenerator->generateTileToken(9);
+                        $tile = new Tile($tid,$results[0]['rid'], $tLat, $tLng, $bBox);
                     }
                     
 
                     $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
                     
-                    $tile->setResources($setResources);
                     $tile->setTileDrone($drone,$drone->getHp());
 
-                    $user->addUserTile($tile, time(),time());                    // $user->addUserTileLost($tile, time());
+                    $user->addUserTile($tile, time(),time(),$setResources);                    
+                    
+                    // $user->addUserTileLost($tile, time());
                     
                     
                     $em->flush();          
@@ -144,7 +147,7 @@ class CaptureController extends Controller
                     $q=   " UPDATE 
                                 gameField 
                             SET 
-                                rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$user->getId().")
+                                rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$user->getUint().")
                             WHERE 
                                 ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
                    
@@ -164,7 +167,7 @@ class CaptureController extends Controller
                     $q=   " UPDATE 
                                 gameField 
                             SET 
-                                rast = ST_SetValue(rast,3,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$tile->getId().")
+                                rast = ST_SetValue(rast,3,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$tile->getTid().")
                             WHERE 
                                 ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
                    
@@ -174,7 +177,7 @@ class CaptureController extends Controller
                     $q=   " INSERT INTO 
                                 tileLog ( uid,tid, timestamp, lat, lng, resources)
                             VALUES
-                                ('".$user->getUid()."','".$tile->getId()."','".time()."','".$tLat."','".$tLng."','".$setResources."')";
+                                ('".$user->getUid()."','".$tile->getTid()."','".time()."','".$tLat."','".$tLng."','".$setResources."')";
                     
                     $statement = $connection->prepare($q);
                     $statement->execute();

@@ -41,6 +41,18 @@ class TokenGenerator
                 return $token;
             }
             
+    private function getUserToken($length)
+            {
+                $token = "";
+                $codeAlphabet= "0123456789";
+                $max = strlen($codeAlphabet) - 1;
+                for ($i=0; $i < $length; $i++) {
+                    $token .= $codeAlphabet[$this->crypto_rand_secure(0, $max)];
+                }
+                return $token;
+            }
+            
+            
     public function generateConfirmationToken($l)
     {
 
@@ -85,6 +97,24 @@ class TokenGenerator
             
             $token = $this->getToken($l);
             $item=$this->graphManager->getClient()->getRepository(User::class)->findOneBy('uid', $token);
+    
+            if (!$item)
+            {
+                return $token;
+            }
+        }
+
+        throw new \Exception('RandomIdGenerator worked hard, but could not generate unique ID :(');
+    }
+    
+    public function generateUserIntToken($l)
+    {
+
+        while (true)
+        {
+            
+            $token = $this->getUserToken($l);
+            $item=$this->graphManager->getClient()->getRepository(User::class)->findOneBy('uint', $token);
     
             if (!$item)
             {

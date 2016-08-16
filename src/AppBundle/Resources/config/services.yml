@@ -1,0 +1,7 @@
+parameters:
+    tile.token_generator.class: AppBundle\Security\TokenGenerator
+
+services:
+    tile.token_generator:
+         class: %tile.token_generator.class%
+         arguments: ['@neo4j.graph_manager']
