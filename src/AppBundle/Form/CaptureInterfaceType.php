@@ -14,14 +14,14 @@ class CaptureInterfaceType extends AbstractType
         $builder
             ->add('landcover', ChoiceType::class, array(
                 'choices' => array(
-                    'Wald' => 'wood',
+                    'Wald' => 'forest',
                     'Wasser' => 'water',
-                    'Landwirtschaft' => 'food',
-                    'Urban' => 'work',
-                    'Schnee' => 'water',
-                    'Berg' => 'stone',
-                    'Wiese' => 'wood',
-                    'Infrastruktur' => 'work',
+                    'Landwirtschaft' => 'agriculture',
+                    'Urban' => 'urban',
+                    'Schnee' => 'snow',
+                    'Berg' => 'mountain',
+                    'Wiese' => 'field',
+                    'Infrastruktur' => 'infrastructure',
                  ),
                  'choice_attr' => array(
                     'Wald' => array('text' => 'Das ist Wald'),

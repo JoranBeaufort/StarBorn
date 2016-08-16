@@ -11,6 +11,10 @@ dashboard:
     path:  /dashboard
     defaults: { _controller: AppBundle:Dashboard:index }
     
+inventory:
+    path:  /inventory
+    defaults: { _controller: AppBundle:Inventory:index }
+    
 map:
     path:  /map
     defaults: { _controller: AppBundle:Map:index }

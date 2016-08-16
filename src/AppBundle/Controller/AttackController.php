@@ -106,7 +106,7 @@ class AttackController extends Controller
                 //$user = $user->addUserTileLost($tile,time());
                 
                 
-                $em->getDatabaseDriver()->run("MATCH(t:Tile{tid:'".$tileId."'})-[hd:HAS_DRONE]->(d:Drone), (u:User{uid:'".$userId."'})-[c:CAPTURED]->(s) DELETE hd SET c.lost = ".time()." WITH c call apoc.refactor.setType(c, 'LOST') yield input, output return false"); 
+                $em->getDatabaseDriver()->run("MATCH(t:Tile{tid:'".$tileId."'})-[hd:HAS_DRONE]->(d:Drone), (u:User{uid:'".$userId."'})-[c:CAPTURED]->(t) DELETE hd SET c.lost = ".time()." WITH c call apoc.refactor.setType(c, 'LOST') yield input, output return false"); 
                 
                 $q=   " UPDATE 
                             gameField 

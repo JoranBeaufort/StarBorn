@@ -20,7 +20,10 @@ use AppBundle\Entity\UserTile;
 use AppBundle\Entity\Tile;
 use AppBundle\Entity\UserTileLost;
 use AppBundle\Entity\TileLost;
-    
+use AppBundle\Entity\UserInventory;
+use AppBundle\Entity\Inventory;
+
+
 /**
  * @OGM\Node(label="User")
  */
@@ -198,6 +201,13 @@ class User implements AdvancedUserInterface, \Serializable
      */
     protected $userTilesLost;
     
+    /**
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserInventory", type="HAS_INVENTORY", direction="OUTGOING", collection=true, mappedBy="user")
+     * @OGM\Lazy()
+     * @var ArrayCollection|\AppBundle\Entity\UserInventory[]
+     */
+    protected $userInventory;
+    
     public function __construct()
     {
         $this->isActive = true;
@@ -206,7 +216,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->userTeam = new ArrayCollection();
         $this->userTiles = new ArrayCollection();
         $this->userTilesLost = new ArrayCollection();
-        
+        $this->userInventory = new ArrayCollection();
     }
 
     // other properties and methods
@@ -555,9 +565,9 @@ class User implements AdvancedUserInterface, \Serializable
      * @param int $captured
      * @param int $collected
      */
-    public function addUserTile(Tile $tile, $captured, $collected, $resources)
+    public function addUserTile(Tile $tile, $captured, $collected, $resources, $landcover)
     {
-            $ut = new UserTile($this, $tile, $captured, $collected, $resources);
+            $ut = new UserTile($this, $tile, $captured, $collected, $resources, $landcover);
             $this->userTiles->add($ut);
             $tile->setUserTile($ut);
             return $this;
@@ -586,6 +596,29 @@ class User implements AdvancedUserInterface, \Serializable
             $tile->setUserTileLost($utl);
             return $this;
     }
+    
+        /**
+     * @return \AppBundle\Entity\UserTeam
+     */   
+    public function getUserInventory()
+    {        
+        return $this->userInventory->first();
+    }
+    
+    /**
+     * @param \AppBundle\Entity\Inventory $inventory
+     * @param int $capacity
+     */
+    public function addInventory(Inventory $inventory)
+    {
+
+        $ui = new UserInventory($this, $inventory);
+        $this->userInventory->add($ui);
+        $inventory->addUserInventory($ui);
+        return $this;
+        
+    }
+
     
     
     

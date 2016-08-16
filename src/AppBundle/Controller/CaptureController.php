@@ -86,10 +86,27 @@ class CaptureController extends Controller
                     // get potential resources
                     $potentialResources = $form->get('landcover')->getData();
                     $potentialTileResources = array();
+                    $landcover = array();
+                    
+                    $resourceMap = array(
+                        'forest' => 'wood',
+                        'water' => 'water',
+                        'agriculture' => 'food',
+                        'urban' => 'work',
+                        'snow' => 'water',
+                        'mountain' => 'stone',
+                        'field' => 'wood',
+                        'infrastructure' => 'work',
+                    );
+                    
                     foreach($potentialResources as $pr){
-                        $r = $em->getRepository(Resources::class)->findOneBy('resourceType',$pr);
+                        
+                        $r = $em->getRepository(Resources::class)->findOneBy('resourceType',$resourceMap[$pr]);
                         array_push($potentialTileResources,$r->getResourceType());
+                        array_push($landcover, $pr);
                     }
+                    
+                    $landcover = join(',', $landcover);
                     
                     $em->clear(); 
 
@@ -136,7 +153,7 @@ class CaptureController extends Controller
                     
                     $tile->setTileDrone($drone,$drone->getHp());
 
-                    $user->addUserTile($tile, time(),time(),$setResources);                    
+                    $user->addUserTile($tile, time(),time(),$setResources, $landcover);                    
                     
                     // $user->addUserTileLost($tile, time());
                     

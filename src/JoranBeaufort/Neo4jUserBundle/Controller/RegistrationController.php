@@ -15,6 +15,7 @@ use JoranBeaufort\Neo4jUserBundle\Entity\User;
 use JoranBeaufort\Neo4jUserBundle\Entity\Role;
 use JoranBeaufort\Neo4jUserBundle\Entity\UserRole;
 use AppBundle\Entity\Resources;
+use AppBundle\Entity\Inventory;
 use AppBundle\Entity\UserResource;
 
 class RegistrationController extends Controller
@@ -83,7 +84,12 @@ class RegistrationController extends Controller
                 $user->setIsCredentialsNonExpired(true);
                 $user->setUint($uint);
                 $user->setUid($uid);
-                $user->setRegistrationDateTime($dateTime);   
+                $user->setRegistrationDateTime($dateTime);                  
+                
+                $inventory = new Inventory(20);
+                $user->addInventory($inventory);
+                $em->persist($inventory);
+                
                 // Add initial role
                 $role=$em->getRepository(Role::class)->findOneBy('roleType', 'ROLE_USER'); 
                 $user->addRole($role);
@@ -136,8 +142,7 @@ class RegistrationController extends Controller
             return $this->render('Neo4jUserBundle:Registration:confirmed.html.twig', array('error' => $error, 'message' => $message));
         }else{
             
-            $uid = $user->getUid();
-            
+
            
             // Add initial resources
             $resource=$em->getRepository(Resources::class)->findOneBy('resourceType', 'wood');             
