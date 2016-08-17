@@ -7,8 +7,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+
 
 use JoranBeaufort\Neo4jUserBundle\Form\UserType;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;

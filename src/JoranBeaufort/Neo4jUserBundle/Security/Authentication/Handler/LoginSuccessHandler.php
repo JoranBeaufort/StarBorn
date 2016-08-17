@@ -29,11 +29,11 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $url = 'dashboard';
         $user = $token->getUser();
         
-        if($user->getUserTeam() == null || $user->getUserTeam() == false) {
-            $url = 'team_apply';
+        if($user->getProfileImage() == null || $user->getProfileImage() == false) {
+            $url = 'avatar_creator';
         }
-        elseif($user->getUsername() != null && $user->getUserTeam() != false) {
-            $url = 'dashboard';
+        elseif($user->getProfileImage() != false) {
+            $url = 'map';
         }
         $response = new RedirectResponse($this->router->generate($url));
             

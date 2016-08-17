@@ -46,10 +46,10 @@
                                 <div class="card text-xs-center">
                                     <div class="card-header default-color white-text">
                                         <div class="row">
-                                            {% if user.getProfileImage is null %}
+                                            {% if tile.getUserTile.getUser.getProfileImage is null %}
                                             <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">    
                                             {% else %}
-                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~user.getUid~'/'~user.getProfileImage) }}"> 
+                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~tile.getUserTile.getUser.getUid~'/'~tile.getUserTile.getUser.getProfileImage) }}"> 
                                             {% endif %}  
                                         </div>
                                         <div class="row">

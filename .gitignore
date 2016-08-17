@@ -14,4 +14,8 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+/web/css/
+/web/img/
+/web/js/
+/web/svgavatars/
 composer.lock

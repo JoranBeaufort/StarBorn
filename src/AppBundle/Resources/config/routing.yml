@@ -3,6 +3,14 @@ home:
     path:  /
     defaults: { _controller: AppBundle:Home:index }
     
+avatar_creator:
+    path:  /avatar
+    defaults: { _controller: AppBundle:Avatar:creator }
+    
+avatar_upload:
+    path:  /avatar/upload
+    defaults: { _controller: AppBundle:Avatar:upload }
+    
 team_apply:
     path:  /team/apply
     defaults: { _controller: AppBundle:Team:apply }
