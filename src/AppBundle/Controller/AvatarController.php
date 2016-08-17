@@ -34,9 +34,14 @@ class AvatarController extends Controller
         
         if($user->getUid() == $userid && !$user->getProfileImage()){
 
+            $dir = $this->getParameter('neo4j_user.directory').'/'.$user->getUid();
+            
+            if (!is_dir($dir)) {
+                mkdir($dir);         
+            }
             
             $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imgdata));
-            file_put_contents($this->getParameter('neo4j_user.directory').'/'.$user->getUid().'/'.$filename, $data);
+            file_put_contents($dir.'/'.$filename, $data);
             
             $user->setProfileImage($filename);
             
