@@ -46,7 +46,7 @@ class TokenGenerator
         while (true)
         {
             
-            $token = $this->getToken($l);
+            $token = '1'.$this->getToken($l);
             $item=$this->graphManager->getClient()->getRepository(Tile::class)->findOneBy('tid', $token);
     
             if (!$item)

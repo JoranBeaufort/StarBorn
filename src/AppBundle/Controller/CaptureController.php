@@ -101,8 +101,8 @@ class CaptureController extends Controller
                     
                     foreach($potentialResources as $pr){
                         
-                        $r = $em->getRepository(Resources::class)->findOneBy('resourceType',$resourceMap[$pr]);
-                        array_push($potentialTileResources,$r->getResourceType());
+                        $r = $em->getRepository(Resources::class)->findOneBy('name',$resourceMap[$pr]);
+                        array_push($potentialTileResources,$r->getName());
                         array_push($landcover, $pr);
                     }
                     

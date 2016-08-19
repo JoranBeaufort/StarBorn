@@ -54,9 +54,9 @@ class BuildController extends Controller
         $statement = $connection->prepare($q);
         $statement->execute();
         $results = $statement->fetchAll();  
-        
+        // var_dump($results);die;
         $em = $this->get('neo4j.graph_manager')->getClient();
-        $tile = $em->getRepository(Tile::class)->findOneById(intval($results[0]['val']));
+        $tile = $em->getRepository(Tile::class)->findOneBy('tid',$results[0]['val']);
 
         $message = null;
         return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'message' => $message));

@@ -24,7 +24,7 @@ class Resources
      * @var string
      */
      
-    protected $resourceType;
+    protected $name;
     
     /**
      * @OGM\Property(type="string")
@@ -71,9 +71,9 @@ class Resources
         return $this->id;
     }
     
-    public function getResourceType()
+    public function getName()
     {
-        return $this->resourceType;
+        return $this->name;
     }
 
     

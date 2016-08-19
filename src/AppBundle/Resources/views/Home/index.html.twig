@@ -1,23 +1,51 @@
 {% extends 'base.html.twig' %}
 {% block title %}Home{% endblock %} 
+  {% block navigation %} 
+  {% endblock %}
+  {% block css %}
+  {{ parent() }}
+  <style>
+    body {
+        margin-top: 20px !important;
+    }
+  </style>
+  {% endblock %}
     {% block content %}
         <!--Mask-->
-    <div>
-        <div class="full-bg-img flex-center">
-            <ul>
-                <li>
-                    <h1 class="h1-responsive wow fadeInDown" data-wow-delay="0.2s"><span style="color:#43a2d0;  text-shadow: 0 0 3px #31e8e6; font-size:56px; font-weight:bold;">STAR</span><span style="color:#dd530a;  text-shadow: 0 0 3px #e3b807; font-size:56px; font-weight:bold;">BORN</span></h1></li>
-                <li>
-                    <p class="wow fadeInDown">Die Siedler mal anders! Ein futuristisches Spiel für Bewegung und Entdeckung!</p>
-                    <p class="wow fadeInDown"><i>Kommt bald!</i></p>
-                </li>
-                <li>
-                    <a target="_blank" href="{{ path('neo4j_register') }}" style="background-color: #43a2d0" class="btn btn-inverse btn-lg wow fadeInLeft" data-wow-delay="0.2s">Anmelden!</a>
-                    <a target="_blank" href="{{ path('neo4j_login') }}" style="background-color: #dd530a" class="btn btn-inverse btn-lg wow fadeInRight" data-wow-delay="0.2s">Spielen!</a>
-                </li>
-            </ul>
+    <div class="container" >
+        <div class="row">
+            <div class="col-xs-12" style="text-align:center">
+                <span style="color:#33b5e5;  text-shadow: 3px 3px 0px #000; font-size:55px; font-weight:bold;">STAR</span>
+                <span style="color:#FF8800;  text-shadow: 3px 3px 0px #000; font-size:55px; font-weight:bold;">BORN</span>
+            </div>
+                        
+            <div class="col-xs-12"> 
+               <div class="col-xs-6" style="padding-top: 10px; height:320px; background: url('{{ asset('img/star-half-blue.svg') }}') center right / auto 320px no-repeat">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <img style="margin-top:100px; margin-bottom:auto; height:200px;float:right;" src="{{ asset('img/team/spacesuit-blue-left.svg') }}">
+                        </div>
+                    </div>
+               </div>
+               <div class="col-xs-6" style="padding-top: 10px; height:320px; background: url('{{ asset('img/star-half-red.svg') }}') center left / auto 320px no-repeat">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <img style="margin-top:100px; margin-bottom:auto; height:200px; " src="{{ asset('img/team/spacesuit-red.svg') }}">
+                        </div>
+                    </div>
+               </div>
+        </div>
+        <div class="col-xs-12">
+           <a href="{{ path('neo4j_login') }}" style="background-color: #dd530a; margin-left:0px" class="btn btn-inverse btn-lg btn-block" data-wow-delay="0.2s">Login!</a>
+        </div>
+        <div class="col-xs-12">
+           <a href="{{ path('neo4j_register') }}" style="background-color: #43a2d0; margin-left:0px" class="btn btn-inverse btn-lg btn-block" data-wow-delay="0.2s">Anmelden!</a>
+        </div>
+        <div class="col-xs-12">
+           <a href="{{ path('neo4j_register') }}" style="background-color: #2BBBAD; margin-left:0px" class="btn btn-inverse btn-lg btn-block" data-wow-delay="0.2s">Geschichte...</a>
         </div>
     </div>
+</div>
     <!--/.Mask-->
     {% endblock content %}
 

@@ -34,8 +34,7 @@
 
   </head>
 {% endblock head %} 
-<!-- NAVBAR
-================================================== -->
+
 {% block body %}
   <body>
   
@@ -66,9 +65,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('inventory') }}"><i class="fa fa-shopping-bag"></i>&nbsp;&nbsp;Inventar</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('dashboard') }}"><i class="fa fa-tachometer"></i>&nbsp;&nbsp;Informationszentrale</a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('neo4j_profile', {'slug': app.user.username}) }}"><i class="fa fa-user"></i>&nbsp;&nbsp;Profil</a>
                     </li>
@@ -125,7 +122,7 @@
     <!-- Bootstrap core JavaScript -->
     <!-- <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script> -->
 
-    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script> -->
+    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
 
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="{{ asset('js/mdb.min.js') }}"></script>    

@@ -27,7 +27,28 @@ class Team
      * @var string
      */
      
-    protected $name;  
+    protected $name;      
+    
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
+    protected $img;  
+    
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
+    protected $title;  
+    
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
+    protected $txt;  
     
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTeam", type="IN_TEAM", direction="INCOMING", collection=true, mappedBy="team")
@@ -54,6 +75,23 @@ class Team
     public function getTid()
     {
         return $this->tid;
+    }   
+    
+    public function getImg()
+    {
+        return $this->img;
+    }     
+    
+    
+    public function getTitle()
+    {
+        return $this->title;
+    }    
+    
+    
+    public function getTxt()
+    {
+        return $this->txt;
     }    
     
     

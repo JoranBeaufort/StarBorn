@@ -16,17 +16,17 @@ use JoranBeaufort\Neo4jUserBundle\Entity\User;
 class TeamController extends Controller
 {
     public function applyAction(Request $request)
-    {    
+    {   
         $em = $this->get('neo4j.graph_manager')->getClient();
         $user=$this->getUser();
-        
-        if($user->getUserTeam() === null || $user->getUserTeam() === false){           
-            
-            $form = $this->createForm(TeamApplyType::class);        
-            $form->handleRequest($request);
-            // var_dump($user->getUserTeam());die;
-            
-            if ($form->isSubmitted() && $form->isValid()) {
+    
+        if($user->getUserTeam() === null || $user->getUserTeam() === false){          
+            if($request->getMethod() != 'POST'){
+                $teams = $em->getRepository(Team::class)->findAll(); 
+                return $this->render('AppBundle:Team:apply.html.twig',array('user' => $user, 'teams' => $teams));
+            }else{
+                print('blu');die;
+                $team = $request->request->get('ulat');
                 $team_selected = $form->get('teamapply')->getData();      
                 $team = $em->getRepository(Team::class)->findOneBy('name', $team_selected);  
                 $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
@@ -36,9 +36,6 @@ class TeamController extends Controller
                 $url = $this->generateUrl('dashboard');            
                 return new RedirectResponse($url);
             }
-
-            
-            return $this->render('AppBundle:Team:apply.html.twig',array('user' => $user,'form' => $form->createView()));
         }else{
             return $this->render('AppBundle:Team:exists.html.twig',array('user' => $user));
         }

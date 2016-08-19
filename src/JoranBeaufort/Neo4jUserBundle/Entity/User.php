@@ -488,7 +488,7 @@ class User implements AdvancedUserInterface, \Serializable
     {
 
         foreach($this->userResources as $resource){
-            if($resource->getResource()->getResourceType() == $name){
+            if($resource->getResource()->getName() == $name){
                 return $resource;
             }
         }
@@ -518,7 +518,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function addResource(Resources $resources, $amount)
     {
         foreach ( $this->userResources as $resource) {
-            if ($resource->getResource()->getResourceType() === $resources->getResourceType()) {
+            if ($resource->getResource()->getName() === $resources->getName()) {
                 return;
             }
         }

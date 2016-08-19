@@ -80,19 +80,34 @@
                                     </div>
                                 </div>
                             </div>
-                            {% form_theme form 'AppBundle:Team:Form/fields.html.twig' %}        
-                            {{ form_start(form, {'method': 'post', 'action': path('team_apply')}) }}
                             <div class="row">
                                 <div class="team-select">
-                                    {% for child in form.teamapply %}
-                                        {{ form_widget(child) }}
+                                    <form name="team_apply" method="post" action="/app_dev.php/team/apply">
+                                    {% for team in teams %}
+                                    <div class="col-xs-12">
+                                        <input id="{{ team.getName }}" type="radio" value="{{ team.getName }}" name="team"/>
+                                        <label style="width:100%" for="{{ team.getName }}" class="{{ team.getName }} card text-xs-center">
+                                            <div class="row" >
+                                                <div class="col-xs-12 col-lg-3">
+                                                    <img style="margin-top:20px; margin-bottom:20px; height:300px;" src="{{ asset(team.getImg) }}">
+                                                </div>
+                                                <div>
+                                                    <div class="card-block">                     
+                                                        <h2 class="card-title">{{ team.getTitle }}</h2>
+                                                        <p class="card-text">{{ team.getTxt }}</p> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
                                     {% endfor %}
+                                    
                                 </div>
                             </div>
                             <div class="col-xs-12">                            
                                 <button style="height:80px; margin-bottom:20px; margin-top:20px; font-size:30px;"  class="btn-success-outline waves-effect" type="submit"><i class="fa fa-check" aria-hidden="true"></i><b>Auswahl Bestätigen!</b></button>
                             </div>
-                            {{ form_end(form) }}
+                            </form>
                         </div>
                  </div>
              </div>

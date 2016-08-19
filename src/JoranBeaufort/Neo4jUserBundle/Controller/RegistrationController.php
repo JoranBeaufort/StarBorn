@@ -144,22 +144,22 @@ class RegistrationController extends Controller
 
            
             // Add initial resources
-            $resource=$em->getRepository(Resources::class)->findOneBy('resourceType', 'wood');             
+            $resource=$em->getRepository(Resources::class)->findOneBy('name', 'wood');             
             $user->addResource($resource, 20);
             
-            $resource=$em->getRepository(Resources::class)->findOneBy('resourceType', 'stone');   
+            $resource=$em->getRepository(Resources::class)->findOneBy('name', 'stone');   
             $user->addResource($resource, 15);
             
-            $resource=$em->getRepository(Resources::class)->findOneBy('resourceType', 'food'); 
+            $resource=$em->getRepository(Resources::class)->findOneBy('name', 'food'); 
             $user->addResource($resource, 10);
 
-            $resource=$em->getRepository(Resources::class)->findOneBy('resourceType', 'water'); 
+            $resource=$em->getRepository(Resources::class)->findOneBy('name', 'water'); 
             $user->addResource($resource, 5);
             
-            $resource=$em->getRepository(Resources::class)->findOneBy('resourceType', 'work');  
+            $resource=$em->getRepository(Resources::class)->findOneBy('name', 'work');  
             $user->addResource($resource, 3);
             
-            $resource=$em->getRepository(Resources::class)->findOneBy('resourceType', 'overwatch');  
+            $resource=$em->getRepository(Resources::class)->findOneBy('name', 'overwatch');  
             $user->addResource($resource, 0);
             
             $user->setConfirmationToken(null);
