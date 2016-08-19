@@ -1,4 +1,6 @@
 {% extends 'base.html.twig' %}
+  {% block navigation %} 
+  {% endblock %}
     {% block content %}
         {% if app.request.hasPreviousSession %}
             {% for type, messages in app.session.flashbag.all() %}
@@ -15,3 +17,11 @@
             {% endblock neo4j_user_content %}
 
 {% endblock content %}
+{% block javascript %}
+    {{ parent() }} 
+    <script>
+    $(window).load(function(){
+        $('#help').modal('show');
+    });
+    </script>
+{% endblock %}

@@ -59,27 +59,65 @@
         color:#fff;
     }
     
+    body {
+            margin-top: 0;
+   }
+   
+   .card{
+       padding-bottom:20px;
+   }
+   
+   
+   .col-md-12{
+       padding:0;
+   }
     </style>
 
 {% endblock css %}
+{% block navigation %}
+{% endblock %}
 {% block content %}
-        <!--Mask-->
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12"> 
-                    <div class="card text-xs-center">                
-                        <h3 class="card-header primary-color white-text">Wähle dein Team!</h3>
-                        <div class="card-block">
-                            <div class="alert alert-info" role="alert">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <i class="fa fa-2x fa-info-circle"></i>
-                                    </div>
-                                    <div class="col-md-10">
-                                        Trete dem Team bei, welches du zum Sieg verhelfen willst! Die Wahl des Teams kann nicht geändert werden.
-                                    </div>
-                                </div>
+<!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+      
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-4 text-xs-center">
+                            <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                        </div>
+                        <div class="col-xs-12 col-lg-8">
+                            <div class="alert alert-info">
+                                    <h4> Willkommen in der Fusionshalle! </h4>
+                                    <p>
+                                        Trete der Fraktion bei, welcher du zum Sieg verhelfen willst! Die Wahl der Fraktion kann nicht geändert werden.
+                                    </p>                                  
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zur Fraktionswahl</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Mask-->
+    <div class="container"> 
+        <div class="row">
+            <div class="col-md-12" style="color:#fff;" >
+                <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center">                
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Anmeldung&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3>                    
+                    <div class="card-block text-xs-left">
                             <div class="row">
                                 <div class="team-select">
                                     <form name="team_apply" method="post" action="/app_dev.php/team/apply">
@@ -105,7 +143,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-12">                            
-                                <button style="height:80px; margin-bottom:20px; margin-top:20px; font-size:30px;"  class="btn-success-outline waves-effect" type="submit"><i class="fa fa-check" aria-hidden="true"></i><b>Auswahl Bestätigen!</b></button>
+                                <button class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" type="submit">Auswahl Bestätigen</button>
                             </div>
                             </form>
                         </div>

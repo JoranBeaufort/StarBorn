@@ -8,43 +8,80 @@
 	
 	<link href="http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700|Roboto:400,300,500,700&subset=latin,cyrillic-ext,cyrillic,latin-ext" rel="stylesheet" type="text/css">
     
+    <style>
+        #svga-container{
+            width:100%;
+            height:100%;
+        }
+        
+        #svga-start-overlay{
+            width:100%;
+            height:100%;
+        }
+        
+        .card-block{
+            padding:0;
+        }
+        
+        .col-md-12{
+            padding:0;
+        }        
+        
+        body {
+            margin-top:0;
+        }
+        
+    </style>
 {% endblock css %}
+{% block navigation %}
+{% endblock %}
 {% block content %}
-    <div class="container">
+<!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+      
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-4 text-xs-center">
+                            <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                        </div>
+                        <div class="col-xs-12 col-lg-8">
+                            <div class="alert alert-info">
+                                    <h4> Herzlich Willkommen {{ user.getUsername() }}!</h4>
+                                    <p> Glückwunsch, Sie haben es erfolgreich zur Sternenschmiede geschafft! Leider sind momentan unsere Biogenetische Scanner offline.
+                                        Übermitteln Sie hier Ihr gewünschtes Aussehen, damit wir dies im Sternenarchiv speichern können! Danach dürfen Sie in der Fusionshalle
+                                        einer Fraktion beitreten.
+                                    </p>    
+                                    <p>
+                                        Wenn Sie mit Ihrem Aussehen einverstanden sind, klicken sie auf "speichern" oder auf &nbsp; <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Charakter Erstellen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container"> 
         <div class="row">
-            <div class="col-xs-12"> 
-                <div class="card text-xs-center">                
-                    <h3 class="card-header primary-color white-text">Charaktererstellung!&nbsp;&nbsp;
+                <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center">                
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Charaktererstellung&nbsp;&nbsp;
                         <!-- Trigger the modal with a button -->
                         <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
-                    </h3>
-                    <!-- Modal -->
-                        <div class="modal fade" id="help" role="dialog">
-                          <div class="modal-dialog">
-                          
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                              </div>
-                              <div class="modal-body ">
-                                  <div class="alert alert-info" role="alert">
-                                      <h4 class="modal-title">Zur Info:</h4>
-                                      <p> Erstelle hier deinen Charakter</p>
-                                  </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
+                    </h3>   
                     <div class="card-block">
                         <div id="svgAvatars"></div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
   
@@ -52,7 +89,9 @@
 {% block javascript %}
     {{ parent() }}
     <script>
-        var userid = "{{ user.getUid }}";
+        $(window).load(function(){
+            $('#help').modal('show');
+        });        var userid = "{{ user.getUid }}";
         var avatar_upload_path = "../..{{ path('avatar_upload') }}";
         var success_redirect_path="../..{{ path('team_apply') }}";
     </script>
@@ -64,6 +103,7 @@
 	<script src="{{ asset('svgavatars/js/canvg/canvg.js') }}"></script>
 	<script src="{{ asset('svgavatars/js/svgavatars.de.js') }}"></script>
 	<script src="{{ asset('svgavatars/js/svgavatars.core.js') }}"></script>
+    
 
 {% endblock javascript %}
 

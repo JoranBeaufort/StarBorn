@@ -80,7 +80,7 @@ class SecurityController extends Controller
                     $em->persist($user);
                     $em->flush();
                     
-                    $success = 'New password sent to your Email!';
+                    $success = 'Passwort zurücksetzen erfolgreich! Neues passwort wurde per Email versandt.';
                     return $this->render('Neo4jUserBundle:Resetting:passwordreset.html.twig',array('success'=>$success));
             }
         }

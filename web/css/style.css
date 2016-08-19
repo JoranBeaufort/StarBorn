@@ -16,8 +16,20 @@ body {
 
 
 label {
-    color:#cccccc !important;
+    color: #fff !important;
 }
+
+input {
+    color: #fff !important;
+}
+
+select option {
+   color: black;
+}
+select:not(:checked) {
+   color: #fff;
+}
+
 
 .full-bg-img{
     padding-top:60px;

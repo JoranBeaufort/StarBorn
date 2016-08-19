@@ -1,17 +1,48 @@
 {% extends "Neo4jUserBundle::layout.html.twig" %}
 
 {% block neo4j_user_content %}
-          <div class="row">
-              <div class="col-md-12" style="text-align:center">
-                {% if error==true %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ message }}
+    {% if error==true %}
+        <div class="container"> 
+            <div class="row">
+                <div class="col-md-12" style="color:#fff" >
+                    <div style="background: none" class="text-xs-center">  
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-3">
+                                <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                            </div>
+                            <div class="col-xs-12 col-lg-8 text-xs-left">
+                                <div class="alert alert-danger">
+                                    {{ message }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                {% elseif error==false %}
-                    <div class="alert alert-success" role="alert">
-                        {{ message }}
-                    </div>                
-               {% endif %}                    
+                </div>
             </div>
-          </div> 
+        </div>
+    {% elseif error==false %}
+        <div class="container"> 
+            <div class="row">
+                <div class="col-md-12" style="color:#fff" >
+                    <div style="background: none" class="text-xs-center">  
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-3">
+                                <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                            </div>
+                            <div class="col-xs-12 col-lg-8 text-xs-left">
+                                <div class="alert alert-success">
+                                    <h4>Erfolgreich!</h4>
+                                    <p>Ihre Emailadresse wurde bestätigt. Melden Sie sich an um zur Sternenschmiede zu gelangen und mit der Charaktererstellung anzufangen!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                   <a href="{{ path('neo4j_login') }}" style="background-color: #2BBBAD; margin-left:0px" class="btn btn-inverse btn-lg btn-block" data-wow-delay="0.2s">Login!</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}                    
+
 {% endblock neo4j_user_content %}

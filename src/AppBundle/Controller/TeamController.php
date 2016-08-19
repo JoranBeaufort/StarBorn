@@ -25,9 +25,7 @@ class TeamController extends Controller
                 $teams = $em->getRepository(Team::class)->findAll(); 
                 return $this->render('AppBundle:Team:apply.html.twig',array('user' => $user, 'teams' => $teams));
             }else{
-                print('blu');die;
-                $team = $request->request->get('ulat');
-                $team_selected = $form->get('teamapply')->getData();      
+                $team_selected = $request->request->get('team');
                 $team = $em->getRepository(Team::class)->findOneBy('name', $team_selected);  
                 $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
                 $user->addTeam($team, time());

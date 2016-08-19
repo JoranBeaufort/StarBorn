@@ -24,10 +24,10 @@ class UserProvider implements UserProviderInterface
         $em = $this->graphManager->getClient();
         // make a call to your webservice here
         
-        $user = $em->getRepository(User::class)->findOneBy('usernameCanonical', $login);
+        $user = $em->getRepository(User::class)->findOneBy('usernameCanonical', mb_convert_case($login, MB_CASE_LOWER, "UTF-8"));
         
         if(!$user){
-            $user=$em->getRepository(User::class)->findOneBy('emailCanonical', $login);
+            $user=$em->getRepository(User::class)->findOneBy('emailCanonical', mb_convert_case($login, MB_CASE_LOWER, "UTF-8"));
         }
         
         if($user){

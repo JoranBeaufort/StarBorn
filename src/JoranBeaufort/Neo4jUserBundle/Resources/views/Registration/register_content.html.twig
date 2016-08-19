@@ -1,48 +1,113 @@
 {% extends "Neo4jUserBundle:Registration:register.html.twig" %}
 {% block title %}Registration{% endblock %} 
+{% block css %}
+    {{ parent() }}
+    <style>
+        body {
+            margin-top: 0;
+        }
+        
+       .card{
+            padding:0;
+        }
+        
+        
+        .col-md-12{
+            padding:0;
+        }
+        
+        
+    </style>
+{% endblock css %}
+
 {% block neo4j_user_content %}
+                    
+<!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+      
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-4 text-xs-center">
+                            <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                        </div>
+                        <div class="col-xs-12 col-lg-8">
+                            <div class="alert alert-info">
+                                    <h4> Willkommen Neuling! </h4>
+                                    <p>Sie haben Glück! Sowohl die <span style="color:#33b5e5; font-weight:bold;">Interplanetare Gesellschaft der Blauen Zwerge</span>, wie auch das <span style="color:#FF8800; font-weight:bold;">Galaktisches Imperium der Roten Riesen</span> suchen neue Mitglieder! 
+                                    Übermittle hier deine Angaben dem <span style="color:#2BBBAD; font-weight:bold;">Sternenarchiv</span> und du wirst eine Einladung in die Sternenschmiede bekommen, wo du einer Fraktion beitreten kannst.
+                                    </p>                                  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Angaben Übermitteln</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
         <!--Mask-->
         <div class="container"> 
             <div class="row">
-                <div class="col-md-12" style="color:#fff" >                            
-                    <h3>Register</h3>
-                    <br>
-                    {% form_theme form 'bootstrap_3_layout.html.twig' %}        
-                    {{ form_start(form, {'method': 'post', 'action': path('neo4j_register')}) }}
-                    <div class="md-form">
-                        <i class="fa fa-envelope prefix"></i>
-                        {{ form_widget(form.email, { 'attr': {'class': "form-control validate"} }) }}
-                        <label for="user_email" data-error="wrong" data-success="">Email Address</label>
-                        {% if form_errors(form.email) %} <div class="alert alert-danger">{{ form_errors(form.email) }}</div> {% endif %}
-                    </div>
-                    <div class="md-form">
-                        <i class="fa fa-user prefix"></i>
-                        {{ form_widget(form.username, { 'attr': {'class': "form-control"} }) }}
-                        <label for="user_username">Choose a Username</label>
-                        {% if form_errors(form.username) %}<div class="alert alert-danger">{{ form_errors(form.username) }}</div>{% endif %}
-                    </div>
-                    
-                    <div class="md-form">
-                        <i class="fa fa-lock prefix"></i>
-                        {{ form_widget(form.plainPassword.first, { 'attr': {'class': "form-control "} }) }}
-                        <label for="user_plainPassword_first" data-error="" >Choose a Password</label>
-                        {% if form_errors(form.plainPassword.first) %} <div class="alert alert-danger">{{ form_errors(form.plainPassword.first) }}</div> {% endif %}
-                    </div>
-                    
-                    <div class="md-form">
-                        <i class="fa fa-unlock-alt prefix"></i>
-                        {{ form_widget(form.plainPassword.second, { 'attr': {'class': "form-control "} }) }}
-                        <label for="user_plainPassword_second" >Repeat your Password</label>
-                        {% if form_errors(form.plainPassword.second) %} <div class="alert alert-danger">{{ form_errors(form.plainPassword.second) }}</div> {% endif %}
-                    </div>
-
-                    <br/>
-                        <div>
-                            <input class="btn btn-info-outline waves-effect btn-block" type="submit" value="Register" />
+                <div class="col-md-12" style="color:#fff" >
+                    <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center">                
+                        <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Anmeldung&nbsp;&nbsp;
+                            <!-- Trigger the modal with a button -->
+                            <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                        </h3>                    
+                        <div class="card-block text-xs-left">
+                            {% form_theme form 'bootstrap_3_layout.html.twig' %}        
+                            {{ form_start(form, {'method': 'post', 'action': path('neo4j_register')}) }}
+                            <div class="md-form">
+                                <i class="fa fa-envelope prefix"></i>
+                                {{ form_widget(form.email, { 'attr': {'class': "form-control validate"} }) }}
+                                <label for="user_email" data-error="wrong" data-success="">Email Adresse</label>
+                                {% if form_errors(form.email) %} <div class="alert alert-danger">{{ form_errors(form.email) }}</div> {% endif %}
+                            </div>
+                            <div class="md-form">
+                                <i class="fa fa-user prefix"></i>
+                                {{ form_widget(form.username, { 'attr': {'class': "form-control"} }) }}
+                                <label for="user_username">Wählen Sie einen Benutzernamen *Dieser ist auch Ihr Name im Spiel</label>
+                                {% if form_errors(form.username) %}<div class="alert alert-danger">{{ form_errors(form.username) }}</div>{% endif %}
+                            </div>
+                            
+                            <div class="md-form">
+                                <i class="fa fa-lock prefix"></i>
+                                {{ form_widget(form.plainPassword.first, { 'attr': {'class': "form-control "} }) }}
+                                <label for="user_plainPassword_first" data-error="" >Wählen Sie ein Passwort</label>
+                                {% if form_errors(form.plainPassword.first) %} <div class="alert alert-danger">{{ form_errors(form.plainPassword.first) }}</div> {% endif %}
+                            </div>
+                            
+                            <div class="md-form">
+                                <i class="fa fa-unlock-alt prefix"></i>
+                                {{ form_widget(form.plainPassword.second, { 'attr': {'class': "form-control "} }) }}
+                                <label for="user_plainPassword_second" >Wiederholen Sie ihr Passwort</label>
+                                {% if form_errors(form.plainPassword.second) %} <div class="alert alert-danger">{{ form_errors(form.plainPassword.second) }}</div> {% endif %}
+                            </div>
+                            <div class="md-form">
+                                <p>Bitte geben Sie ihr Geschlecht an</p>
+                                {{ form_widget(form.gender, { 'attr': {'class': "form-control "} }) }}
+                                {% if form_errors(form.gender) %} <div class="alert alert-danger">{{ form_errors(form.gender) }}</div> {% endif %}
+                            </div>
+                            <div class="md-form">
+                                <p>Bitte geben Sie ihr Alter an</p>
+                                {{ form_widget(form.birthdate, { 'attr': {'class': "form-control "} }) }}
+                                {% if form_errors(form.birthdate) %} <div class="alert alert-danger">{{ form_errors(form.birthdate) }}</div> {% endif %}
+                            </div>
+                            <br/>
+                            <button class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" type="submit">Angaben Übermitteln</button>
+                            {{ form_end(form) }}
                         </div>
-                    {{ form_end(form) }}
+                    </div>
                 </div>
             </div>
-</div>
+        </div>
 {% endblock neo4j_user_content %}
-

@@ -169,9 +169,9 @@ class RegistrationController extends Controller
             // 4) save the User!
             $em->persist($user);
             $em->flush();
-
-            $message="Your account has been enabled. Thank you!";
+            $message = null;
         }
+        
         return $this->render('Neo4jUserBundle:Registration:confirmed.html.twig', array('error' => $error, 'message' => $message));
     }
 

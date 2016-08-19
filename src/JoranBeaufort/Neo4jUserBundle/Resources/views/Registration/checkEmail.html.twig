@@ -1,11 +1,28 @@
 {% extends "Neo4jUserBundle::layout.html.twig" %}
 
 {% block neo4j_user_content %}
-          <div class="row">
-            <div class="col-md-12" style="text-align:center">
-                <div class="alert alert-warning" role="alert">
-                Your account has successfully been created. Please check your email to confirm account creation.
+       <!--Mask-->
+        <div class="container"> 
+            <div class="row">
+                <div class="col-md-12" style="color:#fff" >
+                    <div style="background: none" class="text-xs-center">  
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-3">
+                                <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                            </div>
+                            <div class="col-xs-12 col-lg-8 text-xs-left">
+                                <div class="alert alert-success">
+                                        <h4>Erfolgreich!</h4>
+                                        <p>Ihre Daten wurden erfolgreich an die Äther-Arche übermittelt! Sie sollten jeden Augenblick eine Einladung zur Sternenschmiede
+                                        als Email erhalten! Folgen Sie den Anweisungen des Emails.</p>                                  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-          </div> 
+        </div>
+     
+                    
+                    
 {% endblock neo4j_user_content %}

@@ -78,6 +78,20 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      */
     private $usernameCanonical;
+    
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
+    private $gender;
+    
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
+    private $birthdate;
 
     /**
      * @Assert\Length(min = 4, max=4096)
@@ -290,6 +304,28 @@ class User implements AdvancedUserInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
+        return $this;
+    }
+    
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+        return $this;
+    }
+    
+    public function getBirthdate()
+    {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate($birthdate)
+    {
+        $this->birthdate = $birthdate;
         return $this;
     }
 
