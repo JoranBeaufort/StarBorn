@@ -17,6 +17,8 @@
         }
         
         
+        
+        
     </style>
 {% endblock css %}
 
@@ -33,21 +35,48 @@
                 </div>
                 <div class="modal-body ">
                     <div class="row">
-                        <div class="col-xs-12 col-lg-4 text-xs-center">
-                            <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
-                        </div>
-                        <div class="col-xs-12 col-lg-8">
+                        <div class="col-xs-12">
                             <div class="alert alert-info">
-                                    <h4> Willkommen Neuling! </h4>
-                                    <p>Sie haben Glück! Sowohl die <span style="color:#33b5e5; font-weight:bold;">Interplanetare Gesellschaft der Blauen Zwerge</span>, wie auch das <span style="color:#FF8800; font-weight:bold;">Galaktisches Imperium der Roten Riesen</span> suchen neue Mitglieder! 
-                                    Übermittle hier deine Angaben dem <span style="color:#2BBBAD; font-weight:bold;">Sternenarchiv</span> und du wirst eine Einladung in die Sternenschmiede bekommen, wo du einer Fraktion beitreten kannst.
-                                    </p>                                  
+                                    <h4> Informationen</h4>
+                                    <p>Gib hier deine Daten ein, um mit dem Spiel zu beginnen.</p>
+                                    <ul>
+                                        <li>
+                                            Benutzername und Email sind nicht öffentlich einsehbar
+                                        </li>
+                                        <li>
+                                            Anzeigename wird öffentlich angezeigt
+                                        </li>
+                                    </ul>
+                                    
+                                    <hr>
+                                    <h4>Allgemeine Bedingungen:</h4>
+                                    <ul>
+                                        <li>
+                                            Die Verbindung wird mit SSL-Verschlüsselung geschützt und die Daten werden zusätzlich mit einem
+                                            von Kryptographen empfohlenen Algorithmus verschlüsselt. Ich versuche die Verbindung und die Daten so 
+                                            gut wie möglich zu schützen.
+                                        </li>
+                                        <li>
+                                            Die Angaben werden vertraulich behandelt. Persönliche Daten wie Email-Adresse werden nicht an Dritte weitergegeben
+                                        </li>
+                                        <li>
+                                            Beim Anmelden erklärt sich der Anmeldende einverstanden, dass die generierten Daten für wissenschaftliche Zwecke
+                                            verwendet werden dürfen. 
+                                        </li>
+                                        <li>
+                                            Die Benutzer erklären sich einverstanden, dass Sie nicht unangebrachte Inhalte in Form von Bilder oder Text
+                                            erstellen und/oder hochladen.
+                                        </li>
+                                     </ul>
+                                        
+
+
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Angaben Übermitteln</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
                 </div>
             </div>
         </div>
@@ -62,8 +91,24 @@
                         <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Anmeldung&nbsp;&nbsp;
                             <!-- Trigger the modal with a button -->
                             <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
-                        </h3>                    
+                        </h3> 
+                        
                         <div class="card-block text-xs-left">
+                            <div class="row">
+                                <div class="col-xs-12 col-lg-3 text-xs-center">
+                                    <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                                </div>
+                                <div class="col-xs-12 col-lg-8">
+                                <br>
+                                <div class="bubble">
+                                      <h4> Willkommen Neuling! </h4>
+                                      <p>Du hast Glück! Sowohl die <span style="color:#33b5e5; font-weight:bold;">Interplanetare Gesellschaft der Blauen Zwerge</span>, wie auch das <span style="color:#FF8800; font-weight:bold;">Galaktisches Imperium der Roten Riesen</span> suchen neue Mitglieder! 
+                                      Übermittle hier deine Angaben dem <span style="color:#2BBBAD; font-weight:bold;">Sternenarchiv</span> und du wirst eine Einladung in die Sternenschmiede bekommen, wo du einer Fraktion beitreten kannst.
+                                      </p> 
+                                </div>
+                                </div>
+                            </div>
+                            <hr>                            
                             {% form_theme form 'bootstrap_3_layout.html.twig' %}        
                             {{ form_start(form, {'method': 'post', 'action': path('neo4j_register')}) }}
                             <div class="md-form">
@@ -75,10 +120,15 @@
                             <div class="md-form">
                                 <i class="fa fa-user prefix"></i>
                                 {{ form_widget(form.username, { 'attr': {'class': "form-control"} }) }}
-                                <label for="user_username">Wählen Sie einen Benutzernamen *Dieser ist auch Ihr Name im Spiel</label>
+                                <label for="user_username">Wählen Sie einen Benutzernamen</label>
                                 {% if form_errors(form.username) %}<div class="alert alert-danger">{{ form_errors(form.username) }}</div>{% endif %}
                             </div>
-                            
+                            <div class="md-form">
+                                <i class="fa fa-user prefix"></i>
+                                {{ form_widget(form.screenname, { 'attr': {'class': "form-control"} }) }}
+                                <label for="user_screenname">Wählen Sie einen Anzeigenamen</label>
+                                {% if form_errors(form.screenname) %}<div class="alert alert-danger">{{ form_errors(form.screenname) }}</div>{% endif %}
+                            </div>                            
                             <div class="md-form">
                                 <i class="fa fa-lock prefix"></i>
                                 {{ form_widget(form.plainPassword.first, { 'attr': {'class': "form-control "} }) }}

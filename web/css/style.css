@@ -62,3 +62,92 @@ select:not(:checked) {
         background-color: #1C2331;
     }
 }
+
+        @media only screen and (max-width: 940px) {
+        
+            .bubble
+            {
+                position: relative;
+                padding: 10px;
+                background: rgba(44, 62, 80, 1);
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+                border: #fff solid 4px;
+            }
+
+
+
+            .bubble:after
+            {
+                content: '';
+                position: absolute;
+                border-style: solid;
+                border-width: 0 15px 15px;
+                border-color: rgba(44, 62, 80, 1) transparent;
+                display: block;
+                width: 0;
+                z-index: 1;
+                top: -15px;
+                left: 150px;
+            }
+
+            .bubble:before
+            {
+                content: '';
+                position: absolute;
+                border-style: solid;
+                border-width: 0 18px 18px;
+                border-color: #fff transparent;
+                display: block;
+                width: 0;
+                z-index: 0;
+                top: -22px;
+                left: 147px;
+            }            
+        }        
+        
+        
+        @media only screen and (min-width: 940px) {
+        
+            .bubble
+            {
+                position: relative;
+                padding: 10px;
+                background: rgba(44, 62, 80, 1);
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+                border: #fff solid 4px;
+            }
+
+
+            .bubble:after
+            {
+                content: '';
+                position: absolute;
+                border-style: solid;
+                border-width: 15px 15px 15px 0;
+                border-color: transparent rgba(44, 62, 80, 1);
+                display: block;
+                width: 0;
+                z-index: 1;
+                left: -15px;
+                top: 45px;
+            }
+
+            .bubble:before
+            {
+                content: '';
+                position: absolute;
+                border-style: solid;
+                border-width: 18px 18px 18px 0;
+                border-color: transparent #fff;
+                display: block;
+                width: 0;
+                z-index: 0;
+                left: -21px;
+                top: 42px;
+            }
+            
+        }

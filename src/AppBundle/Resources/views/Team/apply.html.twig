@@ -88,15 +88,12 @@
                 </div>
                 <div class="modal-body ">
                     <div class="row">
-                        <div class="col-xs-12 col-lg-4 text-xs-center">
-                            <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
-                        </div>
-                        <div class="col-xs-12 col-lg-8">
+                        <div class="col-xs-12">
                             <div class="alert alert-info">
-                                    <h4> Willkommen in der Fusionshalle! </h4>
-                                    <p>
-                                        Trete der Fraktion bei, welcher du zum Sieg verhelfen willst! Die Wahl der Fraktion kann nicht geändert werden.
-                                    </p>                                  
+                                <h4>Hilfe</h4>
+                                <p>
+                                    Wähle eine Fraktion. 
+                                </p>                                  
                             </div>
                         </div>
                     </div>
@@ -108,48 +105,64 @@
         </div>
     </div>
 
-    <!--Mask-->
+    
+<!--Mask-->
     <div class="container"> 
         <div class="row">
-            <div class="col-md-12" style="color:#fff;" >
-                <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center">                
-                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Anmeldung&nbsp;&nbsp;
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">                
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Fraktionswahl
                         <!-- Trigger the modal with a button -->
                         <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
-                    </h3>                    
+                    </h3>                      </h3>                     
                     <div class="card-block text-xs-left">
-                            <div class="row">
-                                <div class="team-select">
-                                    <form name="team_apply" method="post" action="/app_dev.php/team/apply">
-                                    {% for team in teams %}
-                                    <div class="col-xs-12">
-                                        <input id="{{ team.getName }}" type="radio" value="{{ team.getName }}" name="team"/>
-                                        <label style="width:100%" for="{{ team.getName }}" class="{{ team.getName }} card text-xs-center">
-                                            <div class="row" >
-                                                <div class="col-xs-12 col-lg-3">
-                                                    <img style="margin-top:20px; margin-bottom:20px; height:300px;" src="{{ asset(team.getImg) }}">
-                                                </div>
-                                                <div>
-                                                    <div class="card-block">                     
-                                                        <h2 class="card-title">{{ team.getTitle }}</h2>
-                                                        <p class="card-text">{{ team.getTxt }}</p> 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                    {% endfor %}
-                                    
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-3 text-xs-center">
+                                <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                            </div>
+                            <div class="col-xs-12 col-lg-8">
+                                <br>
+                                <div class="bubble">
+                                    <h4> Willkommen in der Fusionshalle! </h4>
+                                    <p>
+                                        Trete der Fraktion bei, welcher du zum Sieg verhelfen willst! Die Wahl der Fraktion kann nicht geändert werden.
+                                    </p>                                  
                                 </div>
                             </div>
-                            <div class="col-xs-12">                            
-                                <button class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" type="submit">Auswahl Bestätigen</button>
-                            </div>
-                            </form>
                         </div>
-                 </div>
-             </div>
-         </div>
-     </div>     
+                        <hr>
+                        <div class="row">
+                            <div class="team-select">
+                                <form name="team_apply" method="post" action="/app_dev.php/team/apply">
+                                {% for team in teams %}
+                                <div class="col-xs-12">
+                                    <input id="{{ team.getName }}" type="radio" value="{{ team.getName }}" name="team"/>
+                                    <label style="width:100%" for="{{ team.getName }}" class="{{ team.getName }} card text-xs-center">
+                                        <div class="row" >
+                                            <div class="col-xs-12 col-lg-3">
+                                                <img style="margin-top:20px; margin-bottom:20px; height:300px;" src="{{ asset(team.getImg) }}">
+                                            </div>
+                                            <div>
+                                                <div class="card-block">                     
+                                                    <h2 class="card-title">{{ team.getTitle }}</h2>
+                                                    <p class="card-text">{{ team.getTxt }}</p> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endfor %}
+                                
+                            </div>
+                        </div>
+                        <div class="col-xs-12">                            
+                            <button class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" type="submit">Auswahl Bestätigen</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>     
 {% endblock content %}
 

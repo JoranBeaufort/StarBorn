@@ -82,6 +82,14 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @OGM\Property(type="string")
      * @var string
+     * @Assert\Regex("/^[\w\d\s.,-]*$/")
+     * @Assert\NotBlank()
+     */
+    private $screenname;    
+    
+    /**
+     * @OGM\Property(type="string")
+     * @var string
      */
      
     private $gender;
@@ -304,6 +312,17 @@ class User implements AdvancedUserInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
+        return $this;
+    }
+    
+    public function getScreenname()
+    {
+        return $this->screenname;
+    }
+
+    public function setScreenname($screenname)
+    {
+        $this->screenname = $screenname;
         return $this;
     }
     

@@ -1,20 +1,47 @@
 {% extends "Neo4jUserBundle::layout.html.twig" %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        body {
+            margin-top: 0;
+        }
+        
+       .card{
+            padding:0;
+            height: 100%;
+        }
+        
+        
+        .col-md-12{
+            padding:0;            
+        }
+        
+        
+        
+        
+    </style>
+{% endblock css %}
 
 {% block neo4j_user_content %}
-       <!--Mask-->
-        <div class="container"> 
-            <div class="row">
-                <div class="col-md-12" style="color:#fff" >
-                    <div style="background: none" class="text-xs-center">  
+
+    <!--Mask-->
+    <div class="container"> 
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">                
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Email Bestätigen
+                    </h3>                     
+                    <div class="card-block text-xs-left">
                         <div class="row">
-                            <div class="col-xs-12 col-lg-3">
+                            <div class="col-xs-12 col-lg-3 text-xs-center">
                                 <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
                             </div>
-                            <div class="col-xs-12 col-lg-8 text-xs-left">
-                                <div class="alert alert-success">
-                                        <h4>Erfolgreich!</h4>
-                                        <p>Ihre Daten wurden erfolgreich an die Äther-Arche übermittelt! Sie sollten jeden Augenblick eine Einladung zur Sternenschmiede
-                                        als Email erhalten! Folgen Sie den Anweisungen des Emails.</p>                                  
+                            <div class="col-xs-12 col-lg-8">
+                                <br>
+                                <div class="bubble">
+                                   <h4>Erfolgreich!</h4>
+                                   <p>Deine Daten wurden erfolgreich ans Sternenarchiv übermittelt! Du solltest jeden Augenblick eine Einladung zur Sternenschmiede
+                                   als Email erhalten! Folge den Anweisungen des Emails. </p>                                  
                                 </div>
                             </div>
                         </div>
@@ -22,7 +49,7 @@
                 </div>
             </div>
         </div>
-     
-                    
+    </div>
+                        
                     
 {% endblock neo4j_user_content %}

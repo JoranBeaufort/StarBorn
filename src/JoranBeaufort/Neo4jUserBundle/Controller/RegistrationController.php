@@ -137,7 +137,7 @@ class RegistrationController extends Controller
         
         if (!$user) {
             $error = true;
-            $message="The user with confirmation token ".$token." does not exist";
+            $message="<br><br>Kein User mit dem Bestätigungscode:<b> ".$token." </b>wurde gefunden<br><br><br>";
             return $this->render('Neo4jUserBundle:Registration:confirmed.html.twig', array('error' => $error, 'message' => $message));
         }else{
             
@@ -171,7 +171,6 @@ class RegistrationController extends Controller
             $em->flush();
             $message = null;
         }
-        
         return $this->render('Neo4jUserBundle:Registration:confirmed.html.twig', array('error' => $error, 'message' => $message));
     }
 
