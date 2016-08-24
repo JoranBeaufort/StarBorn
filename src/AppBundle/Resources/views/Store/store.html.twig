@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sternenhändler{% endblock %} 
+{% block css %}
+    {{ parent() }}    
+    <style>     
+        .col-md-12{
+            padding:0;
+        }        
+        
+        
+        body {
+            margin-top:70px;
+        }
+        
+    </style>
+{% endblock css %}
+{% block content %}
+<!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+      
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="alert alert-info">
+                                    <h4>Hilfe</h4>
+                                    <p>
+                                        Tausche hier deine Resourcen gegen Baupläne und Gegenstände ein.
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Mask-->
+    <div class="container"> 
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">                
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Sternenhändler&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3>                    
+                    <div class="card-block text-xs-left">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-3 text-xs-center">
+                                <img style="height:200px;" src="{{ asset('img/toy-576514.svg') }}">
+                            </div>
+                            <div class="col-xs-12 col-lg-8">
+                                <br>
+                                <div class="bubble">
+                                    <h4> Hallo {{ user.getUsername() }}!</h4>
+                                    <p> Willkommen in unserem kleinen Sternenladen. Wir haben eine kleine Auswahl an Bauplänen, welche du gegen Resourcen erwerben kannst!
+                                    </p>    
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row"  style="padding-bottom:20px">
+                            <div class="col-xs-12">
+                                {% for blueprint in blueprints %}
+                                    <div class="col-lg-4">
+                                        <div class="card text-xs-center rgba-stylish-light">
+                                            <h3 class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
+                                            <div  class="card-block">
+                                                <div class="row">
+                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    {% for  blueprintResource in blueprint.getBlueprintResources %}
+                                                        <div class="col-xs-4">
+                                                            <button class="btn" style="border-radius:25px; width:50px; height:50px; background-color:{{ blueprintResource.getResources.getColour }}"><strong>{{ blueprintResource.getAmount }}</strong></button>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    KAUFEN? FOOBAR
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}                                
+                            </div>
+                        </div>                                
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+{% endblock content %}

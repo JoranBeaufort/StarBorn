@@ -47,9 +47,13 @@ build:
     path:  /build
     defaults: { _controller: AppBundle:Build:index }
     
-tile:
+tile: 
     path:  /tile
     defaults: { _controller: AppBundle:Tile:index }
+    
+store:
+    path:  /store
+    defaults: { _controller: AppBundle:Store:index }
     
 admin:
     path:  /admin
