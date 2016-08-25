@@ -620,9 +620,9 @@ class User implements AdvancedUserInterface, \Serializable
      * @param int $captured
      * @param int $collected
      */
-    public function addUserTile(Tile $tile, $captured, $collected, $resources, $landcover)
+    public function addUserTile(Tile $tile, $captured, $collected, $landcover)
     {
-            $ut = new UserTile($this, $tile, $captured, $collected, $resources, $landcover);
+            $ut = new UserTile($this, $tile, $captured, $collected, $landcover);
             $this->userTiles->add($ut);
             $tile->setUserTile($ut);
             return $this;
@@ -666,7 +666,6 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function addInventory(Inventory $inventory)
     {
-
         $ui = new UserInventory($this, $inventory);
         $this->userInventory->add($ui);
         $inventory->addUserInventory($ui);

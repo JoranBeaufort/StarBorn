@@ -84,27 +84,7 @@ class CaptureController extends Controller
                 if(!$results || $results[0]['val'] === '0' || $results[0]['val'] === 0){                    
                     
                     // get potential resources
-                    $potentialResources = $form->get('landcover')->getData();
-                    $potentialTileResources = array();
-                    $landcover = array();
-                    
-                    $resourceMap = array(
-                        'forest' => 'wood',
-                        'water' => 'water',
-                        'agriculture' => 'food',
-                        'urban' => 'work',
-                        'snow' => 'water',
-                        'mountain' => 'stone',
-                        'field' => 'wood',
-                        'infrastructure' => 'work',
-                    );
-                    
-                    foreach($potentialResources as $pr){
-                        
-                        $r = $em->getRepository(Resources::class)->findOneBy('name',$resourceMap[$pr]);
-                        array_push($potentialTileResources,$r->getName());
-                        array_push($landcover, $pr);
-                    }
+                    $landcover = $form->get('landcover')->getData();
                     
                     $landcover = join(',', $landcover);
                     
@@ -112,20 +92,13 @@ class CaptureController extends Controller
 
                     $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
 
-                    $tileResources = array();
-                    $newResources = new ArrayCollection();
-                   
-                   for($i=0; $i<3; $i++){
-                        $resourceName = $potentialTileResources[array_rand($potentialTileResources)];
-                        array_push($tileResources,$resourceName);                        
-                        $urR = $user->getUserResource($resourceName);
-                        $currentResourceCount = $urR->getAmount();
-                        $urR->setAmount($currentResourceCount+1);
-                        $newResources->add($urR->getResource());
-                   }
+                    $sd = $user->getUserResource('stardust');
+                    $sda = $sd->getAmount();
+                    $sd->setAmount($sda+50);
                     
-
-                    $setResources = join(',', $tileResources); 
+                    $et = $user->getUserResource('ethertoken');
+                    $eta = $et->getAmount();
+                    $et->setAmount($eta+1);                    
                     
                     $q=   " SELECT 
                                 rid, 
@@ -153,7 +126,7 @@ class CaptureController extends Controller
                     
                     $tile->setTileDrone($drone,$drone->getHp());
 
-                    $user->addUserTile($tile, time(),time(),$setResources, $landcover);                    
+                    $user->addUserTile($tile, time(),time(), $landcover);                    
                     
                     // $user->addUserTileLost($tile, time());
                     
@@ -192,15 +165,15 @@ class CaptureController extends Controller
                     $statement->execute();
                     
                     $q=   " INSERT INTO 
-                                tileLog ( uid,tid, timestamp, lat, lng, resources)
+                                tileLog ( uid,tid, timestamp, lat, lng)
                             VALUES
-                                ('".$user->getUid()."','".$tile->getTid()."','".time()."','".$tLat."','".$tLng."','".$setResources."')";
+                                ('".$user->getUid()."','".$tile->getTid()."','".time()."','".$tLat."','".$tLng."')";
                     
                     $statement = $connection->prepare($q);
                     $statement->execute();
 
                     
-                    return $this->render('AppBundle:Capture:success.html.twig',array('user' => $user, 'newResources' =>$newResources));
+                    return $this->render('AppBundle:Capture:success.html.twig',array('user' => $user));
                 
                 }elseif($results[0]['val'] !== '0' || $results[0]['val'] !== 0){
                     $user = $this->getUser();

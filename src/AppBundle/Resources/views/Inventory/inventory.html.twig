@@ -1,92 +1,90 @@
 {% extends 'base.html.twig' %}
 {% block title %}Inventar{% endblock %} 
-    {% block content %}
+{% block css %}
+    {{ parent() }}    
+    <style>     
+        .col-md-12{
+            padding:0;
+        }        
+        
+        
+        body {
+            margin-top:70px;
+        }
+        
+    </style>
+{% endblock css %}
+{% block content %}
+    <!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body text-xs-left ">
+              <div class="alert alert-info" role="alert">
+                  <h4 class="modal-title">Zur Info:</h4>
+                  <p>Hier hast du einblick in deine Resourcen und Gegenstände.</p>
+                  <br>
+                  <p>Benutze den Sternenhändler um Resourcen gegen Gegenstände einzutauschen.</p>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+          </div>
+        </div>
+      </div>
+    </div> 
+    
+    
         <!--Mask-->
-    <div class="container">
+        
+    <div class="container"> 
         <div class="row">
-            <div class="col-xs-12"> 
-                <div class="card text-xs-center">                
-                    <h3 class="card-header primary-color white-text">Mein Inventar!&nbsp;&nbsp;
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">                
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Inventar&nbsp;&nbsp;
                         <!-- Trigger the modal with a button -->
                         <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
-                    </h3>
-                    <!-- Modal -->
-                        <div class="modal fade" id="help" role="dialog">
-                          <div class="modal-dialog">
-                          
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                              </div>
-                              <div class="modal-body text-xs-left ">
-                                  <div class="alert alert-info" role="alert">
-                                      <h4 class="modal-title">Zur Info:</h4>
-                                      <p>Hier hast du einblick in deine Resourcen und Gegenstände.</p>
-                                      <br>
-                                      <p>Benutze den Sternenhändler um Resourcen gegen Gegenstände einzutauschen.</p>
-                                  </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>                        
-                        <div class="card-block">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="card">
-                                        <div class="card-header  rgba-green-strong white-text">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( 'img/Scales-96.png')}}"/>
+                    </h3>                    
+                    <div class="card-block text-xs-center">                        
+                        <div class="row">
+                                {% for item in user.getUserInventory.getInventory.getBlueprintInventory %}
+                                
+                                    <div class="col-lg-4">
+                                        <div class="card rgba-stylish-light">
+                                            <h3 class="elegant-color card-header white-text">{{ item.getBlueprint.getName_DE }}</h3>
+                                            <div  class="card-block">
+                                                <div class="row">
+                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( item.getBlueprint.getImg)}}"/>
                                                 </div>
-                                                <div class="col-md-10 text-xs-left">      
-                                                     <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
-                                                         <strong>Sternenhändler</strong><br>
-                                                         <p>
-                                                     </div>
-                                                </div>
-                                            </div>
-                                                
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="card text-xs-center ">
-                                        <div class="card-header default-color white-text">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <p>Meine Resourcen</p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                {% for resource in user.getUserResources %}
-                                                <div class="col-md-4 col-lg-2">
-                                                    <!--Card Success-->
-                                                    <div style="background-color: {{ resource.getResource.getColour }}" class="card text-xs-center z-depth-2">
-                                                        <div style="color:#fff" class="card-block">
-                                                            <b>{{ resource.getResource.getName_DE }}</b>                             
-                                                            <p style="font-size:30px; color:{{resource.getResource.getIconColour }}">{{ resource.getAmount }} X <i  class="fa {{ resource.getResource.getIcon }}"></i></p>
-                                                        </div>
-                                                    </div>
-                                                    <!--/.Card Success-->
-                                                </div>
-                                                {% endfor %}
+                                                <hr>
+                                                <p>Anzahl: {{ item.getAmount }}</p>
+                                                <hr>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                
+                                
+                                {% endfor %}
+                        </div>
+                    </div>
+                    <div style="background: rgba(44, 62, 80, 0.8)" class="card-footer text-muted white-text">
+                        <div class="row">
+                            {% for resource in user.getUserResources %}
+                            <div class="col-md-4">
+                                <p style="color:{{resource.getResource.getIconColour }}">{{ resource.getResource.getName_DE }}: {{ resource.getAmount }} X <i style="color:{{ resource.getResource.getColour }} !important" class="fa {{ resource.getResource.getIcon }}"></i></p>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
    <!--/.Mask-->
    {% endblock content %}
 

@@ -41,14 +41,7 @@ class UserTile
      * @var int
      */
      
-    protected $collected;    
-    
-    /**
-     * @OGM\Property(type="string")
-     * @var string
-     */
-     
-    protected $resources;     
+    protected $collected;            
     
     /**
      * @OGM\Property(type="string")
@@ -65,13 +58,12 @@ class UserTile
      * @param int $captured
      * @param int $collected
      */
-    public function __construct(User $user, Tile $tile, $captured, $collected, $resources, $landcover)
+    public function __construct(User $user, Tile $tile, $captured, $collected, $landcover)
     {
         $this->user = $user;
         $this->tile = $tile;
         $this->captured = $captured;
         $this->collected = $collected;
-        $this->resources = $resources;
         $this->landcover = $landcover;
     }
 
@@ -115,11 +107,7 @@ class UserTile
     {
         return $this->collected;
     }
-       
-    public function getResources()
-    {
-        return $this->resources;
-    }
+
         
     
 }

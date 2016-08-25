@@ -113,6 +113,7 @@ class Blueprint
      */
     public function getBlueprintResources()
     {
+        
         return $this->blueprintResources;
     }
     

@@ -24,6 +24,7 @@ class Inventory
     
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserInventory", type="HAS_INVENTORY", direction="INCOMING", collection=true, mappedBy="inventory")
+     * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\UserInventory[]
      */
     protected $userInventory;
@@ -39,6 +40,7 @@ class Inventory
     public function __construct($capacity)
     {
         $this->capacity = $capacity;
+        $this->userInventory = new ArrayCollection();
         $this->blueprintInventory = new ArrayCollection();
     }
     

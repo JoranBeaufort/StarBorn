@@ -22,6 +22,7 @@ class StoreController extends Controller
         $blueprints = $em->getRepository(Blueprint::class)->findAll();
         
         
+        
         return $this->render('AppBundle:Store:store.html.twig',array('user' => $user, 'blueprints'=>$blueprints));
         
     }

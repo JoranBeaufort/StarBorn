@@ -8,42 +8,43 @@
 
 {% endblock css %}
 {% block content %}
-        <!--Mask-->
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12"> 
-                    <div class="card text-xs-center">                
-                        <h3 class="card-header secondary-color white-text">Dieses Gebiet Einnehmen</h3>
-                        <div class="card-block">
-                            <div class="alert alert-info" role="alert">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <i class="fa fa-2x fa-info-circle"></i>
-                                    </div>
-                                    <div class="col-md-10">
-                                        Übermittle was in diesem Gebiet für Landoberflächen vorkommen, um eine Aufklärungsdrohne zu kallibrieren und es für dein Team einzunehmen! 
-                                    </div>
-                                </div>
+
+
+    <!--Mask-->
+    <div class="container"> 
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">                
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Gebiet Einnehmen&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3> 
+                    <hr>
+                    <div class="card-block">
+                        {% form_theme form 'AppBundle:Capture:Form/fields.html.twig' %}        
+                        {{ form_start(form, {'method': 'post', 'action': path('capture')}) }}
+                        <div class="row">
+                            <input type="hidden" name="ulat" value="{{ uLat }}">
+                            <input type="hidden" name="ulng" value="{{ uLng }}">
+                            <input type="hidden" name="tlat" value="{{ tLat }}">
+                            <input type="hidden" name="tlng" value="{{ tLng }}">
+                            <input type="hidden" name="bBox" value="{{ bBox }}">
+                            <div class="capture-select">
+                                {% for child in form.landcover %}
+                                    {{ form_widget(child) }}
+                                {% endfor %}
                             </div>
-                            {% form_theme form 'AppBundle:Capture:Form/fields.html.twig' %}        
-                            {{ form_start(form, {'method': 'post', 'action': path('capture')}) }}
-                            <div class="row">
-                                <input type="hidden" name="ulat" value="{{ uLat }}">
-                                <input type="hidden" name="ulng" value="{{ uLng }}">
-                                <input type="hidden" name="tlat" value="{{ tLat }}">
-                                <input type="hidden" name="tlng" value="{{ tLng }}">
-                                <input type="hidden" name="bBox" value="{{ bBox }}">
-                                <div class="capture-select">
-                                    {% for child in form.landcover %}
-                                        {{ form_widget(child) }}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <div class="col-xs-12">                            
-                                <button style="height:100px; margin-bottom:20px;"  class="btn-secondary-outline waves-effect" type="submit"><i class="fa fa-3x fa-flag-o" aria-hidden="true"></i><h3><b>Einnehmen!</b></h3></button>
-                            </div>
-                            {{ form_end(form) }}
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">  
+                                <a href="{{ path('map') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Zurück</a>
+                            </div>
+                            <div class="col-md-6">  
+                                <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit">Bestätigen</button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
                  </div>
              </div>
          </div>

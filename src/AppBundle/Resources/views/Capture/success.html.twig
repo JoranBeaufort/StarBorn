@@ -2,29 +2,38 @@
 {% block title %}Dashboard{% endblock %} 
     {% block content %}
     
-    <div class="container">
-        <!--Card-->
-        <div class="card">
-            <div class="row">
-                <div class="card-block">     
-                    <div class="col-md-12">
-                    <h3 class="card-title">Gebiet erfolgreich eingenommen!</h3>
-                    </div>
-                    <p> Du hast folgende Resourcen gewonnen: </p>
-                    {% for resource in newResources %}
-                    <div class="col-md-4">
-                        <!--Card Success-->
-                        <div style="background-color: {{ resource.getColour }}" class="card text-xs-center z-depth-2">
-                            <div style="color:#fff" class="card-block">
-                                <h2>{{ resource.getName_DE }}</h2>                             
-                                <p style="font-size:40px; color:{{resource.getIconColour }}"><i  class="fa {{ resource.getIcon }}"></i></p>
+    <!--Mask-->
+    <div class="container"> 
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">                
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Gebiet erfolgreich eingenommen!&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3> 
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-3 text-xs-center">
+                            <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                        </div>
+                        <div class="col-xs-12 col-lg-8 text-xs-left">
+                            <br>
+                            <div class="bubble">
+                                <h4> Gut gemacht {{ user.getUsername }}!</h4>
+                                <p>
+                                    Das Sternenarchiv und dein Team sind dir Dankbar.!
+                                    Die Aufklärungsdrohne wurde erfolgreich kalibriert und ist nun auf dem Weg. 
+                                </p>                               
+                                <p>
+                                    Du hast folgende Belohnung erhalten:<br>
+                                    <p style="color:#fff">Sternenstaub: 50 X <i style="color:#fdd835 !important" class="fa fa-star"></i></p>
+                                    <p style="color:#fff">Äthermarke: 1 X <i style="color:#69f0ae !important" class="fa fa-cubes"></i></p>
+                                </p>
                             </div>
                         </div>
-                        <!--/.Card Success-->
                     </div>
-                    {% endfor %}
-                    <div class="col-xs-12">                            
-                        <a href="{{ path('map')}}"><button style="height:100px; margin-bottom:20px;"  class="btn-secondary-outline waves-effect btn-block"><i class="fa fa-3x fa-map" aria-hidden="true"></i><h3><b>Zurück zur Karte!</b></h3></button></a>
+                    <hr>
+                    <div class="col-md-12">  
+                        <a href="{{ path('map') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD ; margin-left:0px !important">OK</a>
                     </div>
                 </div>
             </div>
