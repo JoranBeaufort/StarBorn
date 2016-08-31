@@ -61,7 +61,6 @@ class ScanController extends Controller
         $tile = $em->getRepository(Tile::class)->findOneBy('tid', $results[0]['val']);
         
         $structures = array();
-        $attackable = array('drone'=>false, 'building'=>false, 'shield'=>false);
         
         foreach($tile->getTileStructures() as $ts){
             if($ts->getStructure()->getStructureType() == 'drone'){
@@ -75,6 +74,9 @@ class ScanController extends Controller
                 array_push($structures, $ts);
             }
         }
+        
+        $attackable = array('drone'=>null, 'building'=>null, 'shield'=>null);
+        
         if(count($tile->getTileStructures()) == 3){
             $attackable['shield'] = true;
             $attackable['building'] = false;

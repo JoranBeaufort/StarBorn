@@ -96,7 +96,7 @@
                                     <div style="background-color:transparent" class="card-header white-text">
                                         <div class="row">
                                             {% for structure in structures %}
-                                            <div class="col-md-4">
+                                            <div class="{% if structure.getStructure.getStructureType == 'building' and attackable['shield'] == null %} col-md-offset-2 {% elseif structure.getStructure.getStructureType == 'drone' and attackable['shield'] == null and attackable['building'] == null %} col-md-offset-4 {% endif %} col-md-4">
                                                 <div class="card rgba-stylish-light">
                                                     <div class="row" style="padding-top:10px;">
                                                         <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset( structure.getStructure.getImg)}}"/>
@@ -114,7 +114,7 @@
                                                                     <form method="post" action="{{ path('attack')}}">
                                                                         <input type="hidden" name="ulat" value="{{ uLat }}">
                                                                         <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                                        <input type="hidden" name="t" value="structure.getStructure.getStructureType">
+                                                                        <input type="hidden" name="t" value="{{ structure.getStructure.getStructureType }}">
                                                                         <input type="hidden" name="w" value="primary">                                                                
                                                                         <input type="hidden" name="tid" value="{{ tile.getTid }}">                                                
                                                                         <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
@@ -125,7 +125,7 @@
                                                                     <form method="post" action="{{ path('attack')}}">
                                                                         <input type="hidden" name="ulat" value="{{ uLat }}">
                                                                         <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                                        <input type="hidden" name="t" value="structure.getStructure.getStructureType">
+                                                                        <input type="hidden" name="t" value="{{ structure.getStructure.getStructureType }}">
                                                                         <input type="hidden" name="w" value="secondary">                                                                
                                                                         <input type="hidden" name="tid" value="{{ tile.getTid }}">                                                
                                                                         <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
