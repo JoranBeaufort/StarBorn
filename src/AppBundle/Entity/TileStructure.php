@@ -3,13 +3,13 @@ namespace AppBundle\Entity;
 
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 use AppBundle\Entity\Tile;
-use AppBundle\Entity\Drone;
+use AppBundle\Entity\Structure;
 
 /**
- * @OGM\RelationshipEntity(type="HAS_DRONE")
+ * @OGM\RelationshipEntity(type="HAS_STRUCTURE")
  */
  
-class TileDrone
+class TileStructure
 {
     /**
      * @OGM\GraphId()
@@ -25,10 +25,10 @@ class TileDrone
 
     
     /**
-     * @OGM\EndNode(targetEntity="\AppBundle\Entity\Drone")
-     * @var \AppBundle\Entity\Drone
+     * @OGM\EndNode(targetEntity="\AppBundle\Entity\Structure")
+     * @var \AppBundle\Entity\Structure
      */
-    protected $drone;
+    protected $structure;
 
     
     /**
@@ -42,22 +42,22 @@ class TileDrone
     /**
      * UserResource constructor.
      * @param \AppBundle\Entity\Tile $tile
-     * @param \AppBundle\Entity\Drone $drone
+     * @param \AppBundle\Entity\Structure $structure
      * @param int $hp
      */
-    public function __construct(Tile $tile, Drone $drone,  $hp)
+    public function __construct(Tile $tile, Structure $structure,  $hp)
     {
         $this->tile = $tile;
-        $this->drone = $drone;
+        $this->structure = $structure;
         $this->hp = $hp;
     }
-
-
+    
     public function getId()
     {
         return $this->id;
     }
-    
+
+        
     /**
      * @return \AppBundle\Entity\Tile
      */
@@ -67,11 +67,11 @@ class TileDrone
     }
     
     /**
-     * @return \AppBundle\Entity\Drone
+     * @return \AppBundle\Entity\Structure
      */
-    public function getDrone()
+    public function getStructure()
     {
-        return $this->drone;
+        return $this->structure;
     }
 
         

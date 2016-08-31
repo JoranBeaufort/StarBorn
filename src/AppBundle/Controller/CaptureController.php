@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
-use AppBundle\Entity\Drone;
+use AppBundle\Entity\Structure;
 use AppBundle\Entity\Resources;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 
@@ -122,9 +122,9 @@ class CaptureController extends Controller
                     }
                     
 
-                    $drone = $em->getRepository(Drone::class)->findOneBy('name','nova_xs');
+                    $drone = $em->getRepository(Structure::class)->findOneBy('name','nova_xs');
                     
-                    $tile->setTileDrone($drone,$drone->getHp());
+                    $tile->addTileStructure($drone);
 
                     $user->addUserTile($tile, time(),time(), $landcover);                    
                     

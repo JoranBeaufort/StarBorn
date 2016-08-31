@@ -4,11 +4,6 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\AbstractLazyCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
- 
-use AppBundle\Entity\Inventory;
-use AppBundle\Entity\Resources;
-
-
 
 /**
  * @OGM\Node(label="Blueprint")
@@ -33,7 +28,7 @@ class Blueprint
      * @var string
      */
      
-    protected $blueprinttype;
+    protected $type;
     /**
      * @OGM\Property(type="string")
      * @var string
@@ -70,11 +65,20 @@ class Blueprint
      
     protected $blueprintInventories;    
     
+    /**
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\BlueprintStructure", type="BUILDS", direction="OUTGOING", collection=true, mappedBy="blueprint")
+     * @OGM\Lazy()
+     * @var ArrayCollection|\AppBundle\Entity\BlueprintStructure[]
+     */
+     
+    protected $blueprintStructure;    
+        
      
     public function __construct()
     {
         $this->blueprintResources = new ArrayCollection();
         $this->blueprintInventories = new ArrayCollection();        
+        $this->blueprintStructure = new ArrayCollection();        
     }
 
     
@@ -90,7 +94,7 @@ class Blueprint
     
     public function getBlueprinttype()
     {
-        return $this->blueprinttype;
+        return $this->type;
     }
     
     public function getName()
@@ -143,5 +147,13 @@ class Blueprint
         $this->userTileLost->removeElement($userTileLost);
         return $this;
     }
-
+    
+    /**
+     * @return \AppBundle\Entity\BlueprintStructure
+     */
+    public function getBlueprintStructure()
+    {
+        return $this->blueprintStructure->first();
+    }
+    
 }

@@ -5,14 +5,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\AbstractLazyCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
  
-use JoranBeaufort\Neo4jUserBundle\Entity\User;
-use AppBundle\Entity\UserTile;
-use AppBundle\Entity\UserTileLost;
-use AppBundle\Entity\TileDrone;
-use AppBundle\Entity\TileBuilding;
-use AppBundle\Entity\TileShield;
-
-
 /**
  * @OGM\Node(label="Tile")
  */
@@ -61,29 +53,13 @@ class Tile
      
     
     /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileDrone", type="HAS_DRONE", direction="OUTGOING", collection=true, mappedBy="tile")
+     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileStructure", type="HAS_STRUCTURE", direction="OUTGOING", collection=true, mappedBy="tile")
      * @OGM\Lazy()
-     * @var ArrayCollection|\AppBundle\Entity\TileDrone[]
+     * @var ArrayCollection|\AppBundle\Entity\TileStructure[]
      */
      
-    protected $tileDrone;    
+    protected $tileStructures;    
     
-    /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileBuilding", type="HAS_BUILDING", direction="OUTGOING", collection=true, mappedBy="tile")
-     * @OGM\Lazy()
-     * @var ArrayCollection|\AppBundle\Entity\TileBuilding[]
-     */
-     
-    protected $tileBuilding;    
-    
-    /**
-     * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileShield", type="HAS_SHIELD", direction="OUTGOING", collection=true, mappedBy="tile")
-     * @OGM\Lazy()
-     * @var ArrayCollection|\AppBundle\Entity\TileShield[]
-     */
-     
-    protected $tileShield;    
-
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=true, mappedBy="tile")
      * @OGM\Lazy()
@@ -117,9 +93,7 @@ class Tile
         $this->bBox = $bBox;
         $this->userTile = new ArrayCollection();
         $this->userTileLost = new ArrayCollection();
-        $this->tileShield = new ArrayCollection();
-        $this->tileBuilding = new ArrayCollection();
-        $this->tileDrone = new ArrayCollection();
+        $this->tileStructures = new ArrayCollection();
         
     }
 
@@ -215,94 +189,46 @@ class Tile
 
     
     /**
-     * @param \AppBundle\Entity\Drone $drone
+     * @param \AppBundle\Entity\Structure $structure
      * @param int $hp
      */
-    public function setTileDrone(Drone $drone, $hp)
+    public function addTileStructure(Structure $structure)
     {
-        $td = new TileDrone($this, $drone, $hp);
-        $this->tileDrone->add($td);
-        $drone->setTileDrone($td);
+        $hp = $structure->getHp();
+        $td = new TileStructure($this, $structure, $hp);
+        $this->tileStructures->add($td);
+        $structure->addTileStructure($td);
         return $this;
     }
     
     /**
-     * @return \AppBundle\Entity\TileDrone
+     * @return \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\TileStructure[]
      */
-    public function getTileDrone()
+    public function getTileStructures()
     {
-        return $this->tileDrone->first();
+        return $this->tileStructures;
     }
     
     /**
-     * @param \AppBundle\Entity\TileDrone $tileDrone
+     * @return \AppBundle\Entity\TileStructure
      */
-    public function removeTileDrone(TileDrone $tileDrone)
+    public function getTileStructureByType($type)
     {
-        $this->tileDrone->removeElement($tileDrone);
-        $tileDrone->getDrone()->removeTileDrone($tileDrone);
+        foreach($this->tileStructures as $structure){
+            if($structure->getStructureType() == $type){
+                return $structure;
+            }
+        }
+    }
+    
+    /**
+     * @param \AppBundle\Entity\TileStructure $tileStructure
+     */
+    public function removeTileStructure(TileStructure $tileStructure)
+    {
+        $this->tileStructures->removeElement($tileStructure);
+        $tileStructure->getStructure()->removeTileStructure($tileStructure);
         return $this;
     }
     
-    /**
-     * @param \AppBundle\Entity\Building $building
-     * @param int $hp
-     */
-    public function setTileBuilding(Building $building, $hp)
-    {
-        $tb = new TileBuilding($this, $building, $hp);
-        $this->tileBuilding->add($tb);
-        $building->setTileBuilding($tb);
-        return $this;
-    }
-    
-    /**
-     * @param \AppBundle\Entity\TileBuilding $tileBuilding
-     */
-    public function removeTileBuilding(TileBuilding $tileBuilding)
-    {
-        $this->tileBuilding->removeElement($tileBuilding);
-        $tileBuilding->getBuilding()->removeTileBuilding($tileBuilding);
-        return $this;
-    }
-    
-    /**
-     * @return \AppBundle\Entity\TileBuilding
-     */
-
-    public function getTileBuilding()
-    {
-        return $this->tileBuilding->first();
-    }
-    
-    /**
-     * @param \AppBundle\Entity\Shield $shield
-     * @param int $hp
-     */
-    public function setTileShield(Shield $shield, $hp)
-    {
-        $ts = new TileShield($this, $shield, $hp);
-        $this->tileShield->add($ts);
-        $shield->setTileShield($ts);
-        return $this;
-    }
-    
-    /**
-     * @param \AppBundle\Entity\TileShield $tileShield
-     */
-    public function removeTileShield(TileShield $tileShield)
-    {
-        $this->tileShield->removeElement($tileShield);
-        $tileShield->getShield()->removeTileShield($tileShield);
-        return $this;
-    }
-    
-    /**
-     * @return \AppBundle\Entity\TileShield
-     */
-
-    public function getTileShield()
-    {
-        return $this->tileShield->first();
-    }
 }

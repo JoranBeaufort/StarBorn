@@ -60,8 +60,34 @@ class ScanController extends Controller
         
         $tile = $em->getRepository(Tile::class)->findOneBy('tid', $results[0]['val']);
         
+        $structures = array();
+        $attackable = array('drone'=>false, 'building'=>false, 'shield'=>false);
+        
+        foreach($tile->getTileStructures() as $ts){
+            if($ts->getStructure()->getStructureType() == 'drone'){
+                array_push($structures, $ts);
+            }
+            if($ts->getStructure()->getStructureType() == 'building'){
+                array_push($structures, $ts);
+                
+            }
+            if($ts->getStructure()->getStructureType() == 'shield'){
+                array_push($structures, $ts);
+            }
+        }
+        if(count($tile->getTileStructures()) == 3){
+            $attackable['shield'] = true;
+            $attackable['building'] = false;
+            $attackable['drone'] = false;
+        }elseif(count($tile->getTileStructures()) == 2){
+            $attackable['building'] = true;
+            $attackable['drone'] = false;
+        }else{
+            $attackable['drone'] = true;
+        }
+        
         $message = null;
-        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'message' => $message));
+        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'attackable' => $attackable, 'message' => $message));
         
     }
 }
