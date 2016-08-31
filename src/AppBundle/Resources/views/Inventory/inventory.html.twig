@@ -52,8 +52,13 @@
                     </h3>                    
                     <div class="card-block text-xs-center">                        
                         <div class="row">
+                            {% if user.getUserInventory.getInventory.getBlueprintInventory|length == 0 %}
+                                <div class="col-xs-12">
+                                    <h3> Dein Inventar ist leer </h3>
+                                    <p> Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen.</p>
+                                </div>
+                            {% else %}
                                 {% for item in user.getUserInventory.getInventory.getBlueprintInventory %}
-                                
                                     <div class="col-lg-4">
                                         <div class="card rgba-stylish-light">
                                             <h3 class="elegant-color card-header white-text">{{ item.getBlueprint.getName_DE }}</h3>
@@ -67,19 +72,21 @@
                                             </div>
                                         </div>
                                     </div>
-                                
-                                
                                 {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
-                    <div style="background: rgba(44, 62, 80, 0.8)" class="card-footer text-muted white-text">
-                        <div class="row">
-                            {% for resource in user.getUserResources %}
-                            <div class="col-md-4">
-                                <p style="color:{{resource.getResource.getIconColour }}">{{ resource.getResource.getName_DE }}: {{ resource.getAmount }} X <i style="color:{{ resource.getResource.getColour }} !important" class="fa {{ resource.getResource.getIcon }}"></i></p>
-                            </div>
-                            {% endfor %}
+                    <div class="strike">
+                        <span>
+                           Meine Resourcen 
+                        </span>
+                    </div>
+                    <div class="row">
+                        {% for resource in user.getUserResources %}
+                        <div class="col-md-4">
+                            <p style="color:{{resource.getResource.getIconColour }}">{{ resource.getResource.getName_DE }}: {{ resource.getAmount }} X <i style="color:{{ resource.getResource.getColour }} !important" class="fa {{ resource.getResource.getIcon }}"></i></p>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

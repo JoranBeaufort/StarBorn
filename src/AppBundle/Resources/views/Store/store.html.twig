@@ -44,6 +44,29 @@
         </div>
     </div>
     
+    <!-- Modal -->
+    <div class="modal fade" id="modal-resources" role="dialog">
+        <div class="modal-dialog">
+        
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" role="alert">
+                <h4 class="modal-title">Achtung</h4>
+                    <p>Du hast ungenügende Resourcen um dies zu kaufen! </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    
     <!--Mask-->
     <div class="container"> 
         <div class="row">
@@ -71,26 +94,25 @@
                         <div class="row text-xs-center"  style="padding-bottom:20px">
                             <div class="col-xs-12">
                                 {% for blueprint in blueprints %}
+                                    {% if blueprint.getName != 'nova_xs' %}
+                                    {% set buyable=true %}
                                     <div class="col-lg-4">
                                         <div class="card rgba-stylish-light">
-                                            <h3 class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
-                                            <div  class="card-block">
+                                            <div class="row">
+                                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
+                                            </div>
+                                            <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;"  class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
+                                            <div  class="card-block elegant-color ">
+                                                <hr>
                                                 <div class="row">
-                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
+                                                    <p>HP: {{ blueprint.getBlueprintStructure.getStructure.getHp }} </p>
                                                 </div>
                                                 <hr>
                                                 <div class="row">
-                                                    {% if blueprint.getBlueprinttype == 'drone' %}
-                                                        <p>HP: {{ blueprint.getBlueprintDrone.first.getDrone.getHp }} </p>
-                                                    {% elseif blueprint.getBlueprinttype == 'building' %}
-                                                        <p>HP: {{ blueprint.getBlueprintBuilding.first.getBuilding.getHp }} </p>
-                                                    {% elseif blueprint.getBlueprinttype == 'shield' %}
-                                                        <p>HP: {{ blueprint.getBlueprintShield.first.getShield.getHp }} </p>
+                                                    {% for  blueprintResource in blueprint.getBlueprintResources|sort %}
+                                                    {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
+                                                        {% set buyable = false %}
                                                     {% endif %}
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                    {% for  blueprintResource in blueprint.getBlueprintResources %}
                                                         <div class="col-xs-4">
                                                             <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>                                                        
                                                         </div>
@@ -98,6 +120,7 @@
                                                 </div>
                                                 <hr>
                                                 <div class="row">
+                                                
                                                 <!-- modal -->
                                                     <div class="modal fade" id="{{ blueprint.getName }}" role="dialog">
                                                         <div class="modal-dialog">
@@ -125,16 +148,25 @@
                                                         </div>
                                                     </div>
                                                 <!-- modal end -->
-                                                <a class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" data-toggle="modal" data-target="#{{ blueprint.getName }}"><strong>Kaufen...</strong></a>
+                                                {% if buyable == true %}
+                                                    <a class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" data-toggle="modal" data-target="#{{ blueprint.getName }}"><strong>Kaufen...</strong></a>
+                                                {% else %}
+                                                    <button class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"  data-toggle="modal" data-target="#modal-resources"><strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
+                                                {% endif %}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    {% endif %}
                                 {% endfor %}                                
                             </div>
                         </div>                                
                     </div>
-                    <div style="background: rgba(44, 62, 80, 0.8)" class="card-footer text-muted white-text">
+                    <div class="strike">
+                        <span>
+                           Meine Resourcen 
+                        </span>
+                    </div>
                         <div class="row">
                             {% for resource in user.getUserResources %}
                             <div class="col-md-4">
@@ -142,7 +174,6 @@
                             </div>
                             {% endfor %}
                         </div>
-                    </div>                    
                 </div>
             </div>
         </div>
