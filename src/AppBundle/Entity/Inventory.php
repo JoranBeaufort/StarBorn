@@ -90,4 +90,19 @@ class Inventory
     {
         return $this->blueprintInventory;
     }
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\BlueprintInventory
+     */
+    public function getBlueprintInventoriesByType($type)
+    {
+        $blueprintInventories = new ArrayCollection();
+        
+        foreach($this->blueprintInventory as $bi){
+            if($bi->getBlueprint()->getBlueprintType() == $type){
+                $blueprintInventories->add($bi);
+            }
+        }
+        
+        return $blueprintInventories;
+    }
 }

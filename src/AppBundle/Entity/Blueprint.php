@@ -92,7 +92,7 @@ class Blueprint
         return $this->tid;
     }
     
-    public function getBlueprinttype()
+    public function getBlueprintType()
     {
         return $this->type;
     }

@@ -566,7 +566,7 @@ class User implements AdvancedUserInterface, \Serializable
     }
     
 
-    /**
+    /** 
      * @param \AppBundle\Entity\Resources $resources
      * @param int $amount
      */
@@ -652,8 +652,8 @@ class User implements AdvancedUserInterface, \Serializable
             return $this;
     }
     
-        /**
-     * @return \AppBundle\Entity\UserTeam
+    /**
+     * @return \AppBundle\Entity\UserInventory
      */   
     public function getUserInventory()
     {        
@@ -662,7 +662,6 @@ class User implements AdvancedUserInterface, \Serializable
     
     /**
      * @param \AppBundle\Entity\Inventory $inventory
-     * @param int $capacity
      */
     public function addInventory(Inventory $inventory)
     {

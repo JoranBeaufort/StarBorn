@@ -1,48 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Angreifen{% endblock %} 
+{% block title %}Bauen{% endblock %} 
 {% block content %}
-    <!--Mask-->
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12"> 
-                <div class="card text-xs-center">                
-                    <h3 class="card-header primary-color white-text">Gebiet schützen&nbsp;&nbsp;
-                        <!-- Trigger the modal with a button -->
-                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
-                    </h3>
-                    <!-- Modal -->
-                        <div class="modal fade" id="help" role="dialog">
-                          <div class="modal-dialog">
-                          
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                              </div>
-                              <div class="modal-body text-xs-left ">
-                                  <div class="alert alert-info" role="alert">
-                                      <h4 class="modal-title">Zur Info:</h4>
-                                      <p>Dieses Gebiet gehört dem freundlichen Team.Baue Strukturen um das Gebiet zu stärken!</p>
-                                  </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+<!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+      <div class="modal-dialog">        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body text-xs-left ">
+              <div class="alert alert-danger" role="alert">
+                  <h4 class="modal-title">Achtung:</h4>
+                  <p>Dieses gebiet gehört einem feindlichen Spieler, bekannt unter dem Namen <strong>"{{ tile.getUserTile.getUser.getUsername }}"</strong>!</p>
+              </div>
+              <div class="alert alert-info" role="alert">
+                  <h4 class="modal-title">Zur Info:</h4>
+                  <p>Du hast in diesem Gebiet eine feindliche Presänz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!</p>
+                  <br>
+                  <h4 class="modal-title">Angriff!</h4>
+                  <p>Brauche entweder deine Laserkanone (kurze Wiederaufladezeit) oder eine mächtige Photonenbombe (lange Wiederaufladezeit) um den Feind anzugreiffen.</p>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   <!--Mask-->
+   <div class="container"> 
+       <div class="row">
+           <div class="col-md-12" style="color:#fff" >
+               <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center">                
+                   <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Gebiet bebauen!&nbsp;&nbsp;
+                       <!-- Trigger the modal with a button -->
+                       <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                   </h3> 
 
                     <div class="card-block">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="card text-xs-center">
-                                    <div class="card-header default-color white-text">
+                                <div style="background-color:transparent" class="card text-xs-center">
+                                    <div  style="background-color:transparent" class="card-header white-text">
                                         <div class="row">
-                                            {% if user.getProfileImage is null %}
+                                            {% if tile.getUserTile.getUser.getProfileImage is null %}
                                             <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">    
                                             {% else %}
-                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~user.getUid~'/'~user.getProfileImage) }}"> 
+                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~tile.getUserTile.getUser.getUid~'/'~tile.getUserTile.getUser.getProfileImage) }}"> 
                                             {% endif %}  
                                         </div>
                                         <div class="row">
@@ -68,7 +74,7 @@
                                                 </div>
                                                 <div class="col-md-10 text-xs-left">      
                                                      <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
-                                                         <strong>Bau erfolgreich!</strong><br>
+                                                         <strong>Angriff erfolgreich!</strong><br>
                                                          <p>{{ message.text }}</p>
                                                      </div>
                                                 </div>
@@ -83,156 +89,96 @@
                          
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="card text-xs-center ">
-                                    <div class="card-header default-color white-text">
+                                <div style="background-color:transparent" class="card text-xs-center ">
+                                    <div style="background-color:transparent" class="card-header white-text">
                                         <div class="row">
-                                            {% if tile.getTileShield != null %}
-                                            <div class="col-md-4">
-                                                <div style="margin-bottom:5px; border-radius:20px; height:400px"" class="rgba-grey-light">
-                                                    <div class="row">
-                                                        <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Schild</button>
-                                                    </div>
-                                                    <div class="row">
-                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( tile.getTileShield.getShield.getImg)}}"/>
-                                                    </div>
-                                                    <div class="row">
-                                                         <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect"><strong>{{ tile.getTileShield.getShield.getName_DE }}</strong><br>
-                                                         {{ tile.getTileShield.getHp }} / {{ tile.getTileShield.getShield.getHp }}<br>
-                                                         <progress class="progress progress-success" value="{{ tile.getTileShield.getHp }}" max="{{ tile.getTileShield.getShield.getHp }}" style="color:000">25%</progress>
-                                                         </button>
-                                                    </div>
-                                                    {% if tile.getTileShield.getHp < tile.getTileShield.getShield.getHp %}
-                                                        <div class="col-xs-12">
-                                                            <form method="post" action="{{ path('attack')}}">
-                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
-                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                                <input type="hidden" name="t" value="shield">
-                                                                <input type="hidden" name="w" value="secondary">                                                                
-                                                                <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
-                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
-                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-light waves-effect" type="submit"><strong><i class="fa fa-3x fa-medkit" aria-hidden="true"></i></strong></button>
-                                                            </form>
+                                            {% for key,structure in structures|sort%}
+                                                <div class="col-md-4">
+                                                    {% if structure == null %}
+                                                        <div class="card rgba-stylish-light">
+                                                            <div class="row" style="padding-top:10px;">
+                                                                <a data-toggle="modal" data-target="#build-{{ key }}"><img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset('img/Plus-96.png')}}"/></a>
+                                                            </div>
+                                                            <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>{% if key == 'building' %} Gebäude {% elseif key == 'shield' %} Schild {% endif %}</strong></h3>
+                                                            <div class="card-block elegant-color">
+                                                                {% if key == 'building' %}
+                                                                    <p>Es wurden keine Gebäuden gefunden. Bebaue jetzt dieses Gebiet um es für dein Team zu stärken!</p>
+                                                                {% elseif key == 'shield' %} 
+                                                                    <p>Es wurden kein Schild gefunden. Bebaue jetzt dieses Gebiet um es für dein Team zu stärken!</p>
+                                                                {% endif %}
+                                                            </div>
                                                         </div>
-                                                    {% endif %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% else %}
-                                            <div class="col-md-4">
-                                                <div style="margin-bottom:5px; border-radius:20px; height:400px"" class="rgba-grey-light">
-                                                    <div class="row">
-                                                        <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Schild</button>
-                                                    </div>
-                                                    <div class="row">
-                                                        <button  data-toggle="modal" data-target="#help" style="margin-top:40px; opacity: 0.7; border:none; background-color:transparent; color: #000; font-size:165px; " ><i style="opacity: 0.7;" class="fa fa-plus-circle" aria-hidden="true"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endif %}
-                                            {% if tile.getTileBuilding != null %}
-                                            <div class="col-md-4">
-                                            <div  style="margin-bottom:5px; border-radius:20px; height:400px"" class="rgba-grey-light">
-                                                <div class="row">
-                                                    <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Gebäude</button>
-                                                </div>
-                                                <div class="row">
-                                                    <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset(tile.getTileBuilding.getBuilding.getImg)}}"/>
-                                                </div>
-                                                <div class="row">
-                                                     <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect"><strong>{{ tile.getTileBuilding.getBuilding.getName_DE }}</strong><br>
-                                                     {{ tile.getTileBuilding.getHp }} / {{ tile.getTileBuilding.getBuilding.getHp }}<br>
-                                                     <progress class="progress progress-success" value="{{ tile.getTileBuilding.getHp }}" max="{{tile.getTileBuilding.getBuilding.getHp }}" style="color:000">25%</progress>
-                                                     </button>
-                                                </div>
-                                                <div class="row">
-                                                    {% if tile.getTileBuilding.getHp < tile.getTileBuilding.getBuilding.getHp %}
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <form>
-                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
-                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                                <input type="hidden" name="t" value="building">
-                                                                <input type="hidden" name="w" value="secondary">                                                                
-                                                                <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
-                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
-                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-light waves-effect" type="submit"><strong><i class="fa fa-3x fa-medkit" aria-hidden="true"></i></strong></button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                    {% else %}
-                                                    <!-- Trigger the modal with a button -->
-                                                      <button type="button" style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-strong waves-effect" data-toggle="modal" data-target="#modalbuilding"><strong><i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
-
-                                                      <!-- Modal -->
-                                                      <div class="modal fade" id="modalbuilding" role="dialog">
-                                                        <div class="modal-dialog">
                                                         
-                                                          <!-- Modal content-->
-                                                          <div class="modal-content">
-                                                            <div class="modal-header">
-                                                              <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="alert alert-danger" role="alert">
-                                                                <h4 class="modal-title">Achtung</h4>
-
-                                                                <p>Du musst zuerst das feindliche Schild zerstören, bevor du dieses Gebäude angreifen kannst!</p>
+                                                    <!-- Modal -->
+                                                        <div class="modal fade" id="build-{{ key }}" role="dialog">
+                                                          <div class="modal-dialog">        <!-- Modal content-->
+                                                            <div style="background: rgba(44, 62, 80, 1)" class="modal-content ">
+                                                              <div class="modal-header">
+                                                                <button style="color:white" type="button" class="close" data-dismiss="modal">&times;</button>
+                                                              </div>
+                                                              <div class="modal-body text-xs-center">
+                                                                  <div class="row">
+                                                                    <div class="col-xs-12">
+                                                                      <p>Verfügbare Baupläne:</p>
+                                                                    </div> 
+                                                                  </div>
+                                                                  {% if user.getUserInventory.getInventory.getBlueprintInventoriesByType(key)|length == 0 %}
+                                                                    <p> Du hast noch keine Baupläne im Inventar. Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen </p>
+                                                                  {% else %}
+                                                                      {% for blueprint in user.getUserInventory.getInventory.getBlueprintInventoriesByType(key) %}
+                                                                        <div class="col-md-6" style="padding-top:20px">
+                                                                            <div class="card rgba-stylish-light">
+                                                                                <div class="row" style="padding-top:10px;">
+                                                                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-55px; padding:10px; width:100px; height:100px" src="{{ asset( blueprint.getBlueprint.getBlueprintStructure.getStructure.getImg)}}"/>
+                                                                                </div>
+                                                                                <h4 style="padding-top:55px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>{{ blueprint.getBlueprint.getName_DE }}</strong></h4>
+                                                                                <div class="card-block elegant-color">
+                                                                                    <div class="row">
+                                                                                        <div class="col-xs-12">
+                                                                                            Lebenspunkte: {{ blueprint.getBlueprint.getBlueprintStructure.getStructure.getHp }}
+                                                                                        </diV>
+                                                                                        <div class="col-xs-12">
+                                                                                            <button type="button" class="btn btn-default">Bauen!</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>                                               
+                                                                        </div>
+                                                                      {% endfor %}
+                                                                  {% endif %}
+                                                              </div>
+                                                              <div class="modal-footer text-xs-center">
+                                                                <div class="row">
+                                                                  <div class="col-xs-12">
+                                                                    <button style="border-radius:33px; width:66px;height:66px" type="button" class="btn btn-default-outline waves-effect" data-dismiss="modal"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></button>
+                                                                  </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                              <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                                                              </div>
                                                             </div>
                                                           </div>
                                                         </div>
-                                                      </div>
-                                                    {% endif %}
-                                                </div>
-                                                </div>
-                                            </div>
-                                            {% else %}
-                                            <div class="col-md-4" style="height:100%">
-                                                <div style="margin-bottom:5px; border-radius:20px; height:400px" class="rgba-grey-light">
-                                                    <div class="row">
-                                                        <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Gebäude</button>
-                                                    </div>
-                                                    <div class="row">
-                                                        <button  data-toggle="modal" data-target="#help" style="margin-top:40px; opacity: 0.7; border:none; background-color:transparent; color: #000; font-size:165px; " ><i style="opacity: 0.7;" class="fa fa-plus-circle" aria-hidden="true"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endif %}
-                                            <div class="col-md-4">
-                                            <div  style="margin-bottom:5px; border-radius:20px; height:400px"" class="rgba-grey-light">
-                                                <div class="row">
-                                                    <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect">Aufklärungsdrohne</button>
-                                                </div>
-                                                <div class="row">
-                                                    <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset(tile.getTileDrone.getDrone.getImg)}}"/>
-                                                </div>
-                                                <div class="row">
-                                                     <button style="width:90%; border-radius:20px;" class="btn rgba-stylish-strong waves-effect"><strong>{{ tile.getTileDrone.getDrone.getName_DE }}</strong><br>
-                                                     {{ tile.getTileDrone.getHp }} / {{ tile.getTileDrone.getDrone.getHp }}<br>
-                                                     <progress class="progress progress-success" value="{{ tile.getTileDrone.getHp }}" max="{{ tile.getTileDrone.getDrone.getHp }}" style="color:000">25%</progress>
-                                                     </button>
-                                                </div>
-                                                <div class="row">
-                                                    {% if tile.getTileDrone.getHp < tile.getTileDrone.getDrone.getHp %}
-                                                    <div class="row">
-                                                        <div class="col-xs-12">
-                                                            <form>
-                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
-                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                                <input type="hidden" name="t" value="drone">
-                                                                <input type="hidden" name="w" value="primary">                                                                
-                                                                <input type="hidden" name="tid" value="{{ tile.getId }}">                                                
-                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">                                       
-                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-light waves-effect" type="submit"><strong><i class="fa fa-3x fa-medkit" aria-hidden="true"></i></strong></button>
-                                                            </form>
+                                                    {% else %}
+                                                        <div class="card rgba-stylish-light">
+                                                            <div class="row" style="padding-top:10px;">
+                                                                <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset( structure.getStructure.getImg)}}"/>
+                                                            </div>
+                                                            <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>{{ structure.getStructure.getName_DE }}</strong></h3>
+                                                            <div  class="card-block elegant-color">
+                                                                <div class="row">
+                                                                     {{ structure.getHp }} / {{ structure.getStructure.getHp }}<br>
+                                                                     <progress class="progress progress-success" value="{{ structure.getHp }}" max="{{ structure.getStructure.getHp }}" style="color:000"></progress>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-xs-12">
+                                                                        <button type="button" style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-strong waves-effect" data-toggle="modal" data-target="#modal-{{ structure.getStructure.getStructureType }}"><strong><i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     {% endif %}
                                                 </div>
-                                            </div>
+                                           {% endfor %}
+                                       </div>
                                     </div>
                                 </div>
                             </div>

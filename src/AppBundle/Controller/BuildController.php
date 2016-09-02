@@ -13,6 +13,7 @@ use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
 use AppBundle\Entity\Team;
 use AppBundle\Entity\Resources;
+use AppBundle\Entity\Inventory;
 use AppBundle\Entity\UserResource;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 
@@ -20,7 +21,6 @@ class BuildController extends Controller
 {
     public function indexAction(Request $request)
     {    
-        $user = $this->getUser();               
         
         $encoder = $this->get('nzo_url_encryptor');
         
@@ -58,8 +58,40 @@ class BuildController extends Controller
         $em = $this->get('neo4j.graph_manager')->getClient();
         $tile = $em->getRepository(Tile::class)->findOneBy('tid',$results[0]['val']);
 
+        $structures = array('drone' => null, 'building' => null, 'shield' => null);
+        
+        foreach($tile->getTileStructures() as $ts){
+            if($ts->getStructure()->getStructureType() == 'drone'){
+                $structures['drone'] = $ts;
+            }
+            if($ts->getStructure()->getStructureType() == 'building'){
+                $structures['building'] = $ts;
+                
+            }
+            if($ts->getStructure()->getStructureType() == 'shield'){
+                $structures['shield'] = $ts;
+            }
+        }
+
+
+        $buildable = array('drone'=>null, 'building'=>null, 'shield'=>null);
+        
+        if(count($tile->getTileStructures()) == 2){
+            $buildable['shield'] = true;
+        }elseif(count($tile->getTileStructures()) == 1){
+            $buildable['building'] = true;
+        }
+        
         $message = null;
-        return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'message' => $message));
+        
+        // $test = $user->getUserInventory()->getInventory()->getBlueprintInventoriesByType('building');
+        // foreach($test as $t){
+        //     var_dump($t->getBlueprint()->getName());
+        // }die;
+        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
+        $em->clear();
+
+        return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'buildable' => $buildable, 'message' => $message));
         
     }
 }
