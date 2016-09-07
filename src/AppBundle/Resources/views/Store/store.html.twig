@@ -96,6 +96,7 @@
                                 {% for blueprint in blueprints %}
                                     {% if blueprint.getName != 'nova_xs' %}
                                     {% set buyable=true %}
+                                    {% set buyAmount=[] %}
                                     <div class="col-lg-4">
                                         <div class="card rgba-stylish-light">
                                             <div class="row">
@@ -110,9 +111,14 @@
                                                 <hr>
                                                 <div class="row">
                                                     {% for  blueprintResource in blueprint.getBlueprintResources|sort %}
-                                                    {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
-                                                        {% set buyable = false %}
-                                                    {% endif %}
+                                                        {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
+                                                            {% set buyable = false %}
+                                                        {% else %}
+                                                            {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
+                                                                {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
+                                                                {% set buyAmount = buyAmount|merge(amount) %}
+                                                            {% endif %}
+                                                        {% endif %}
                                                         <div class="col-xs-4">
                                                             <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>                                                        
                                                         </div>
@@ -138,6 +144,11 @@
                                                                                     <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
                                                                             </div>
                                                                             <hr>
+                                                                            <div class="row">
+                                                                                 <div class="md-form">
+                                                                                    Anzahl: <input type="number" min="0" max="{{ min(buyAmount) }}" />
+                                                                                 </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
