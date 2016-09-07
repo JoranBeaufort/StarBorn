@@ -33,7 +33,12 @@ class BlueprintStructure
     {
     }
 
-        
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * @return \AppBundle\Entity\Blueprint
      */

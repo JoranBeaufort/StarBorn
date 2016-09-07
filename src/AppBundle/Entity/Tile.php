@@ -4,6 +4,14 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\AbstractLazyCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
+use AppBundle\Entity\UserTile;
+use AppBundle\Entity\UserTileLost;
+use AppBundle\Entity\Structure;
+use AppBundle\Entity\TileStructure;
+
+
+
+
  
 /**
  * @OGM\Node(label="Tile")
@@ -172,7 +180,7 @@ class Tile
     /**
      * @var \AppBundle\Entity\UserTileLost
      */
-    public function setUserTileLost($userTileLost)
+    public function setUserTileLost(UserTileLost $userTileLost)
     {
         $this->userTileLost->add($userTileLost);
         return $this;
@@ -198,7 +206,6 @@ class Tile
         $td = new TileStructure($this, $structure, $hp);
         $this->tileStructures->add($td);
         $structure->addTileStructure($td);
-        return $this;
     }
     
     /**

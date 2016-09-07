@@ -63,7 +63,7 @@
                         </div>
 
                         {% if message != null %}
-                            {% if message.type == 'as' %}
+                            {% if message.type == 'constructionComplete' %}
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="card">
@@ -74,7 +74,7 @@
                                                     </div>
                                                     <div class="col-md-10 text-xs-left">
                                                         <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
-                                                            <strong>Angriff erfolgreich!</strong><br>
+                                                            <strong>Bau erfolgreich!</strong><br>
                                                             <p>{{ message.text }}</p>
                                                         </div>
                                                     </div>
@@ -122,7 +122,7 @@
                                                                                 <p>Verfügbare Baupläne:</p>
                                                                             </div>
                                                                         </div>
-                                                                        {% if user.getUserInventory.getInventory.getBlueprintInventoriesByType(key)|length == 0 %}
+                                                                        {% if user.getUserInventory.getInventory.getBlueprintInventoriesByType(key)|length < 1 %}
                                                                             <p> Du hast noch keine Baupläne im Inventar. Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen </p>
                                                                         {% else %}
                                                                             {% for blueprint in user.getUserInventory.getInventory.getBlueprintInventoriesByType(key) %}
@@ -144,10 +144,11 @@
                                                                                                     <form method="post" action="{{ path('construct')}}">
                                                                                                         <input type="hidden" name="ulat" value="{{ uLat }}">
                                                                                                         <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                                                        <input type="hidden" name="bid" value="{{ blueprint.getBlueprint.getBid }}">
                                                                                                         <input type="hidden" name="sid" value="{{ blueprint.getBlueprint.getBlueprintStructure.getStructure.getSid }}">
                                                                                                         <input type="hidden" name="tid" value="{{ tile.getTid }}">
                                                                                                         <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
-                                                                                                        <button type="button" class="btn btn-default" type="submit">Bauen!</button>
+                                                                                                        <button type="submit" class="btn btn-default">Bauen!</button>
                                                                                                     </form>
                                                                                                 </div>
                                                                                             </div>

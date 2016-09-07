@@ -4,6 +4,9 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\AbstractLazyCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
+use AppBundle\Entity\BlueprintInventory;
+use AppBundle\Entity\BlueprintStructure;
+
 
 /**
  * @OGM\Node(label="Blueprint")
@@ -131,21 +134,20 @@ class Blueprint
     }
     
     /**
-     * @var \AppBundle\Entity\BlueprintInventory $blueprintInventory
+     * @param \AppBundle\Entity\BlueprintInventory $blueprintInventory
      */
-    public function addBlueprintInventory($blueprintInventory)
+    public function addBlueprintInventory(BlueprintInventory $blueprintInventory)
     {
         $this->blueprintInventories->add($blueprintInventory);
         return $this;
     }
     
     /**
-     * @var \AppBundle\Entity\BlueprintInventory $blueprintInventory
+     * @param \AppBundle\Entity\BlueprintInventory $blueprintInventory
      */
     public function removeBlueprintInventory(BlueprintInventory $blueprintInventory)
     {
-        $this->blueprintInventories->removeElement($userTileLost);
-        return $this;
+        $this->blueprintInventories->removeElement($blueprintInventory);
     }
     
     /**

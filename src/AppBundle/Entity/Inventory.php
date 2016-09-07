@@ -3,6 +3,12 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
+use Doctrine\Common\Collections\AbstractLazyCollection;
+use AppBundle\Entity\UserInventory;
+use AppBundle\Entity\Blueprint;
+use AppBundle\Entity\BlueprintInventory;
+
+
 
 /**
  * @OGM\Node(label="Inventory")
@@ -60,7 +66,7 @@ class Inventory
      */
     public function addUserInventory(UserInventory $userInventory)
     {
-        return $this->userInventory->add($userInventory);
+        $this->userInventory->add($userInventory);
     }
     
     /**
@@ -82,7 +88,16 @@ class Inventory
         $blueprint->addBlueprintInventory($bi);
         return $this;
     }
-    
+
+    /**
+     * @param \AppBundle\Entity\BlueprintInventory $blueprintInventory
+     */
+    public function removeBlueprintInventory(BlueprintInventory $blueprintInventory)
+    {
+        $blueprintInventory->getBlueprint()->removeBlueprintInventory($blueprintInventory);
+        $this->blueprintInventory->removeElement($blueprintInventory);
+    }
+
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\BlueprintInventory
      */
@@ -90,6 +105,7 @@ class Inventory
     {
         return $this->blueprintInventory;
     }
+
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\BlueprintInventory
      */
@@ -104,5 +120,21 @@ class Inventory
         }
         
         return $blueprintInventories;
+    }
+
+    /**
+     * @return \AppBundle\Entity\BlueprintInventory
+     */
+    public function getBlueprintInventoryByBid($bid)
+    {
+
+        foreach($this->blueprintInventory as $bi){
+            if($bi->getBlueprint()->getBid() == $bid){
+                return $bi;
+            }
+        }
+
+        return null;
+
     }
 }

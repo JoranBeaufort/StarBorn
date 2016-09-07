@@ -133,17 +133,17 @@ class Structure
     }
     
     /**
-     * @var \AppBundle\Entity\TileStructure
+     * @param \AppBundle\Entity\TileStructure $tileStructure
      */
-    public function addTileStructure($tileStructure)
+    public function addTileStructure(TileStructure $tileStructure)
     {
         $this->tileStructures->add($tileStructure);
     }
     
     /**
-     * @var \AppBundle\Entity\TileStructure
+     * @param \AppBundle\Entity\TileStructure $tileStructure
      */
-    public function removeTileStructure($tileStructure)
+    public function removeTileStructure(TileStructure $tileStructure)
     {
         $this->tileStructures->removeElement($tileStructure);
     }
