@@ -83,11 +83,7 @@ class BuildController extends Controller
         }
         
         $message = null;
-        
-        // $test = $user->getUserInventory()->getInventory()->getBlueprintInventoriesByType('building');
-        // foreach($test as $t){
-        //     var_dump($t->getBlueprint()->getName());
-        // }die;
+
         $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
         $em->clear();
 

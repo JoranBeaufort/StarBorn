@@ -2,42 +2,42 @@
 
 {% block title %}Bauen{% endblock %} 
 {% block content %}
-<!-- Modal -->
+    <!-- Modal -->
     <div class="modal fade" id="help" role="dialog">
-      <div class="modal-dialog">        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-          <div class="modal-body text-xs-left ">
-              <div class="alert alert-danger" role="alert">
-                  <h4 class="modal-title">Achtung:</h4>
-                  <p>Dieses gebiet gehört einem feindlichen Spieler, bekannt unter dem Namen <strong>"{{ tile.getUserTile.getUser.getUsername }}"</strong>!</p>
-              </div>
-              <div class="alert alert-info" role="alert">
-                  <h4 class="modal-title">Zur Info:</h4>
-                  <p>Du hast in diesem Gebiet eine feindliche Presänz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!</p>
-                  <br>
-                  <h4 class="modal-title">Angriff!</h4>
-                  <p>Brauche entweder deine Laserkanone (kurze Wiederaufladezeit) oder eine mächtige Photonenbombe (lange Wiederaufladezeit) um den Feind anzugreiffen.</p>
-              </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
-          </div>
+        <div class="modal-dialog">        <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-left ">
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="modal-title">Achtung:</h4>
+                        <p>Dieses gebiet gehört einem feindlichen Spieler, bekannt unter dem Namen <strong>"{{ tile.getUserTile.getUser.getUsername }}"</strong>!</p>
+                    </div>
+                    <div class="alert alert-info" role="alert">
+                        <h4 class="modal-title">Zur Info:</h4>
+                        <p>Du hast in diesem Gebiet eine feindliche Presänz entdeckt! Greiffe die feindlichen Strukturen an um das Gebiet wieder freizugeben und selber einzunehmen!</p>
+                        <br>
+                        <h4 class="modal-title">Angriff!</h4>
+                        <p>Brauche entweder deine Laserkanone (kurze Wiederaufladezeit) oder eine mächtige Photonenbombe (lange Wiederaufladezeit) um den Feind anzugreiffen.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-   <!--Mask-->
-   <div class="container"> 
-       <div class="row">
-           <div class="col-md-12" style="color:#fff" >
-               <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center">                
-                   <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Gebiet bebauen!&nbsp;&nbsp;
-                       <!-- Trigger the modal with a button -->
-                       <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
-                   </h3> 
+    <!--Mask-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center">
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Gebiet bebauen!&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3>
 
                     <div class="card-block">
                         <div class="row">
@@ -46,10 +46,10 @@
                                     <div  style="background-color:transparent" class="card-header white-text">
                                         <div class="row">
                                             {% if tile.getUserTile.getUser.getProfileImage is null %}
-                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">    
+                                                <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">
                                             {% else %}
-                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~tile.getUserTile.getUser.getUid~'/'~tile.getUserTile.getUser.getProfileImage) }}"> 
-                                            {% endif %}  
+                                                <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~tile.getUserTile.getUser.getUid~'/'~tile.getUserTile.getUser.getProfileImage) }}">
+                                            {% endif %}
                                         </div>
                                         <div class="row">
                                             <button style="margin-left: 170px; margin-top:-200px; border-radius:20px; font-size:20px; border: solid rgba(62, 69, 81, 0.7); color:rgba(62, 69, 81, 0.7);" class="btn waves-effect"><strong>1</strong></button>
@@ -61,32 +61,32 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         {% if message != null %}
                             {% if message.type == 'as' %}
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="card">
-                                        <div class="card-header  rgba-green-strong white-text">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:80px; height:80px" src="{{ asset(message.img)}}"/>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="card">
+                                            <div class="card-header  rgba-green-strong white-text">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:80px; height:80px" src="{{ asset(message.img)}}"/>
+                                                    </div>
+                                                    <div class="col-md-10 text-xs-left">
+                                                        <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
+                                                            <strong>Angriff erfolgreich!</strong><br>
+                                                            <p>{{ message.text }}</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-10 text-xs-left">      
-                                                     <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
-                                                         <strong>Angriff erfolgreich!</strong><br>
-                                                         <p>{{ message.text }}</p>
-                                                     </div>
-                                                </div>
+
                                             </div>
-                                                
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             {% endif %}
-                         {% endif %}
-                         
+                        {% endif %}
+
                         <div class="row">
                             <div class="col-xs-12">
                                 <div style="background-color:transparent" class="card text-xs-center ">
@@ -103,59 +103,69 @@
                                                             <div class="card-block elegant-color">
                                                                 {% if key == 'building' %}
                                                                     <p>Es wurden keine Gebäuden gefunden. Bebaue jetzt dieses Gebiet um es für dein Team zu stärken!</p>
-                                                                {% elseif key == 'shield' %} 
+                                                                {% elseif key == 'shield' %}
                                                                     <p>Es wurden kein Schild gefunden. Bebaue jetzt dieses Gebiet um es für dein Team zu stärken!</p>
                                                                 {% endif %}
                                                             </div>
                                                         </div>
-                                                        
-                                                    <!-- Modal -->
+
+                                                        <!-- Modal -->
                                                         <div class="modal fade" id="build-{{ key }}" role="dialog">
-                                                          <div class="modal-dialog">        <!-- Modal content-->
-                                                            <div style="background: rgba(44, 62, 80, 1)" class="modal-content ">
-                                                              <div class="modal-header">
-                                                                <button style="color:white" type="button" class="close" data-dismiss="modal">&times;</button>
-                                                              </div>
-                                                              <div class="modal-body text-xs-center">
-                                                                  <div class="row">
-                                                                    <div class="col-xs-12">
-                                                                      <p>Verfügbare Baupläne:</p>
-                                                                    </div> 
-                                                                  </div>
-                                                                  {% if user.getUserInventory.getInventory.getBlueprintInventoriesByType(key)|length == 0 %}
-                                                                    <p> Du hast noch keine Baupläne im Inventar. Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen </p>
-                                                                  {% else %}
-                                                                      {% for blueprint in user.getUserInventory.getInventory.getBlueprintInventoriesByType(key) %}
-                                                                        <div class="col-md-6" style="padding-top:20px">
-                                                                            <div class="card rgba-stylish-light">
-                                                                                <div class="row" style="padding-top:10px;">
-                                                                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-55px; padding:10px; width:100px; height:100px" src="{{ asset( blueprint.getBlueprint.getBlueprintStructure.getStructure.getImg)}}"/>
-                                                                                </div>
-                                                                                <h4 style="padding-top:55px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>{{ blueprint.getBlueprint.getName_DE }}</strong></h4>
-                                                                                <div class="card-block elegant-color">
-                                                                                    <div class="row">
-                                                                                        <div class="col-xs-12">
-                                                                                            Lebenspunkte: {{ blueprint.getBlueprint.getBlueprintStructure.getStructure.getHp }}
-                                                                                        </diV>
-                                                                                        <div class="col-xs-12">
-                                                                                            <button type="button" class="btn btn-default">Bauen!</button>
+                                                            <div class="modal-dialog">        <!-- Modal content-->
+                                                                <div style="background: rgba(44, 62, 80, 1)" class="modal-content ">
+                                                                    <div class="modal-header">
+                                                                        <button style="color:white" type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body text-xs-center">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12">
+                                                                                <p>Verfügbare Baupläne:</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        {% if user.getUserInventory.getInventory.getBlueprintInventoriesByType(key)|length == 0 %}
+                                                                            <p> Du hast noch keine Baupläne im Inventar. Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen </p>
+                                                                        {% else %}
+                                                                            {% for blueprint in user.getUserInventory.getInventory.getBlueprintInventoriesByType(key) %}
+                                                                                <div class="col-md-6" style="padding-top:20px">
+                                                                                    <div class="card rgba-stylish-light">
+                                                                                        <div class="row" style="padding-top:10px;">
+                                                                                            <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-55px; padding:10px; width:100px; height:100px" src="{{ asset( blueprint.getBlueprint.getBlueprintStructure.getStructure.getImg)}}"/>
+                                                                                        </div>
+                                                                                        <h4 style="padding-top:55px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>{{ blueprint.getBlueprint.getName_DE }}</strong></h4>
+                                                                                        <div class="card-block elegant-color">
+                                                                                            <div class="row">
+                                                                                                <div class="col-xs-12">
+                                                                                                    Anzahl verfügbar: {{ blueprint.getAmount }}
+                                                                                                </div>
+                                                                                                <div class="col-xs-12">
+                                                                                                    Lebenspunkte: {{ blueprint.getBlueprint.getBlueprintStructure.getStructure.getHp }}
+                                                                                                </div>
+                                                                                                <div class="col-xs-12">
+                                                                                                    <form method="post" action="{{ path('construct')}}">
+                                                                                                        <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                                                        <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                                                        <input type="hidden" name="sid" value="{{ blueprint.getBlueprint.getBlueprintStructure.getStructure.getSid }}">
+                                                                                                        <input type="hidden" name="tid" value="{{ tile.getTid }}">
+                                                                                                        <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                                        <button type="button" class="btn btn-default" type="submit">Bauen!</button>
+                                                                                                    </form>
+                                                                                                </div>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>                                               
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="modal-footer text-xs-center">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12">
+                                                                                <button style="border-radius:33px; width:66px;height:66px" type="button" class="btn btn-default-outline waves-effect" data-dismiss="modal"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></button>
+                                                                            </div>
                                                                         </div>
-                                                                      {% endfor %}
-                                                                  {% endif %}
-                                                              </div>
-                                                              <div class="modal-footer text-xs-center">
-                                                                <div class="row">
-                                                                  <div class="col-xs-12">
-                                                                    <button style="border-radius:33px; width:66px;height:66px" type="button" class="btn btn-default-outline waves-effect" data-dismiss="modal"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></button>
-                                                                  </div>
+                                                                    </div>
                                                                 </div>
-                                                              </div>
                                                             </div>
-                                                          </div>
                                                         </div>
                                                     {% else %}
                                                         <div class="card rgba-stylish-light">
@@ -165,8 +175,8 @@
                                                             <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>{{ structure.getStructure.getName_DE }}</strong></h3>
                                                             <div  class="card-block elegant-color">
                                                                 <div class="row">
-                                                                     {{ structure.getHp }} / {{ structure.getStructure.getHp }}<br>
-                                                                     <progress class="progress progress-success" value="{{ structure.getHp }}" max="{{ structure.getStructure.getHp }}" style="color:000"></progress>
+                                                                    {{ structure.getHp }} / {{ structure.getStructure.getHp }}<br>
+                                                                    <progress class="progress progress-success" value="{{ structure.getHp }}" max="{{ structure.getStructure.getHp }}" style="color:000"></progress>
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-xs-12">
@@ -177,8 +187,8 @@
                                                         </div>
                                                     {% endif %}
                                                 </div>
-                                           {% endfor %}
-                                       </div>
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -187,6 +197,6 @@
                 </div>
             </div>
         </div>
-    </div>     
+    </div>
 {% endblock content %}
 

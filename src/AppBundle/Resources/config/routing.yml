@@ -46,6 +46,10 @@ attack:
 build:
     path:  /build
     defaults: { _controller: AppBundle:Build:index }
+
+construct:
+    path:  /construct
+    defaults: { _controller: AppBundle:Construct:index }
     
 tile: 
     path:  /tile

@@ -89,7 +89,7 @@ class Blueprint
     
     public function getBid()
     {
-        return $this->tid;
+        return $this->bid;
     }
     
     public function getBlueprintType()
@@ -113,7 +113,7 @@ class Blueprint
     }
     
     /**
-     * @return \AppBundle\Entity\BlueprintResources
+     * @return BlueprintResources|BlueprintResources[]|ArrayCollection
      */
     public function getBlueprintResources()
     {
@@ -142,9 +142,9 @@ class Blueprint
     /**
      * @var \AppBundle\Entity\BlueprintInventory $blueprintInventory
      */
-    public function removeBlueprintInventory(UserTileLost $userTileLost)
+    public function removeBlueprintInventory(BlueprintInventory $blueprintInventory)
     {
-        $this->userTileLost->removeElement($userTileLost);
+        $this->blueprintInventories->removeElement($userTileLost);
         return $this;
     }
     
