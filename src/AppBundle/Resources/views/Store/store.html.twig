@@ -129,12 +129,14 @@
                                                 
                                                 <!-- modal -->
                                                     <div class="modal fade" id="{{ blueprint.getName }}" role="dialog">
-                                                        <div class="modal-dialog">
+                                                        <div class="modal-dialog" style="background: rgba(44, 62, 80, 1)">
                                                       
                                                             <!-- Modal content-->
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
+                                                            <div class="modal-content" style="background: rgba(44, 62, 80, 1)">
+                                                                <form>
+                                                                <div class="modal-header">                                                                    
                                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    <h4>Kaufen</h4>
                                                                 </div>
                                                                 <div class="modal-body ">
                                                                     <div class="card rgba-stylish-light">
@@ -145,16 +147,25 @@
                                                                             </div>
                                                                             <hr>
                                                                             <div class="row">
-                                                                                 <div class="md-form">
-                                                                                    Anzahl: <input type="number" min="0" max="{{ min(buyAmount) }}" />
-                                                                                 </div>
+                                                                                <div class="col-xs-12 md-form">
+                                                                                    <label for="buyAmount">Anzahl:</label>
+                                                                                    <input id="buyAmount" class="form-control" type="number" min="0" max="{{ min(buyAmount) }}" />
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                                                                    <div class="row">
+                                                                        <div class="col-xs-6">  
+                                                                            <button type="button" class="btn btn-inverse btn-lg btn-block" data-dismiss="modal" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Abbrechen</a>
+                                                                        </div>
+                                                                        <div class="col-xs-6">  
+                                                                            <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="button">Kaufen</button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
+                                                                </form>
                                                             </div>
                                                         </div>
                                                     </div>
