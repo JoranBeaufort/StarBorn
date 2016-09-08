@@ -1,559 +1,575 @@
 {% extends 'base.html.twig' %}
 {% block title %}Spielkarte{% endblock %} 
 {% block css %}
-{{ parent() }}
-<link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
-<link rel="stylesheet" href="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.css" />
+    {{ parent() }}
+    <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.css" />
 {% endblock %}
 {% block content %}
-        <!--Mask-->
+    <!--Mask-->
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-            <div id="map" style="height:700px; width:100%;"></div>
+                <div id="map" style="height:700px; width:100%;"></div>
             </div>
         </div>
     </div>
-    
-<!-- Large modal -->
-<div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    
+
+    <!-- Large modal -->
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-    
+
 
 
     <!--/.Mask-->
 {% endblock content %}
 {% block javascript %}
-{{ parent() }}
-<script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
-<!--<script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>-->
-<script src="{{ asset('js/L.Control.Locate.js') }}"></script>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
+    {{ parent() }}
+    <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
+    <script src="{{ asset('js/L.Control.Locate.js') }}"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="{{ asset('js/QuadTree.js') }}"></script>
+    <script src="{{ asset('js/L.GridLayer.MaskCanvas.js') }}"></script>
 
-var uLat, uLng;
+    <script>
 
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(uPosition, showError);
-        } else { 
-           alert("Geolocation is not supported by this browser.");
+        var uLat, uLng;
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(uPosition, showError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
         }
-    }
-    
-    function uPosition(position) {
-    
-        uLat = position.coords.latitude;
-        uLng = position.coords.longitude;
-        populateField();
-        
-    }
 
-    function showError(error) {
-        switch(error.code) {
-            case error.PERMISSION_DENIED:
-                x.innerHTML = "User denied the request for Geolocation."
-                break;
-            case error.POSITION_UNAVAILABLE:
-                x.innerHTML = "Location information is unavailable."
-                break;
-            case error.TIMEOUT:
-                x.innerHTML = "The request to get user location timed out."
-                break;
-            case error.UNKNOWN_ERROR:
-                x.innerHTML = "An unknown error occurred."
-                break;
+        function uPosition(position) {
+
+            uLat = position.coords.latitude;
+            uLng = position.coords.longitude;
+            populateField();
+
         }
-    }
-    
-    var map = L.map('map').setView([46.7,8], 8);
 
-    var Stamen_Toner = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        subdomains: 'abcd',
-        minZoom: 15,
-        maxZoom: 18,
-        ext: 'png'
-    }).addTo(map);
-        
-        
-   function generateModal(modal, coords, gauge){    
-   
-           var modalTemplate =  '   <div class="card text-xs-center">' +
-                             modal.pretitle+modal.title+modal.posttitle+
-                     '       <div class="card-block"> ' +
-                     '           <div class="col-xs-12" id="gauge-wrap"><div display:block;" id="gauge"></div></div>' +
-                     '           <div class="card-text">'+modal.contentText+'</div> '+
-                     '           <div class="row"> '+
-                     '           <div class="col-xs-6 col-lg-3"> '+
-                     '               <form method="post" action="{{ path('tile')}}"> '+
-                     '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
-                     '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
-                     '                   <input type="hidden" name="tlat" value="'+coords.tLat+'"> '+
-                     '                   <input type="hidden" name="tlng" value="'+coords.tLng+'"> '+
-                     '                   <input type="hidden" name="tblx" value="'+coords.tblx+'"> '+
-                     '                   <input type="hidden" name="tbly" value="'+coords.tbly+'"> '+
-                     '                   <input type="hidden" name="ttlx" value="'+coords.ttlx+'"> '+
-                     '                   <input type="hidden" name="ttly" value="'+coords.ttly+'"> '+
-                     '                   <input type="hidden" name="ttrx" value="'+coords.ttrx+'"> '+
-                     '                   <input type="hidden" name="ttry" value="'+coords.ttry+'"> '+
-                     '                   <input type="hidden" name="tbrx" value="'+coords.tbrx+'"> '+
-                     '                   <input type="hidden" name="tbry" value="'+coords.tbry+'"> '+
-                     '                   <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}"> '+                                        
-                     '                   <button style="width:95%; height:80px" class="btn '+(modal.info != true ? 'disabled rgba-grey-strong' :  'rgba-indigo-strong')+' waves-effect" '+(modal.info != true ? 'disabled="true"' :  void 0)+' type="submit"><i class="fa fa-3x fa-info-circle" aria-hidden="true"></i></button> '+
-                     '               </form> '+
-                     '           </div> '+ 
-                     '           <div class="col-xs-6 col-lg-3"> '+
-                     '               <form method="post" action="{{ path('capture')}}"> '+
-                     '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
-                     '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
-                     '                   <input type="hidden" name="tlat" value="'+coords.tLat+'"> '+
-                     '                   <input type="hidden" name="tlng" value="'+coords.tLng+'"> '+
-                     '                   <input type="hidden" name="tblx" value="'+coords.tblx+'"> '+
-                     '                   <input type="hidden" name="tbly" value="'+coords.tbly+'"> '+
-                     '                   <input type="hidden" name="ttlx" value="'+coords.ttlx+'"> '+
-                     '                   <input type="hidden" name="ttly" value="'+coords.ttly+'"> '+
-                     '                   <input type="hidden" name="ttrx" value="'+coords.ttrx+'"> '+
-                     '                   <input type="hidden" name="ttry" value="'+coords.ttry+'"> '+
-                     '                   <input type="hidden" name="tbrx" value="'+coords.tbrx+'"> '+
-                     '                   <input type="hidden" name="tbry" value="'+coords.tbry+'"> '+
-                     '                   <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}"> '+                                        
-                     '                   <button style="width:95%; height:80px" class="btn '+(modal.capture != true ? 'disabled rgba-grey-strong' :  'rgba-purple-strong')+' waves-effect" '+(modal.capture != true ? 'disabled="true"' :  void 0)+' type="submit"><i class="fa fa-3x fa-flag-o" aria-hidden="true"></i></button> '+
-                     '               </form> '+
-                     '           </div> '+
-                     '           <div class="col-xs-6 col-lg-3"> '+
-                     '               <form method="post" action="{{ path('build')}}"> '+
-                     '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
-                     '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
-                     '                   <input type="hidden" name="tlat" value="'+coords.tLat+'"> '+
-                     '                   <input type="hidden" name="tlng" value="'+coords.tLng+'"> '+
-                     '                   <input type="hidden" name="tblx" value="'+coords.tblx+'"> '+
-                     '                   <input type="hidden" name="tbly" value="'+coords.tbly+'"> '+
-                     '                   <input type="hidden" name="ttlx" value="'+coords.ttlx+'"> '+
-                     '                   <input type="hidden" name="ttly" value="'+coords.ttly+'"> '+
-                     '                   <input type="hidden" name="ttrx" value="'+coords.ttrx+'"> '+
-                     '                   <input type="hidden" name="ttry" value="'+coords.ttry+'"> '+
-                     '                   <input type="hidden" name="tbrx" value="'+coords.tbrx+'"> '+
-                     '                   <input type="hidden" name="tbry" value="'+coords.tbry+'"> '+
-                     '                   <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}"> '+                                        
-                     '                   <button style="width:95%; height:80px" class="btn '+(modal.build != true ? 'disabled rgba-grey-strong' : 'rgba-green-strong')+' waves-effect" '+(modal.build != true ? 'disabled="true"' :  void 0)+' type="submit"><i class="fa fa-3x fa-building-o" aria-hidden="true"></i></button> '+
-                     '               </form> '+
-                     '           </div> '+
-                     '           <div class="col-xs-6 col-lg-3"> '+
-                     '               <form method="post" action="{{ path('scan')}}"> '+
-                     '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
-                     '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
-                     '                   <input type="hidden" name="tlat" value="'+coords.tLat+'"> '+
-                     '                   <input type="hidden" name="tlng" value="'+coords.tLng+'"> '+
-                     '                   <input type="hidden" name="tblx" value="'+coords.tblx+'"> '+
-                     '                   <input type="hidden" name="tbly" value="'+coords.tbly+'"> '+
-                     '                   <input type="hidden" name="ttlx" value="'+coords.ttlx+'"> '+
-                     '                   <input type="hidden" name="ttly" value="'+coords.ttly+'"> '+
-                     '                   <input type="hidden" name="ttrx" value="'+coords.ttrx+'"> '+
-                     '                   <input type="hidden" name="ttry" value="'+coords.ttry+'"> '+
-                     '                   <input type="hidden" name="tbrx" value="'+coords.tbrx+'"> '+
-                     '                   <input type="hidden" name="tbry" value="'+coords.tbry+'"> '+
-                     '                   <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}"> '+                                        
-                     '                   <button style="width:95%; height:80px" class="btn '+(modal.scan != true ? 'disabled rgba-grey-strong' : 'rgba-red-strong')+' waves-effect" '+(modal.scan != true ? 'disabled="true"': void 0)+' type="submit"><i class="fa fa-3x fa-crosshairs" aria-hidden="true"></i></button> '+
-                     '               </form> '+
-                     '           </div> '+
-                     '          </div> '+
-                     '           <br><div class="row"><div class="col-xs-12"><button style="border-radius:33px; width:66px;height:66px" type="button" class="btn btn-default-outline waves-effect" data-dismiss="modal"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></button></div></div>' +
-                     '       </div> '+
-                     '   </div>';
-        
-        $("#modal").modal("show"); 
-        $(".modal-content").html(modalTemplate);
-
-        var svg = d3.select("#gauge").selectAll("*").remove();
-        // src: http://jsfiddle.net/akashtyagi40/u28n234k/
-        var label = {};
-        if ($(window).width() < 768) {
-            var width = 210;
-            var height = 150;
-            label.offsetblue = 5;
-            label.offsetred = 25;
-            label.textsize = 14;
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    x.innerHTML = "User denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    x.innerHTML = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    x.innerHTML = "The request to get user location timed out."
+                    break;
+                case error.UNKNOWN_ERROR:
+                    x.innerHTML = "An unknown error occurred."
+                    break;
+            }
         }
-        else if ($(window).width() >= 768 &&  $(window).width() <= 992) {
-            var width = 290;
-            var height = 200;
-            label.offsetblue = 10;
-            label.offsetred = 30;
-            label.textsize = 18;
-        }
-        else if ($(window).width() > 992 &&  $(window).width() <= 1200) {
-            var width = 390;
-            var height = 250;
-            label.offsetblue = 10;
-            label.offsetred = 70;
-            label.textsize = 22;
-        }
-        else  {
-            var width = 390;
-            var height = 250;
-            label.offsetblue = 10;
-            label.offsetred = 70;
-            label.textsize = 22;
-        }
-        
-        var svg = d3.select("#gauge").append("svg")
-            .attr("width", width)
-            .attr("height", height);
 
-        //Path inner and outer radius is adjusted
-        var arc1 = d3.arc()
-            .innerRadius(width / 4)
-            .outerRadius(width/3)
-            .startAngle(100 * (Math.PI/180))
-            .endAngle(119 * (Math.PI/180));
-            
-       var arc11 = d3.arc()
-            .innerRadius(width / 4)
-            .outerRadius((width/3)-10)
-            .startAngle(120 * (Math.PI/180))
-            .endAngle(159 * (Math.PI/180));       
-            
-       var arc1L1 = d3.arc()
-            .innerRadius((width / 3)+10)
-            .outerRadius((width/2))
-            .startAngle(100 * (Math.PI/180))
-            .endAngle(159 * (Math.PI/180));
-            
-       var arc1L2 = d3.arc()
-            .innerRadius((width / 5))
-            .outerRadius((width/5)+4)
-            .startAngle(100 * (Math.PI/180))
-            .endAngle(159 * (Math.PI/180));
-            
-        var arc2 = d3.arc()
-            .innerRadius(width / 4)
-            .outerRadius((width/3)-20)
-            .startAngle(160 * (Math.PI/180))
-            .endAngle(200 * (Math.PI/180));
-            
-        var arc3 = d3.arc()
-            .innerRadius(width / 4)
-            .outerRadius((width/3)-10)
-            .startAngle(201 * (Math.PI/180))
-            .endAngle(240 * (Math.PI/180));
-            
-        var arc31 = d3.arc()
-            .innerRadius(width / 4)
-            .outerRadius(width/3)
-            .startAngle(241 * (Math.PI/180))
-            .endAngle(260 * (Math.PI/180));
-            
-       var arc3L1 = d3.arc()
-            .innerRadius((width / 3)+10)
-            .outerRadius((width/2))
-            .startAngle(201 * (Math.PI/180))
-            .endAngle(260 * (Math.PI/180));
-            
-       var arc3L2 = d3.arc()
-            .innerRadius((width / 5))
-            .outerRadius((width/5)+4)
-            .startAngle(201 * (Math.PI/180))
-            .endAngle(260 * (Math.PI/180));
-            
-        var plot = svg
-            .append("g")
-            .attr("class", "arc");
+        var map = L.map('map').setView([46.7,8], 8);
 
-        var arc = plot
-            .append("path")
-            .attr("d", arc1)
-            .attr("class", "gauge")
-            .style("fill", "#0099CC")
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
-            
-        var arc = plot
-            .append("path")
-            .attr("d", arc11)
-            .attr("class", "gauge")
-            .style("fill", "#33b5e5")
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
-            
-        var arc = plot
-            .append("path")
-            .attr("d", arc1L1)
-            .attr("class", "gauge")
-            .style("fill", "none")
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)")
-            .attr("class","arc")   
-            .attr("id","blue-dwarf-arc");    
-            
-            
-        var arc = plot
-            .append("path")
-            .attr("d", arc2)
-            .attr("class", "gauge")
-            .style("fill", "#aa66cc")
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
-            
-        var arc = plot
-            .append("path")
-            .attr("d", arc3)
-            .attr("class", "gauge")
-            .style("fill", "#ffbb33")
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+        var Stamen_Toner = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            subdomains: 'abcd',
+            minZoom: 15,
+            maxZoom: 18,
+            ext: 'png'
+        }).addTo(map);
 
-            
-        var arc = plot
-            .append("path")
-            .attr("d", arc31)
-            .attr("class", "gauge")
-            .style("fill", "#FF8800")
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)"); 
-            
-            
-        var arc = plot
-            .append("path")
-            .attr("d", arc3L1)
-            .attr("class", "gauge")
-            .style("fill", "none")
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)")
-            .attr("class","arc")   
-            .attr("id","red-giant-arc"); 
+
+        function generateModal(modal, coords, gauge){
+
+            var modalTemplate =  '   <div class="card text-xs-center">' +
+                    modal.pretitle+modal.title+modal.posttitle+
+                    '       <div class="card-block"> ' +
+                    '           <div class="col-xs-12" id="gauge-wrap"><div display:block;" id="gauge"></div></div>' +
+                    '           <div class="card-text">'+modal.contentText+'</div> '+
+                    '           <div class="row"> '+
+                    '           <div class="col-xs-6 col-lg-3"> '+
+                    '               <form method="post" action="{{ path('tile')}}"> '+
+                    '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
+                    '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
+                    '                   <input type="hidden" name="tlat" value="'+coords.tLat+'"> '+
+                    '                   <input type="hidden" name="tlng" value="'+coords.tLng+'"> '+
+                    '                   <input type="hidden" name="tblx" value="'+coords.tblx+'"> '+
+                    '                   <input type="hidden" name="tbly" value="'+coords.tbly+'"> '+
+                    '                   <input type="hidden" name="ttlx" value="'+coords.ttlx+'"> '+
+                    '                   <input type="hidden" name="ttly" value="'+coords.ttly+'"> '+
+                    '                   <input type="hidden" name="ttrx" value="'+coords.ttrx+'"> '+
+                    '                   <input type="hidden" name="ttry" value="'+coords.ttry+'"> '+
+                    '                   <input type="hidden" name="tbrx" value="'+coords.tbrx+'"> '+
+                    '                   <input type="hidden" name="tbry" value="'+coords.tbry+'"> '+
+                    '                   <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}"> '+
+                    '                   <button style="width:95%; height:80px" class="btn '+(modal.info != true ? 'disabled rgba-grey-strong' :  'rgba-indigo-strong')+' waves-effect" '+(modal.info != true ? 'disabled="true"' :  void 0)+' type="submit"><i class="fa fa-3x fa-info-circle" aria-hidden="true"></i></button> '+
+                    '               </form> '+
+                    '           </div> '+
+                    '           <div class="col-xs-6 col-lg-3"> '+
+                    '               <form method="post" action="{{ path('capture')}}"> '+
+                    '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
+                    '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
+                    '                   <input type="hidden" name="tlat" value="'+coords.tLat+'"> '+
+                    '                   <input type="hidden" name="tlng" value="'+coords.tLng+'"> '+
+                    '                   <input type="hidden" name="tblx" value="'+coords.tblx+'"> '+
+                    '                   <input type="hidden" name="tbly" value="'+coords.tbly+'"> '+
+                    '                   <input type="hidden" name="ttlx" value="'+coords.ttlx+'"> '+
+                    '                   <input type="hidden" name="ttly" value="'+coords.ttly+'"> '+
+                    '                   <input type="hidden" name="ttrx" value="'+coords.ttrx+'"> '+
+                    '                   <input type="hidden" name="ttry" value="'+coords.ttry+'"> '+
+                    '                   <input type="hidden" name="tbrx" value="'+coords.tbrx+'"> '+
+                    '                   <input type="hidden" name="tbry" value="'+coords.tbry+'"> '+
+                    '                   <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}"> '+
+                    '                   <button style="width:95%; height:80px" class="btn '+(modal.capture != true ? 'disabled rgba-grey-strong' :  'rgba-purple-strong')+' waves-effect" '+(modal.capture != true ? 'disabled="true"' :  void 0)+' type="submit"><i class="fa fa-3x fa-flag-o" aria-hidden="true"></i></button> '+
+                    '               </form> '+
+                    '           </div> '+
+                    '           <div class="col-xs-6 col-lg-3"> '+
+                    '               <form method="post" action="{{ path('build')}}"> '+
+                    '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
+                    '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
+                    '                   <input type="hidden" name="tlat" value="'+coords.tLat+'"> '+
+                    '                   <input type="hidden" name="tlng" value="'+coords.tLng+'"> '+
+                    '                   <input type="hidden" name="tblx" value="'+coords.tblx+'"> '+
+                    '                   <input type="hidden" name="tbly" value="'+coords.tbly+'"> '+
+                    '                   <input type="hidden" name="ttlx" value="'+coords.ttlx+'"> '+
+                    '                   <input type="hidden" name="ttly" value="'+coords.ttly+'"> '+
+                    '                   <input type="hidden" name="ttrx" value="'+coords.ttrx+'"> '+
+                    '                   <input type="hidden" name="ttry" value="'+coords.ttry+'"> '+
+                    '                   <input type="hidden" name="tbrx" value="'+coords.tbrx+'"> '+
+                    '                   <input type="hidden" name="tbry" value="'+coords.tbry+'"> '+
+                    '                   <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}"> '+
+                    '                   <button style="width:95%; height:80px" class="btn '+(modal.build != true ? 'disabled rgba-grey-strong' : 'rgba-green-strong')+' waves-effect" '+(modal.build != true ? 'disabled="true"' :  void 0)+' type="submit"><i class="fa fa-3x fa-building-o" aria-hidden="true"></i></button> '+
+                    '               </form> '+
+                    '           </div> '+
+                    '           <div class="col-xs-6 col-lg-3"> '+
+                    '               <form method="post" action="{{ path('scan')}}"> '+
+                    '                   <input type="hidden" name="ulat" value="'+coords.uLat+'"> '+
+                    '                   <input type="hidden" name="ulng" value="'+coords.uLng+'"> '+
+                    '                   <input type="hidden" name="tlat" value="'+coords.tLat+'"> '+
+                    '                   <input type="hidden" name="tlng" value="'+coords.tLng+'"> '+
+                    '                   <input type="hidden" name="tblx" value="'+coords.tblx+'"> '+
+                    '                   <input type="hidden" name="tbly" value="'+coords.tbly+'"> '+
+                    '                   <input type="hidden" name="ttlx" value="'+coords.ttlx+'"> '+
+                    '                   <input type="hidden" name="ttly" value="'+coords.ttly+'"> '+
+                    '                   <input type="hidden" name="ttrx" value="'+coords.ttrx+'"> '+
+                    '                   <input type="hidden" name="ttry" value="'+coords.ttry+'"> '+
+                    '                   <input type="hidden" name="tbrx" value="'+coords.tbrx+'"> '+
+                    '                   <input type="hidden" name="tbry" value="'+coords.tbry+'"> '+
+                    '                   <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}"> '+
+                    '                   <button style="width:95%; height:80px" class="btn '+(modal.scan != true ? 'disabled rgba-grey-strong' : 'rgba-red-strong')+' waves-effect" '+(modal.scan != true ? 'disabled="true"': void 0)+' type="submit"><i class="fa fa-3x fa-crosshairs" aria-hidden="true"></i></button> '+
+                    '               </form> '+
+                    '           </div> '+
+                    '          </div> '+
+                    '           <br><div class="row"><div class="col-xs-12"><button style="border-radius:33px; width:66px;height:66px" type="button" class="btn btn-default-outline waves-effect" data-dismiss="modal"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></button></div></div>' +
+                    '       </div> '+
+                    '   </div>';
+
+            $("#modal").modal("show");
+            $(".modal-content").html(modalTemplate);
+
+            var svg = d3.select("#gauge").selectAll("*").remove();
+            // src: http://jsfiddle.net/akashtyagi40/u28n234k/
+            var label = {};
+            if ($(window).width() < 768) {
+                var width = 210;
+                var height = 150;
+                label.offsetblue = 5;
+                label.offsetred = 25;
+                label.textsize = 14;
+            }
+            else if ($(window).width() >= 768 &&  $(window).width() <= 992) {
+                var width = 290;
+                var height = 200;
+                label.offsetblue = 10;
+                label.offsetred = 30;
+                label.textsize = 18;
+            }
+            else if ($(window).width() > 992 &&  $(window).width() <= 1200) {
+                var width = 390;
+                var height = 250;
+                label.offsetblue = 10;
+                label.offsetred = 70;
+                label.textsize = 22;
+            }
+            else  {
+                var width = 390;
+                var height = 250;
+                label.offsetblue = 10;
+                label.offsetred = 70;
+                label.textsize = 22;
+            }
+
+            var svg = d3.select("#gauge").append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+            //Path inner and outer radius is adjusted
+            var arc1 = d3.arc()
+                    .innerRadius(width / 4)
+                    .outerRadius(width/3)
+                    .startAngle(100 * (Math.PI/180))
+                    .endAngle(119 * (Math.PI/180));
+
+            var arc11 = d3.arc()
+                    .innerRadius(width / 4)
+                    .outerRadius((width/3)-10)
+                    .startAngle(120 * (Math.PI/180))
+                    .endAngle(159 * (Math.PI/180));
+
+            var arc1L1 = d3.arc()
+                    .innerRadius((width / 3)+10)
+                    .outerRadius((width/2))
+                    .startAngle(100 * (Math.PI/180))
+                    .endAngle(159 * (Math.PI/180));
+
+            var arc1L2 = d3.arc()
+                    .innerRadius((width / 5))
+                    .outerRadius((width/5)+4)
+                    .startAngle(100 * (Math.PI/180))
+                    .endAngle(159 * (Math.PI/180));
+
+            var arc2 = d3.arc()
+                    .innerRadius(width / 4)
+                    .outerRadius((width/3)-20)
+                    .startAngle(160 * (Math.PI/180))
+                    .endAngle(200 * (Math.PI/180));
+
+            var arc3 = d3.arc()
+                    .innerRadius(width / 4)
+                    .outerRadius((width/3)-10)
+                    .startAngle(201 * (Math.PI/180))
+                    .endAngle(240 * (Math.PI/180));
+
+            var arc31 = d3.arc()
+                    .innerRadius(width / 4)
+                    .outerRadius(width/3)
+                    .startAngle(241 * (Math.PI/180))
+                    .endAngle(260 * (Math.PI/180));
+
+            var arc3L1 = d3.arc()
+                    .innerRadius((width / 3)+10)
+                    .outerRadius((width/2))
+                    .startAngle(201 * (Math.PI/180))
+                    .endAngle(260 * (Math.PI/180));
+
+            var arc3L2 = d3.arc()
+                    .innerRadius((width / 5))
+                    .outerRadius((width/5)+4)
+                    .startAngle(201 * (Math.PI/180))
+                    .endAngle(260 * (Math.PI/180));
+
+            var plot = svg
+                    .append("g")
+                    .attr("class", "arc");
+
+            var arc = plot
+                    .append("path")
+                    .attr("d", arc1)
+                    .attr("class", "gauge")
+                    .style("fill", "#0099CC")
+                    .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+
+            var arc = plot
+                    .append("path")
+                    .attr("d", arc11)
+                    .attr("class", "gauge")
+                    .style("fill", "#33b5e5")
+                    .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+
+            var arc = plot
+                    .append("path")
+                    .attr("d", arc1L1)
+                    .attr("class", "gauge")
+                    .style("fill", "none")
+                    .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)")
+                    .attr("class","arc")
+                    .attr("id","blue-dwarf-arc");
+
+
+            var arc = plot
+                    .append("path")
+                    .attr("d", arc2)
+                    .attr("class", "gauge")
+                    .style("fill", "#aa66cc")
+                    .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+
+            var arc = plot
+                    .append("path")
+                    .attr("d", arc3)
+                    .attr("class", "gauge")
+                    .style("fill", "#ffbb33")
+                    .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+
+
+            var arc = plot
+                    .append("path")
+                    .attr("d", arc31)
+                    .attr("class", "gauge")
+                    .style("fill", "#FF8800")
+                    .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
+
+
+            var arc = plot
+                    .append("path")
+                    .attr("d", arc3L1)
+                    .attr("class", "gauge")
+                    .style("fill", "none")
+                    .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)")
+                    .attr("class","arc")
+                    .attr("id","red-giant-arc");
 
             if(gauge.uTeam == 'red'){
                 var l1col = 'red';
                 var l3col = 'green';
-                
+
             }else if(gauge.uTeam == 'blue'){
                 var l1col = 'green';
                 var l3col = 'red';
-            }         
+            }
 
 
-        var arc = plot
-            .append("path")
-            .attr("d", arc1L2)
-            .attr("class", "gauge")
-            .style("fill", l1col)
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");    
-            
-        var arc = plot
-            .append("path")
-            .attr("d", arc3L2)
-            .attr("class", "gauge")
-            .style("fill", l3col)
-            .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");      
-            
-            
-            plot   
-            .append("text")
-            .attr("dx", label.offsetred) //Move the text down
-            .attr("dy", 20) //Move the text down
-            .style('fill', 'black')
-            .style("font-size",label.textsize+"px")
-            .append("textPath")
-            .attr("xlink:href","#red-giant-arc")
-            .text("Red Giants");            
-            
-            plot               
-            .append("text")
-            .attr("dx", label.offsetblue) //Move the text down
-            .attr("dy", 20) //Move the text down
-            .style('fill', 'black')
-            .style("font-size",label.textsize+"px")
-            .append("textPath")
-            .attr("xlink:href","#blue-dwarf-arc")
-            .text("Blue Dwarfs");	  
+            var arc = plot
+                    .append("path")
+                    .attr("d", arc1L2)
+                    .attr("class", "gauge")
+                    .style("fill", l1col)
+                    .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
 
-            
-           
+            var arc = plot
+                    .append("path")
+                    .attr("d", arc3L2)
+                    .attr("class", "gauge")
+                    .style("fill", l3col)
+                    .attr("transform", "translate("+width/2+","+(height-20)+") rotate(180)");
 
-        var needle = svg
-            .append("g")
-            .attr("class", "needle")
-            .attr("transform", "translate( 0 , 0 )")
-            .append("path")
-            .attr("class", "tri")
-            .attr("d", "M" + (width/2 + 2) + " " + (height-20) + " L" + width/2 + " "+(height-(height*0.75))+" L" + (width/2 - 3) + " " + (height-20) + " C" + (width/2 - 3) + " " + (height-10) + " " + (width/2 + 3) + " " + (height-10) + " " + (width/2 + 3) + " " + (height-20) + " Z");
-            
-        needle.attr("transform", "rotate("+gauge.nPos+", " + width/2 + "," + (height-20) + ")");
-   
 
-   }
+            plot
+                    .append("text")
+                    .attr("dx", label.offsetred) //Move the text down
+                    .attr("dy", 20) //Move the text down
+                    .style('fill', 'black')
+                    .style("font-size",label.textsize+"px")
+                    .append("textPath")
+                    .attr("xlink:href","#red-giant-arc")
+                    .text("Red Giants");
 
-    
-    getLocation();
+            plot
+                    .append("text")
+                    .attr("dx", label.offsetblue) //Move the text down
+                    .attr("dy", 20) //Move the text down
+                    .style('fill', 'black')
+                    .style("font-size",label.textsize+"px")
+                    .append("textPath")
+                    .attr("xlink:href","#blue-dwarf-arc")
+                    .text("Blue Dwarfs");
 
-    function populateField(){
-        L.circle([uLat,uLng],700,{fillOpacity:0, opacity:0, color:"#00ff00"}).addTo(map);
-        var url = "{{ path('radar', {'lat': 'lat', 'lng':'lng', 'a':user.getUid()|urlencrypt }) }}";
-        url = url.replace("lat",uLat);
-        url = url.replace("lng",uLng);
-        
-       
-       var svg = map.getPanes().overlayPane.firstChild,
-        svgFilter = document.createElementNS('http://www.w3.org/2000/svg', 'filter'),
-        svgBlur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
-        svgFilter.setAttribute('id', 'blur');
-        svgFilter.setAttribute('x', '0');
-        svgFilter.setAttribute('y', '0');
-        svgBlur.setAttribute('stdDeviation', 3);
 
-        svgFilter.appendChild(svgBlur);
-        svg.appendChild(svgFilter);
-        
-        $.getJSON(url,  function( json ) {
-            L.geoJson(json, {
-                onEachFeature: function (feature, layer) {
-                    var tile;
-                    var modal = {};
-                    modal.info = true;
-                    modal.capture = false;
-                    modal.build = false;
-                    modal.scan = false;
-                    var coords = {};
-                    coords.tLat = feature.geometry.coordinates[1];
-                    coords.tLng = feature.geometry.coordinates[0];
-                    coords.uLat = uLat;
-                    coords.uLng = uLng;
-                    coords.tblx = feature.properties.blx;
-                    coords.tbly = feature.properties.bly;
-                    coords.ttlx = feature.properties.tlx;
-                    coords.ttly = feature.properties.tly;
-                    coords.ttrx = feature.properties.trx;
-                    coords.ttry = feature.properties.try;
-                    coords.tbrx = feature.properties.brx;
-                    coords.tbry = feature.properties.bry;
-                    var gauge = {};
-                    gauge.nPos = '0';
-                    {% if user.getUserTeam.getTeam.getTid == redGiantsId %}
+
+
+            var needle = svg
+                    .append("g")
+                    .attr("class", "needle")
+                    .attr("transform", "translate( 0 , 0 )")
+                    .append("path")
+                    .attr("class", "tri")
+                    .attr("d", "M" + (width/2 + 2) + " " + (height-20) + " L" + width/2 + " "+(height-(height*0.75))+" L" + (width/2 - 3) + " " + (height-20) + " C" + (width/2 - 3) + " " + (height-10) + " " + (width/2 + 3) + " " + (height-10) + " " + (width/2 + 3) + " " + (height-20) + " Z");
+
+            needle.attr("transform", "rotate("+gauge.nPos+", " + width/2 + "," + (height-20) + ")");
+
+
+        }
+
+
+        getLocation();
+
+        function populateField(){
+
+            L.circle([uLat,uLng],700,{fillOpacity:0, opacity:0, color:"#00ff00"}).addTo(map);
+            var url = "{{ path('radar', {'lat': 'lat', 'lng':'lng', 'a':user.getUid()|urlencrypt }) }}";
+            url = url.replace("lat",uLat);
+            url = url.replace("lng",uLng);
+
+
+            var svg = map.getPanes().overlayPane.firstChild,
+                    svgFilter = document.createElementNS('http://www.w3.org/2000/svg', 'filter'),
+                    svgBlur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+            svgFilter.setAttribute('id', 'blur');
+            svgFilter.setAttribute('x', '0');
+            svgFilter.setAttribute('y', '0');
+            svgBlur.setAttribute('stdDeviation', 3);
+
+            svgFilter.appendChild(svgBlur);
+            svg.appendChild(svgFilter);
+
+            $.getJSON(url,  function( json ) {
+                L.geoJson(json, {
+                    onEachFeature: function (feature, layer) {
+                        var tile;
+                        var modal = {};
+                        modal.info = true;
+                        modal.capture = false;
+                        modal.build = false;
+                        modal.scan = false;
+                        var coords = {};
+                        coords.tLat = feature.geometry.coordinates[1];
+                        coords.tLng = feature.geometry.coordinates[0];
+                        coords.uLat = uLat;
+                        coords.uLng = uLng;
+                        coords.tblx = feature.properties.blx;
+                        coords.tbly = feature.properties.bly;
+                        coords.ttlx = feature.properties.tlx;
+                        coords.ttly = feature.properties.tly;
+                        coords.ttrx = feature.properties.trx;
+                        coords.ttry = feature.properties.try;
+                        coords.tbrx = feature.properties.brx;
+                        coords.tbry = feature.properties.bry;
+                        var gauge = {};
+                        gauge.nPos = '0';
+                        {% if user.getUserTeam.getTeam.getTid == redGiantsId %}
                         gauge.uTeam = 'red';
-                    {% elseif user.getUserTeam.getTeam.getTid == blueDwarfsId %}
+                        {% elseif user.getUserTeam.getTeam.getTid == blueDwarfsId %}
                         gauge.uTeam = 'blue';
-                    {% else %}
+                        {% else %}
                         gauge.uTeam = '';
-                    {% endif %}
-                    
-                    if(feature.properties.tid == {{ redGiantsId }}){
-                        polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#FF8800 ",fillColor: "#FF8800 ", weight: 1}).addTo(map);
-                        
-                        modal.pretitle = '<h4 class="card-header warning-color white-text"><b>';
-                        modal.title = 'Gebiet der "Red Giants"';
-                        modal.posttitle = '</b></h4>';
-                        {% if user.getUserTeam.getTeam.getTid == redGiantsId %}
-                            modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>'; 
-                        {% elseif user.getUserTeam.getTeam.getTid == blueDwarfsId %}
-                            modal.contentText = '<div class="alert alert-danger">Dein Radar registriert ein <b>schwaches</b> feindliches Signal!</div>'; 
                         {% endif %}
 
-                       gauge.nPos = '30';
-                        
-                       
-                        polygon._path.setAttribute('filter', 'url(#blur)');                        
-                    }else if(feature.properties.tid == {{ blueDwarfsId }}){
-                        polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#0099CC ",fillColor: "#0099CC ", weight: 1}).addTo(map);
-                        
-                        modal.pretitle = '<h4 class="card-header info-color white-text"><b>';
-                        modal.title = 'Gebiet der "Blue Dwarfs"';
-                        modal.posttitle = '</b></h4>';
-                        {% if user.getUserTeam.getTeam.getTid == redGiantsId %}
-                            modal.contentText = '<div class="alert alert-danger">Dein Radar registriert ein <b>schwaches</b> feindliches Signal!</div>'; 
-                        {% elseif user.getUserTeam.getTeam.getTid == blueDwarfsId %}
-                            modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>'; 
-                        {% endif %}
-                        gauge.nPos = '-30';
-                        
-                        polygon._path.setAttribute('filter', 'url(#blur)');                        
-                    }else{
-                        polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{properties:{tid:feature.properties.tid},fillOpacity: 0.5, color: "#9e9e9e   ", fillColor: "#9e9e9e ", weight: 1}).addTo(map);
-                        
-                        modal.pretitle = '<h4 class="card-header secondary-color white-text"><b>';
-                        modal.title = 'Neutrales Gebiet';
-                        modal.posttitle = '</b></h4>';
-                        modal.contentText = '<div class="alert">Dein Radar registriert kein Signal aus diesem Gebiet...</div>';
-                        
-                        polygon._path.setAttribute('filter', 'url(#blur)');
-                    }                    
-                    
-                    popupOptions = {maxWidth: 200};
-                    if(uLat > coords.tbly  && uLat < coords.ttry && uLng > coords.tblx  && uLng < coords.ttrx){    
-                       
-                       if(feature.properties.tid != 0 && feature.properties.tid == {{ user.getUserTeam.getTeam.getTid }}){
-                            modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>starkes</b> freundliches Signal!</div>'; 
-                            modal.build = true;
-                            
-                            if(feature.properties.tid == {{ redGiantsId }}){
-                                gauge.nPos = 70;
-                            }else{
-                                gauge.nPos = -70;
-                            }
-                            
-                            polygon.on('click', function() { 
-                            
-                                generateModal(modal,coords, gauge);
-                            });
+                        if(feature.properties.tid == {{ redGiantsId }}){
+                            polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#FF8800 ",fillColor: "#FF8800 ", weight: 1}).addTo(map);
 
-                        }else if(feature.properties.tid != 0 && feature.properties.tid != {{ user.getUserTeam.getTeam.getTid }}){
-                            modal.contentText = '<div class="alert alert-danger">Dein Radar registriert ein <b>starkes</b> feindliches Signal!</div>'; 
-                            modal.scan = true; 
-                            
-                           if(feature.properties.tid == {{ redGiantsId }}){
-                                gauge.nPos = 70;
-                            }else{
-                                gauge.nPos = -70;
-                            }
+                            modal.pretitle = '<h4 class="card-header warning-color white-text"><b>';
+                            modal.title = 'Gebiet der "Red Giants"';
+                            modal.posttitle = '</b></h4>';
+                            {% if user.getUserTeam.getTeam.getTid == redGiantsId %}
+                            modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>';
+                            {% elseif user.getUserTeam.getTeam.getTid == blueDwarfsId %}
+                            modal.contentText = '<div class="alert alert-danger">Dein Radar registriert ein <b>schwaches</b> feindliches Signal!</div>';
+                            {% endif %}
 
-                            
-                            polygon.on('click', function() {  
-                                generateModal(modal,coords, gauge);
-                            });
-                        }else if(feature.properties.tid == 0||feature.properties.tid == '0'){
-                        
-                            modal.contentText = '<div class="alert alert-info">Dein Radar registriert kein Signal... Nimm dieses Gebiet ein. Schnell!</div>'; 
-                            modal.capture = true;                 
-                            polygon.on('click', function() {  
+                            gauge.nPos = '30';
+
+
+                            polygon._path.setAttribute('filter', 'url(#blur)');
+                        }else if(feature.properties.tid == {{ blueDwarfsId }}){
+                            polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#0099CC ",fillColor: "#0099CC ", weight: 1}).addTo(map);
+
+                            modal.pretitle = '<h4 class="card-header info-color white-text"><b>';
+                            modal.title = 'Gebiet der "Blue Dwarfs"';
+                            modal.posttitle = '</b></h4>';
+                            {% if user.getUserTeam.getTeam.getTid == redGiantsId %}
+                            modal.contentText = '<div class="alert alert-danger">Dein Radar registriert ein <b>schwaches</b> feindliches Signal!</div>';
+                            {% elseif user.getUserTeam.getTeam.getTid == blueDwarfsId %}
+                            modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>schwaches</b> freundliches Signal!</div>';
+                            {% endif %}
+                            gauge.nPos = '-30';
+
+                            polygon._path.setAttribute('filter', 'url(#blur)');
+                        }else{
+                            polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{properties:{tid:feature.properties.tid},fillOpacity: 0.5, color: "#9e9e9e   ", fillColor: "#9e9e9e ", weight: 1}).addTo(map);
+
+                            modal.pretitle = '<h4 class="card-header secondary-color white-text"><b>';
+                            modal.title = 'Neutrales Gebiet';
+                            modal.posttitle = '</b></h4>';
+                            modal.contentText = '<div class="alert">Dein Radar registriert kein Signal aus diesem Gebiet...</div>';
+
+                            polygon._path.setAttribute('filter', 'url(#blur)');
+                        }
+
+                        popupOptions = {maxWidth: 200};
+                        if(uLat > coords.tbly  && uLat < coords.ttry && uLng > coords.tblx  && uLng < coords.ttrx){
+
+                            if(feature.properties.tid != 0 && feature.properties.tid == {{ user.getUserTeam.getTeam.getTid }}){
+                                modal.contentText = '<div class="alert alert-success">Dein Radar registriert ein <b>starkes</b> freundliches Signal!</div>';
+                                modal.build = true;
+
+                                if(feature.properties.tid == {{ redGiantsId }}){
+                                    gauge.nPos = 70;
+                                }else{
+                                    gauge.nPos = -70;
+                                }
+
+                                polygon.on('click', function() {
+
+                                    generateModal(modal,coords, gauge);
+                                });
+
+                            }else if(feature.properties.tid != 0 && feature.properties.tid != {{ user.getUserTeam.getTeam.getTid }}){
+                                modal.contentText = '<div class="alert alert-danger">Dein Radar registriert ein <b>starkes</b> feindliches Signal!</div>';
+                                modal.scan = true;
+
+                                if(feature.properties.tid == {{ redGiantsId }}){
+                                    gauge.nPos = 70;
+                                }else{
+                                    gauge.nPos = -70;
+                                }
+
+
+                                polygon.on('click', function() {
+                                    generateModal(modal,coords, gauge);
+                                });
+                            }else if(feature.properties.tid == 0||feature.properties.tid == '0'){
+
+                                modal.contentText = '<div class="alert alert-info">Dein Radar registriert kein Signal... Nimm dieses Gebiet ein. Schnell!</div>';
+                                modal.capture = true;
+                                polygon.on('click', function() {
+                                    generateModal(modal,coords, gauge);
+                                });
+                            }
+                        }else{
+                            polygon.on('click', function() {
                                 generateModal(modal,coords, gauge);
                             });
                         }
-                    }else{
-                            polygon.on('click', function() {  
-                                generateModal(modal,coords, gauge);
-                            });
+
+                        // L.circleMarker([feature.geometry.coordinates[1],feature.geometry.coordinates[0]],20,{color:"#545454"}).addTo(map);
+
+
+
                     }
-                    
-                    // L.circleMarker([feature.geometry.coordinates[1],feature.geometry.coordinates[0]],20,{color:"#545454"}).addTo(map);
+
+                });
 
 
+            });
 
-                }                
-                
-            });  
-            
-            
+            var maskCircle = new L.GridLayer.MaskCanvas({
+                radius: 700,  // radius in pixels or in meters (see useAbsoluteRadius)
+                useAbsoluteRadius: true,  // true: r in meters, false: r in pixels
+                color: '#000',  // the color of the layer
+                opacity: 0.5,  // opacity of the not covered area
+                noMask: false,  // true results in normal (filled) circled, instead masked circles
+                lineColor: '#A00'   // color of the circle outline if noMask is true
+
+            });
+
+            maskCircle.setData([[uLat,uLng]]);
+            maskCircle.addTo(map);
+
+        }
+        var LeafIcon = L.Icon.extend({
+            options: {
+                iconSize:     [54, 54],
+                iconAnchor:   [27, 48],
+            }
         });
 
-    }
-   	var LeafIcon = L.Icon.extend({
-		options: {
-			iconSize:     [54, 54],
-			iconAnchor:   [27, 48],
-		}
-	});
-        
-    {% if user.getUserTeam.getTeam.getTid == 1 %}
+        {% if user.getUserTeam.getTeam.getTid == 1 %}
         var greenIcon = new LeafIcon({iconUrl: '{{ asset("img/Street View Filled-50-red1.png")}}'});
-    {% elseif user.getUserTeam.getTeam.getTid == 2 %}
+        {% elseif user.getUserTeam.getTeam.getTid == 2 %}
         var greenIcon = new LeafIcon({iconUrl: '{{ asset("img/Street View Filled-50-blue2.png")}}'});
-    {% else %}
+        {% else %}
         var greenIcon = new LeafIcon({iconUrl: '{{ asset("img/Street View Filled-50.png")}}'});
-    {% endif %}
-    console.log({{user.getUserTeam.getTeam.getTid}})
-    var lc = L.control.locate({setView:'always',markerStyle:{icon: greenIcon},circleStyle:{fillColor:'#ff0000'}}).addTo(map);
-    
-    lc.start();
-    
-    
-</script>
+        {% endif %}
+        console.log({{user.getUserTeam.getTeam.getTid}})
+        var lc = L.control.locate({setView:'always',markerStyle:{icon: greenIcon},circleStyle:{fillColor:'#ff0000'}}).addTo(map);
+
+        lc.start();
+
+
+    </script>
 {% endblock %}
 

@@ -62,29 +62,27 @@
                             </div>
                         </div>
 
-                        {% if message != null %}
-                            {% if message.type == 'constructionComplete' %}
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="card">
-                                            <div class="card-header  rgba-green-strong white-text">
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:80px; height:80px" src="{{ asset(message.img)}}"/>
-                                                    </div>
-                                                    <div class="col-md-10 text-xs-left">
-                                                        <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
-                                                            <strong>Bau erfolgreich!</strong><br>
-                                                            <p>{{ message.text }}</p>
-                                                        </div>
+                        {% if app.session.flashbag.get('success') == true %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="card">
+                                        <div class="card-header  rgba-green-strong white-text">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:110px; height:110px" src="{{ asset(app.session.flashbag.get('success-img')[0]) }}"/>
+                                                </div>
+                                                <div class="col-md-10 text-xs-left">
+                                                    <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
+                                                        <strong>Bau erfolgreich!</strong><br>
+                                                        <p>{{ app.session.flashbag.get('success-message')[0] }}</p>
                                                     </div>
                                                 </div>
-
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
-                            {% endif %}
+                            </div>
                         {% endif %}
 
                         <div class="row">

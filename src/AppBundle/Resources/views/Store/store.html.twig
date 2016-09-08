@@ -2,24 +2,24 @@
 
 {% block title %}Sternenhändler{% endblock %} 
 {% block css %}
-    {{ parent() }}    
-    <style>     
+    {{ parent() }}
+    <style>
         .col-md-12{
             padding:0;
-        }        
-        
-        
+        }
+
+
         body {
             margin-top:70px;
         }
-        
+
     </style>
 {% endblock css %}
 {% block content %}
-<!-- Modal -->
+    <!-- Modal -->
     <div class="modal fade" id="help" role="dialog">
         <div class="modal-dialog">
-      
+
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -29,10 +29,10 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="alert alert-info">
-                                    <h4>Hilfe</h4>
-                                    <p>
-                                        Tausche hier deine Resourcen gegen Baupläne und Gegenstände ein.
-                                    </p>
+                                <h4>Hilfe</h4>
+                                <p>
+                                    Tausche hier deine Resourcen gegen Baupläne und Gegenstände ein.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -43,39 +43,39 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal -->
     <div class="modal fade" id="modal-resources" role="dialog">
         <div class="modal-dialog">
-        
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-danger" role="alert">
-                <h4 class="modal-title">Achtung</h4>
-                    <p>Du hast ungenügende Resourcen um dies zu kaufen! </p>
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="modal-title">Achtung</h4>
+                        <p>Du hast ungenügende Resourcen um dies zu kaufen! </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
                 </div>
             </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
-            </div>
-        </div>
         </div>
     </div>
 
-    
+
     <!--Mask-->
-    <div class="container"> 
+    <div class="container">
         <div class="row">
             <div class="col-md-12" style="color:#fff" >
-                <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">                
+                <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">
                     <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Sternenhändler&nbsp;&nbsp;
                         <!-- Trigger the modal with a button -->
                         <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
-                    </h3>                    
+                    </h3>
                     <div class="card-block text-xs-left">
                         <div class="row">
                             <div class="col-xs-12 col-lg-3 text-xs-center">
@@ -86,119 +86,147 @@
                                 <div class="bubble">
                                     <h4> Hallo {{ user.getUsername() }}!</h4>
                                     <p> Willkommen in unserem kleinen Sternenladen. Wir haben eine kleine Auswahl an Bauplänen, welche du gegen Resourcen erwerben kannst!
-                                    </p>    
+                                    </p>
                                 </div>
                             </div>
                         </div>
+
+                        {% if app.session.flashbag.get('success') == true %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="card">
+                                        <div class="card-header  rgba-green-strong white-text">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:110px; height:110px" src="{{ asset(app.session.flashbag.get('success-img')[0]) }}"/>
+                                                </div>
+                                                <div class="col-md-10 text-xs-left">
+                                                    <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
+                                                        <strong>Kauf erfolgreich!</strong><br>
+                                                        <p>{{ app.session.flashbag.get('success-message')[0] }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
                         <hr>
                         <div class="row text-xs-center"  style="padding-bottom:20px">
                             <div class="col-xs-12">
                                 {% for blueprint in blueprints %}
                                     {% if blueprint.getName != 'nova_xs' %}
-                                    {% set buyable=true %}
-                                    {% set buyAmount=[] %}
-                                    <div class="col-lg-4">
-                                        <div class="card rgba-stylish-light">
-                                            <div class="row">
+                                        {% set buyable=true %}
+                                        {% set buyAmount=[] %}
+                                        <div class="col-lg-4">
+                                            <div class="card rgba-stylish-light">
+                                                <div class="row">
                                                     <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
-                                            </div>
-                                            <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;"  class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
-                                            <div  class="card-block elegant-color ">
-                                                <hr>
-                                                <div class="row">
-                                                    <p>HP: {{ blueprint.getBlueprintStructure.getStructure.getHp }} </p>
                                                 </div>
-                                                <hr>
-                                                <div class="row">
-                                                    {% for  blueprintResource in blueprint.getBlueprintResources|sort %}
-                                                        {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
-                                                            {% set buyable = false %}
-                                                        {% else %}
-                                                            {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
-                                                                {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
-                                                                {% set buyAmount = buyAmount|merge(amount) %}
+                                                <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;"  class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
+                                                <div  class="card-block elegant-color ">
+                                                    <hr>
+                                                    <div class="row">
+                                                        <p>HP: {{ blueprint.getBlueprintStructure.getStructure.getHp }} </p>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row">
+                                                        {% for  blueprintResource in blueprint.getBlueprintResources|sort %}
+                                                            {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
+                                                                {% set buyable = false %}
+                                                            {% else %}
+                                                                {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
+                                                                    {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
+                                                                    {% set buyAmount = buyAmount|merge(amount) %}
+                                                                {% endif %}
                                                             {% endif %}
-                                                        {% endif %}
-                                                        <div class="col-xs-4">
-                                                            <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>                                                        
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                
-                                                <!-- modal -->
-                                                    <div class="modal fade" id="{{ blueprint.getName }}" role="dialog">
-                                                        <div class="modal-dialog" style="background: rgba(44, 62, 80, 1)">
-                                                      
-                                                            <!-- Modal content-->
-                                                            <div class="modal-content" style="background: rgba(44, 62, 80, 1)">
-                                                                <form>
-                                                                <div class="modal-header">                                                                    
-                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                    <h4>Kaufen</h4>
-                                                                </div>
-                                                                <div class="modal-body ">
-                                                                    <div class="card rgba-stylish-light">
-                                                                        <h3 class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
-                                                                        <div  class="card-block">
-                                                                            <div class="row">
-                                                                                    <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
-                                                                            </div>
-                                                                            <hr>
-                                                                            <div class="row">
-                                                                                <div class="col-xs-12 md-form">
-                                                                                    <label for="buyAmount">Anzahl:</label>
-                                                                                    <input id="buyAmount" class="form-control" type="number" min="0" max="{{ min(buyAmount) }}" />
+                                                            <div class="col-xs-4">
+                                                                <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row">
+
+                                                        <!-- modal -->
+                                                        <div class="modal fade" id="{{ blueprint.getName }}" role="dialog">
+                                                            <div class="modal-dialog" style="background: rgba(44, 62, 80, 1)">
+
+                                                                <!-- Modal content-->
+                                                                <div class="modal-content" style="background: rgba(44, 62, 80, 1)">
+                                                                    <form method="post" action="{{  path('buy') }}">
+                                                                        <div class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                            <h4>Kaufen</h4>
+                                                                        </div>
+                                                                        <div class="modal-body ">
+                                                                            <div class="card rgba-stylish-light">
+                                                                                <h3 class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
+                                                                                <div  class="card-block">
+                                                                                    <div class="row">
+                                                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
+                                                                                    </div>
+                                                                                    <hr>
+                                                                                    <div class="row">
+                                                                                        <div class="col-xs-12 md-form">
+                                                                                            <label for="buyAmount">Anzahl:</label>
+                                                                                            {% if buyAmount |length > 0 %}
+                                                                                            <input id="buyAmount" class="form-control" type="number" name="amount" min="0" max="{{ min(buyAmount) }}" />
+                                                                                            {% endif %}
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <div class="row">
-                                                                        <div class="col-xs-6">  
-                                                                            <button type="button" class="btn btn-inverse btn-lg btn-block" data-dismiss="modal" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Abbrechen</a>
+                                                                        <div class="modal-footer">
+                                                                            <div class="row">
+                                                                                <div class="col-xs-6">
+                                                                                    <button type="button" class="btn btn-inverse btn-lg btn-block" data-dismiss="modal" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Abbrechen</a>
+                                                                                </div>
+                                                                                <div class="col-xs-6">
+                                                                                    <input type="hidden" name="bid" value="{{ blueprint.getBid }}">
+                                                                                    <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                    <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit">Kaufen</button>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col-xs-6">  
-                                                                            <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="button">Kaufen</button>
-                                                                        </div>
-                                                                    </div>
+                                                                    </form>
                                                                 </div>
-                                                                </form>
                                                             </div>
                                                         </div>
+                                                        <!-- modal end -->
+                                                        {% if buyable == true %}
+                                                            <a class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" data-toggle="modal" data-target="#{{ blueprint.getName }}"><strong>Kaufen...</strong></a>
+                                                        {% else %}
+                                                            <button class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"  data-toggle="modal" data-target="#modal-resources"><strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
+                                                        {% endif %}
                                                     </div>
-                                                <!-- modal end -->
-                                                {% if buyable == true %}
-                                                    <a class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" data-toggle="modal" data-target="#{{ blueprint.getName }}"><strong>Kaufen...</strong></a>
-                                                {% else %}
-                                                    <button class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"  data-toggle="modal" data-target="#modal-resources"><strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
-                                                {% endif %}
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                     {% endif %}
-                                {% endfor %}                                
+                                {% endfor %}
                             </div>
-                        </div>                                
+                        </div>
                     </div>
                     <div class="strike">
                         <span>
                            Meine Resourcen 
                         </span>
                     </div>
-                        <div class="row">
-                            {% for resource in user.getUserResources %}
+                    <div class="row">
+                        {% for resource in user.getUserResources %}
                             <div class="col-md-4">
                                 <p style="color:{{resource.getResource.getIconColour }}">{{ resource.getResource.getName_DE }}: {{ resource.getAmount }} X <i style="color:{{ resource.getResource.getColour }} !important" class="fa {{ resource.getResource.getIcon }}"></i></p>
                             </div>
-                            {% endfor %}
-                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-  
+
 {% endblock content %}

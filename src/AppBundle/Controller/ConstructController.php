@@ -55,8 +55,6 @@ class ConstructController extends Controller
              * @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User
              */
 
-            $message = array();
-
             $em = $this->get('neo4j.graph_manager')->getClient();
 
             $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
@@ -85,11 +83,12 @@ class ConstructController extends Controller
                 }
                 $em->flush();
 
-                $message['type'] = 'constructionComplete';
-                $message['text'] = $structure->getName_DE().' wurde erfolgreich gebaut!';
-                $message['img'] = $structure->getImg();
-            }else{
-                $message = null;
+                // set flash messages
+                $fb = $this->get('session')->getFlashBag();
+                $fb->add('success', true);
+                $fb->add('success-message', $structure->getName_DE() . ' wurde erfolgreich gebaut!');
+                $fb->add('success-img',$structure->getImg());
+
             }
 
             $structures = array('drone' => null, 'building' => null, 'shield' => null);
@@ -120,7 +119,7 @@ class ConstructController extends Controller
             $em->clear();
 
             // var_dump(count($user->getUserInventory()->getInventory()->getBlueprintInventoriesByType('building')));die;
-            return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'buildable' => $buildable, 'message' => $message));
+            return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'buildable' => $buildable));
 
         }else{
             throw new \Exception('IDs dont match. Uiuiui!');
