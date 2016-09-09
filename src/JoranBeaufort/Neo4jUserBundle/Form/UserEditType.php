@@ -18,8 +18,6 @@ class UserEditType extends AbstractType
     {
         
         $builder
-            ->add('profileImageFile', FileType::class, array(
-                'required' => false))
             ->add('email', EmailType::class, array(
                 'required' => false))
             ->add('profileDescription', TextType::class, array(

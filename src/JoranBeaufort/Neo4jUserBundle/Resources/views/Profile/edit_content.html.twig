@@ -1,82 +1,119 @@
-{% if error is null %}
-{% form_theme form 'bootstrap_3_layout.html.twig' %}
-{{ form_start(form, {'method': 'post', 'action': path('neo4j_profile_edit', {'slug': slug}), 'required':false}) }}
-<div class="container">
-    <!--Card-->
-    <div class="card">
-        {% elseif error is not null %}
-        <div class="row">
-          <div class="col-md-12" style="text-align:center">
-            <div class="alert alert-danger" role="alert">{{ error }}</div>
-          </div>
-        </div>
-        {% endif %}        
-        <div class="row">
-        <!--Card image-->
-            <div class="col-md-3">
-                {% if user.getProfileImage is null %}
-                <img style="padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">    
-                {% else %}
-                <img style="padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~user.uid~'/'~user.profileImage) }}"> 
-                {% endif %}
-                <div class="md-form" style="padding:10px;">
-                    {{ form_widget(form.profileImageFile, { 'attr': {'class': "form-control"} }) }}
-                    <label for="user_edit_profileImageFile"></label>
-                    <div style="color:red">
-                    {{ form_errors(form.profileImageFile) }}
-                    </div>                
+<!-- Modal -->
+<div class="modal fade" id="help" role="dialog">
+    <div class="modal-dialog">        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body text-xs-left ">
+                <div class="alert alert-info" role="alert">
+                    <h4 class="modal-title">Info:</h4>
+                        <p>Hier kannst du dein Profil anpassen...</p>
                 </div>
             </div>
-            <!--Card content-->
-            <div class="col-md-9">
-                <div class="card-block">            
-                    <h4>User Information</h4>
-                    <br>
-                    <div class="md-form">
-                        {{ form_widget(form.email, { 'attr': {'class': "form-control validate"} }) }}
-                        <label for="user_edit_email" data-error="">Change email</label>
-                        <div style="color:red">
-                        {{ form_errors(form.email) }}
-                        </div>
-                    </div>
-                    <div class="md-form">
-                        {{ form_widget(form.plainPassword.first, { 'attr': {'class': "form-control validate"} }) }}
-                        <label for="user_edit_plainPassword_first" data-error="">New password</label>
-                        <div style="color:red">
-                        {{ form_errors(form.plainPassword.first) }}
-                        </div>
-                    </div>
-                    <div class="md-form">
-                        {{ form_widget(form.plainPassword.second, { 'attr': {'class': "form-control validate"} }) }}
-                        <label for="user_edit_plainPassword_second" data-error="">Repeat new password</label>
-                        <div style="color:red">
-                        {{ form_errors(form.plainPassword.second) }}
-                        </div>
-                    </div>
-                    <br>
-                    <div class="md-form">
-                        {{ form_widget(form.profileDescription, { 'attr': {'class': "form-control validate"} }) }}
-                        <label for="user_edit_email" data-error="">Update your description</label>
-                        <div style="color:red">
-                        {{ form_errors(form.profileDescription) }}
-                        </div>
-                    </div>
-                    <div class="md-form">
-                        {{ form_widget(form.current_password, { 'attr': {'class': "form-control validate"} }) }}
-                        <label for="user_edit_current_password" data-error="">Current Password</label>
-                        <div style="color:red">
-                        {{ form_errors(form.current_password) }}
-                        </div>
-                        <p>* Current password required to save changes</p>
-                    </div>
-                    <input class="btn btn-info-outline waves-effect btn-block" type="submit" value="Save Changes" />
-                </div>
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
             </div>
         </div>
     </div>
 </div>
-{{ form_end(form) }}
+
+<!--Mask-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="color:#fff" >
+            <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center">
+                <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Profil!&nbsp;&nbsp;
+                    <!-- Trigger the modal with a button -->
+                    <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                </h3>
+                {% if error is null %}
+                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                {{ form_start(form, {'method': 'post', 'action': path('neo4j_profile_edit', {'slug': slug}), 'required':false}) }}
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div style="background-color:transparent" class="card text-xs-center">
+                                <div  style="background-color:transparent" class="card-header white-text">
+                                    <div class="row">
+                                        {% if user.getProfileImage is null %}
+                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">
+                                        {% else %}
+                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~user.getUid~'/'~user.getProfileImage) }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div style="background-color:transparent" class="card text-xs-center ">
+                                <div style="background-color:transparent" class="card-header white-text">
+                                    <div class="row">
+                                        <h4>Profilangaben:</h4>
+                                        <div class="md-form">
+                                            {{ form_widget(form.profileDescription, { 'attr': {'class': "form-control validate"} }) }}
+                                            <label for="user_edit_email" data-error="">Profilbeschrieb hinzufügen</label>
+                                            <div style="color:red">
+                                                {{ form_errors(form.profileDescription) }}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <h4>Persönliche Daten:</h4>
+                                        <div class="md-form">
+                                            {{ form_widget(form.email, { 'attr': {'class': "form-control validate"} }) }}
+                                            <label for="user_edit_email" data-error="">Email ändern</label>
+                                            <div style="color:red">
+                                                {{ form_errors(form.email) }}
+                                            </div>
+                                        </div>
+                                        <div class="md-form">
+                                            {{ form_widget(form.plainPassword.first, { 'attr': {'class': "form-control validate"} }) }}
+                                            <label for="user_edit_plainPassword_first" data-error="">Neues passwort</label>
+                                            <div style="color:red">
+                                                {{ form_errors(form.plainPassword.first) }}
+                                            </div>
+                                        </div>
+                                        <div class="md-form">
+                                            {{ form_widget(form.plainPassword.second, { 'attr': {'class': "form-control validate"} }) }}
+                                            <label for="user_edit_plainPassword_second" data-error="">Neues passwort wiederholen</label>
+                                            <div style="color:red">
+                                                {{ form_errors(form.plainPassword.second) }}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <h4>Identität Bestätigen:</h4>
+                                        <div class="md-form">
+                                            {{ form_widget(form.current_password, { 'attr': {'class': "form-control validate"} }) }}
+                                            <label for="user_edit_current_password" data-error="">Aktuelles Passwort eingeben</label>
+                                            <div style="color:red">
+                                                {{ form_errors(form.current_password) }}
+                                            </div>
+                                            <p>* Eingabe des aktuellen Passworts wird benötigt um Änderungen zu speichern</p>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <a href="{{ path('neo4j_profile', {'slug': app.user.username}) }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Abbrechen</a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit">Speichern</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+            {%  endif %}
+        </div>
+    </div>
+</div>
 
 
         

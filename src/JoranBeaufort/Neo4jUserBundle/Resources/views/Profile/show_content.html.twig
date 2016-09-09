@@ -1,53 +1,73 @@
-<div class="container">
-    <!--Card-->
-    <div class="card">
-        <div class="row">  
-        <!--Card image-->
-            <div class="col-md-3">
-                {% if user.getProfileImage is null %}
-                <img style="padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">    
-                {% else %}
-                <img style="padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~user.uid~'/'~user.profileImage) }}"> 
-                {% endif %}
-                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and user.getUsername() == app.user.username %}
-                <a href="{{ path('neo4j_profile_edit', {'slug': app.user.username}) }}" class="btn btn-primary">Edit&nbsp;&nbsp;<i class="fa fa-cog"></i></a>
-                {% endif %}  
+<!-- Modal -->
+<div class="modal fade" id="help" role="dialog">
+    <div class="modal-dialog">        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-        <!--/.Card image-->
-
-            <!--Card content-->
-            <div class="col-md-9">
-                <div class="card-block">
-                    <!--Title-->
-                    <h4 class="card-title">{{ user.getUserName() }}</h4>
-                    <!--Text-->
-                        {% if user.getProfileDescription() != '' %}
-                        <p class="text-justify"> {{ user.getProfileDescription() }}</p>
-                        {% endif %}
-                     
+            <div class="modal-body text-xs-left ">
+                <div class="alert alert-info" role="alert">
+                    <h4 class="modal-title">Info:</h4>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and user.getUsername() == app.user.username %}
+                        <p>Hier siehst du dein Profil. Teile dieser Seite sind Öffentlich zugänglich damit andere Spieler dein Fortschritt bewundern können!</p>
+                    {% else %}
+                        <p>Das ist das Profil von <strong>"{{ user.getUsername }}"</strong>! Hier siehst du den Fortschritt und die Leistungen dieses Spielers!</p>
+                    {% endif %}
                 </div>
-                <!--/.Card content-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
             </div>
         </div>
-        <hr>
-        <div class="card">
-            <div class="row">
-                <div class="card-block">     
-                    <div class="col-md-12">
-                    <h2 class="card-header primary-color white-text">Rohstoffe</h2>
-                    </div>
-                    {% for resource in user.getUserResources %}
-                    <div class="col-md-4">
-                        <!--Card Success-->
-                        <div style="background-color: {{ resource.getResource.getColour }}" class="card text-xs-center z-depth-2">
-                            <div style="color:#fff" class="card-block">
-                                <h2>{{ resource.getResource.getName_DE }}</h2>                             
-                                <p style="font-size:40px; color:{{resource.getResource.getIconColour }}">{{ resource.getAmount }} X <i  class="fa {{ resource.getResource.getIcon }}"></i></p>
+    </div>
+</div>
+
+<!--Mask-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="color:#fff" >
+            <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center">
+                <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Profil!&nbsp;&nbsp;
+                    <!-- Trigger the modal with a button -->
+                    <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and user.getUsername() == app.user.username %}
+                        <a style="color:white;float:right" href="{{ path('neo4j_profile_edit', {'slug': app.user.username}) }}"><i class="fa fa-cog"></i></a>
+                    {% endif %}
+                </h3>
+
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div style="background-color:transparent" class="card text-xs-center">
+                                <div  style="background-color:transparent" class="card-header white-text">
+                                    <div class="row">
+                                        {% if user.getProfileImage is null %}
+                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">
+                                        {% else %}
+                                            <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~user.getUid~'/'~user.getProfileImage) }}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="row">
+                                        <button style="border-radius:20px; border: solid rgba(62, 69, 81, 0.7); color:rgba(62, 69, 81, 0.7); font-size:20px" class="btn waves-effect"><strong>Name: {{ user.getUsername }}</strong></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <!--/.Card Success-->
                     </div>
-                    {% endfor %}
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div style="background-color:transparent" class="card text-xs-center ">
+                                <div style="background-color:transparent" class="card-header white-text">
+                                    <div class="row">
+                                        {% if user.getProfileDescription() != '' %}
+                                            <p class="text-justify"> {{ user.getProfileDescription() }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

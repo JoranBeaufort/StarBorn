@@ -144,7 +144,14 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      */
     private $profileDescription;
-    
+
+    /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+
+    private $exppoints;
+
     /**
      * @OGM\Property(type="string")
      * @var string
