@@ -11,7 +11,7 @@ html {
     
 body {
     background:none;
-    margin-top: 70px;
+    /* margin-top: 70px; */
     }
 
 
@@ -89,6 +89,16 @@ select:not(:checked) {
 .top-nav-collapse {
     background-color: #000;
 }
+
+.toggle-wrap {
+    width: 100%;
+    float: none;
+    margin: 0 auto;
+    border-width:0;
+    border-radius:0;
+    background:transparent;
+}
+
 
 @media only screen and (max-width: 768px) {
     .navbar {

@@ -150,7 +150,7 @@ class User implements AdvancedUserInterface, \Serializable
      * @var int
      */
 
-    private $exppoints;
+    private $xp;
 
     /**
      * @OGM\Property(type="string")
@@ -434,8 +434,27 @@ class User implements AdvancedUserInterface, \Serializable
     public function setProfileDescription($profileDescription)
     {
         $this->profileDescription = $profileDescription;
-    }    
-    
+    }
+
+    public function getXP()
+    {
+        return $this->xp;
+    }
+
+
+    public function addXP($amount)
+    {
+        $xp = $this->xp;
+        $this->xp = $xp+$amount;
+        return $this;
+    }
+
+    public function getLvl()
+    {
+        $lvl = bcdiv(sqrt($this->xp),1,0);
+        return $lvl;
+    }
+
     public function getConfirmationToken()
     {
         return $this->confirmationToken;
