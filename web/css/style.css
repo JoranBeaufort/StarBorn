@@ -2,18 +2,29 @@
 
 
 html {
-     background:  url(../img/overlays/07.png) repeat, url(../img/universe-1566159_1920.jpg) center / cover no-repeat ; 
+     background:  url(../img/overlays/07.png) repeat, url(../img/universe-1566159_1920.jpg) center / cover no-repeat ;
    /*  background:  url(../img/overlays/07.png) repeat, url(../img/space-1228967_960_720.jpg) center / cover no-repeat ; */
     /* background:  linear-gradient(#0099CC, #ef6c00);*/
-    min-height: 100%;
-    min-height: 100vh;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
     }
-    
+
 body {
     background:none;
     /* margin-top: 70px; */
-    }
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+    padding-bottom:40px;
+}
 
+#map {
+    height: 100%;
+    width: auto;
+}
 
 label {
     color: #fff !important;
@@ -73,13 +84,36 @@ select:not(:checked) {
     color: #fff;
 }
 
-.navbar {
-    background-color: transparent;
+.footer {
+    z-index:999;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 40px;
+    background-color: rgba(44, 62, 80, 1) !important;
+    color:white;
+    overflow:hidden;
 }
 
-.navbar-dark .navbar-nav .nav-link {
-    color: #fff;
+.menu-toggle {
+    z-index:9999;
+    position: absolute;
+    bottom: 10px;
+    background-color: rgba(44, 62, 80, 1) !important;
+    border-radius:33px;
+    width:66px;
+    height:66px;
+    color: rgb(0, 105, 92) !important;
+    text-align: center;
+    margin-left:-33px;
 }
+
+.menu-toggle:hover {
+    background-color: rgba(44, 62, 80, 1) !important;
+    color: rgb(43, 187, 173) !important;
+}
+
 .scrolling-navbar {
         -webkit-transition: background .5s ease-in-out, padding .5s ease-in-out;
         -moz-transition: background .5s ease-in-out, padding .5s ease-in-out;

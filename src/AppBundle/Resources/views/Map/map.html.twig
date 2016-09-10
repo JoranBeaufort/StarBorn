@@ -3,14 +3,11 @@
 {% block css %}
     {{ parent() }}
     <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.css" />
+    <link rel="stylesheet" href="{{  asset("css/L.Control.Locate.min.css") }} "/>
 {% endblock %}
 {% block content %}
     <!--Mask-->
-    <div class="container-flex">
-                <div id="map" style="height:100vh; width:100%;"></div>
-    </div>
-
+        <div id="map"></div>
     <!-- Large modal -->
     <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
