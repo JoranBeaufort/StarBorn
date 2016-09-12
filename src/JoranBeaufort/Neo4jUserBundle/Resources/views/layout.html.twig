@@ -1,6 +1,18 @@
 {% extends 'base.html.twig' %}
-  {% block navigation %} 
-  {% endblock %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        .col-md-12{
+            padding:0;
+        }
+
+
+        .main-content {
+            padding-bottom:60px;
+        }
+
+    </style>
+{% endblock css %}
     {% block content %}
         {% if app.request.hasPreviousSession %}
             {% for type, messages in app.session.flashbag.all() %}

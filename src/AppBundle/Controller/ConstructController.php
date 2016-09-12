@@ -81,6 +81,7 @@ class ConstructController extends Controller
                     $amountNew = $amount - 1;
                     $blueprintInventory->setAmount($amountNew);
                 }
+                $user->addXP(6);
                 $em->flush();
 
                 // set flash messages

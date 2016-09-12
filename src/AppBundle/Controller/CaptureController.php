@@ -19,8 +19,7 @@ use JoranBeaufort\Neo4jUserBundle\Entity\User;
 class CaptureController extends Controller
 {
     public function indexAction(Request $request)
-    {    
-        $user = $this->getUser();               
+    {
         
         $encoder = $this->get('nzo_url_encryptor');
         
@@ -54,6 +53,7 @@ class CaptureController extends Controller
         
         
         if ($form->isSubmitted() && $form->isValid()) {
+            /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
                 $em = $this->get('neo4j.graph_manager')->getClient();
                 
                 // user coords
@@ -126,7 +126,9 @@ class CaptureController extends Controller
                     
                     $tile->addTileStructure($drone);
 
-                    $user->addUserTile($tile, time(),time(), $landcover);                    
+                    $user->addUserTile($tile, time(),time(), $landcover);
+
+                    $user->addXP(4);
                     
                     // $user->addUserTileLost($tile, time());
                     

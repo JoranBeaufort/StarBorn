@@ -96,17 +96,22 @@ select:not(:checked) {
     overflow:hidden;
 }
 
+.menu-toggle-wrap{
+    width:100%;
+    position:absolute;
+    bottom: 15px;
+}
+
 .menu-toggle {
     z-index:9999;
-    position: absolute;
-    bottom: 10px;
     background-color: rgba(44, 62, 80, 1) !important;
     border-radius:33px;
     width:66px;
     height:66px;
     color: rgb(0, 105, 92) !important;
-    text-align: center;
-    margin-left:-33px;
+    display:block;
+    margin: 0 auto;
+    position: relative;
 }
 
 .menu-toggle:hover {

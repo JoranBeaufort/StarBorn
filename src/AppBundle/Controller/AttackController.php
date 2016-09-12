@@ -103,12 +103,20 @@ class AttackController extends Controller
                         
                         $statement = $connection->prepare($q);
                         $statement->execute();
+
+                        /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
+                        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
+                        $user->addXP(8);
                         
                         
                         $url = $this->generateUrl('map');
                         return new RedirectResponse($url);
                         
                     }else{
+                        /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
+                        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
+                        $user->addXP(8);
+
                         $tile->removeTileStructure($ts);
                     }     
                 }else{
@@ -116,7 +124,9 @@ class AttackController extends Controller
                 }  
             }
         }
-            
+
+
+
         $em->flush();
         $em->clear();
         
@@ -149,7 +159,7 @@ class AttackController extends Controller
             }
         }
 
-
+        /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
         $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
         return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'attackable' => $attackable, 'message' => $message));
         
