@@ -31,7 +31,6 @@ class UserInventory
     
 
     /**
-     * UserResource constructor.
      * @param \JoranBeaufort\Neo4jUserBundle\Entity\User $user
      * @param \AppBundle\Entity\Inventory $inventory
      */
@@ -58,5 +57,4 @@ class UserInventory
         return $this->inventory;
     }
 
-    
 }

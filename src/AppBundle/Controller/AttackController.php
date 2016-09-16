@@ -129,34 +129,31 @@ class AttackController extends Controller
 
         $em->flush();
         $em->clear();
-        
-        $attackable = array('drone'=>false, 'building'=>false, 'shield'=>false);
-        
-        if(count($tile->getTileStructures()) == 3){
-            $attackable['shield'] = true;
-            $attackable['building'] = false;
-            $attackable['drone'] = false;
-        }elseif(count($tile->getTileStructures()) == 2){
-            $attackable['building'] = true;
-            $attackable['drone'] = false;
-        }else{
-            $attackable['drone'] = true;
-        }
-
 
         $structures = array();
+        $attackable = array('drone'=>null, 'building'=>null, 'shield'=>null);
+
         foreach($tile->getTileStructures() as $ts){
-            /* @var $ts \AppBundle\Entity\TileStructure */
             if($ts->getStructure()->getStructureType() == 'drone'){
                 array_push($structures, $ts);
+                $attackable['drone'] = true;
+
             }
             if($ts->getStructure()->getStructureType() == 'building'){
                 array_push($structures, $ts);
-                
+                $attackable['building'] = true;
             }
             if($ts->getStructure()->getStructureType() == 'shield'){
                 array_push($structures, $ts);
+                $attackable['shield'] = true;
             }
+        }
+
+        if($attackable['drone'] == true &&  $attackable['building'] == true && $attackable['shield'] = true){
+            $attackable['building'] = false;
+            $attackable['drone'] = false;
+        }elseif(($attackable['drone'] == true &&  $attackable['building'] == true) || ($attackable['drone'] == true &&  $attackable['shield'] == true)){
+            $attackable['drone'] = false;
         }
 
         /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */

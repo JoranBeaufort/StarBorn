@@ -4,18 +4,9 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
-
-use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
-use AppBundle\Entity\Team;
-use AppBundle\Entity\Resources;
-use AppBundle\Entity\Inventory;
-use AppBundle\Entity\UserResource;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
+
 
 class BuildController extends Controller
 {
@@ -85,7 +76,18 @@ class BuildController extends Controller
         $message = null;
 
         $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
+
+       // $struc = $em->getRepository(Structure::class)->findOneBy('sid',4);
+       // $struc = $structures['drone']->getStructure();
+
+       // var_dump(   $struc->getBlueprintStructure()->getBlueprint()->getName());die;
+        // var_dump( get_class_methods ( get_class ($structures['drone']->getStructure())));die;
+
         $em->clear();
+
+
+
+
 
         return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'buildable' => $buildable, 'message' => $message));
         

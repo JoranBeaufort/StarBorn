@@ -2,6 +2,8 @@
 namespace AppBundle\Entity;
 
 use GraphAware\Neo4j\OGM\Annotations as OGM;
+use AppBundle\Entity\Blueprint;
+use AppBundle\Entity\Structure;
 
 /**
  * @OGM\RelationshipEntity(type="BUILDS")
@@ -29,8 +31,10 @@ class BlueprintStructure
     protected $structure;    
 
 
-    public function __construct()
+    public function __construct(Tile $tile, Blueprint $bluprint)
     {
+        $this->tile = $tile;
+        $this->bluprint = $bluprint;
     }
 
 

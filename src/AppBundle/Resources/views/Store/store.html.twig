@@ -184,13 +184,19 @@
                                                                         <div class="modal-footer">
                                                                             <div class="row">
                                                                                 <div class="col-xs-6">
-                                                                                    <button type="button" class="btn btn-inverse btn-lg btn-block" data-dismiss="modal" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Abbrechen</a>
+                                                                                    <button type="button" class="btn btn-inverse btn-lg btn-block" data-dismiss="modal" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Abbrechen</button>
                                                                                 </div>
-                                                                                <div class="col-xs-6">
-                                                                                    <input type="hidden" name="bid" value="{{ blueprint.getBid }}">
-                                                                                    <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
-                                                                                    <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit">Kaufen</button>
-                                                                                </div>
+                                                                                {% if blueprint.getMinlvl <= user.getLvl %}
+                                                                                    <div class="col-xs-6">
+                                                                                        <input type="hidden" name="bid" value="{{ blueprint.getBid }}">
+                                                                                        <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                        <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit">Kaufen</button>
+                                                                                    </div>
+                                                                                {% else %}
+                                                                                    <div class="col-xs-6">
+                                                                                        <button class="btn rgba-grey-strong btn-lg btn-block" style="border-radius: 20px; margin-left:0px !important" >Ungenügende Stufe...</button>
+                                                                                    </div>
+                                                                                {% endif %}
                                                                             </div>
                                                                         </div>
                                                                     </form>
@@ -199,7 +205,11 @@
                                                         </div>
                                                         <!-- modal end -->
                                                         {% if buyable == true %}
-                                                            <a class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" data-toggle="modal" data-target="#{{ blueprint.getName }}"><strong>Kaufen...</strong></a>
+                                                            {% if blueprint.getMinlvl <= user.getLvl %}
+                                                                <a class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" data-toggle="modal" data-target="#{{ blueprint.getName }}"><strong>Kaufen...</strong></a>
+                                                            {%  else %}
+                                                                <a class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"><strong>Benötigt Stufe: {{ blueprint.getMinlvl }}</strong></a>
+                                                            {% endif %}
                                                         {% else %}
                                                             <button class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"  data-toggle="modal" data-target="#modal-resources"><strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
                                                         {% endif %}

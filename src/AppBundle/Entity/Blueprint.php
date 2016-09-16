@@ -2,10 +2,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\AbstractLazyCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
-use AppBundle\Entity\BlueprintInventory;
-use AppBundle\Entity\BlueprintStructure;
 
 
 /**
@@ -32,12 +29,27 @@ class Blueprint
      */
      
     protected $type;
+
     /**
      * @OGM\Property(type="string")
      * @var string
      */
      
     protected $name;
+
+    /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+
+    protected $minlvl;
+
+    /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+
+    protected $ilvl;
     /**
      * @OGM\Property(type="string")
      * @var string
@@ -70,7 +82,6 @@ class Blueprint
     
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\BlueprintStructure", type="BUILDS", direction="OUTGOING", collection=true, mappedBy="blueprint")
-     * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\BlueprintStructure[]
      */
      
@@ -104,7 +115,17 @@ class Blueprint
     {
         return $this->name;
     }
-    
+
+    public function getMinlvl()
+    {
+        return $this->minlvl;
+    }
+
+    public function getIlvl()
+    {
+        return $this->ilvl;
+    }
+
     public function getName_DE()
     {
         return $this->name_DE;

@@ -50,7 +50,11 @@ build:
 construct:
     path:  /construct
     defaults: { _controller: AppBundle:Construct:index }
-    
+
+upgrade:
+    path:  /upgrade
+    defaults: { _controller: AppBundle:Upgrade:index }
+
 tile: 
     path:  /tile
     defaults: { _controller: AppBundle:Tile:index }

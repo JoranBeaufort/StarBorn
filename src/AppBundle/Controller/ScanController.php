@@ -61,33 +61,31 @@ class ScanController extends Controller
         $tile = $em->getRepository(Tile::class)->findOneBy('tid', $results[0]['val']);
         
         $structures = array();
-        
+        $attackable = array('drone'=>null, 'building'=>null, 'shield'=>null);
+
         foreach($tile->getTileStructures() as $ts){
             if($ts->getStructure()->getStructureType() == 'drone'){
                 array_push($structures, $ts);
+                $attackable['drone'] = true;
+
             }
             if($ts->getStructure()->getStructureType() == 'building'){
                 array_push($structures, $ts);
-                
+                $attackable['building'] = true;
             }
             if($ts->getStructure()->getStructureType() == 'shield'){
                 array_push($structures, $ts);
+                $attackable['shield'] = true;
             }
         }
-        
-        $attackable = array('drone'=>null, 'building'=>null, 'shield'=>null);
-        
-        if(count($tile->getTileStructures()) == 3){
-            $attackable['shield'] = true;
+
+        if($attackable['drone'] == true &&  $attackable['building'] == true && $attackable['shield'] = true){
             $attackable['building'] = false;
             $attackable['drone'] = false;
-        }elseif(count($tile->getTileStructures()) == 2){
-            $attackable['building'] = true;
+        }elseif(($attackable['drone'] == true &&  $attackable['building'] == true) || ($attackable['drone'] == true &&  $attackable['shield'] == true)){
             $attackable['drone'] = false;
-        }else{
-            $attackable['drone'] = true;
         }
-        
+
         $message = null;
         return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'attackable' => $attackable, 'message' => $message));
         

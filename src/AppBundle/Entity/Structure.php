@@ -2,13 +2,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\AbstractLazyCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
- 
-use AppBundle\Entity\Tile;
-use AppBundle\Entity\TileStructure;
-use AppBundle\Entity\BlueprintStructure;
-
 
 /**
  * @OGM\Node(label="Structure")
@@ -66,7 +60,6 @@ class Structure
     
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileStructure", type="HAS_STRUCTURE", direction="INCOMING", collection=true, mappedBy="structure")
-     * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\TileStructure[]
      */
      
@@ -74,7 +67,6 @@ class Structure
 
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\BlueprintStructure", type="BUILDS", direction="INCOMING", collection=true, mappedBy="structure")
-     * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\BlueprintStructure[]
      */
      
@@ -122,13 +114,14 @@ class Structure
     {
         return $this->name_DE;
     }
-    
-    
+
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\TileStructure[]
      */
+
     public function getTileStructures()
     {
+
         return $this->tileStructures;
     }
     
@@ -147,13 +140,15 @@ class Structure
     {
         $this->tileStructures->removeElement($tileStructure);
     }
-    
+
     /**
      * @return \AppBundle\Entity\BlueprintStructure
      */
+
     public function getBlueprintStructure()
     {
-        return $this->blueprintStructure;
+
+        return $this->blueprintStructure->first();
     }
     
 }

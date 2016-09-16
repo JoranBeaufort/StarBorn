@@ -3,11 +3,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
-use Doctrine\Common\Collections\AbstractLazyCollection;
-use AppBundle\Entity\UserInventory;
-use AppBundle\Entity\Blueprint;
-use AppBundle\Entity\BlueprintInventory;
-
 
 
 /**

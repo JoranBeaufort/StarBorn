@@ -187,7 +187,78 @@
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-xs-12">
-                                                                        <button type="button" style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-strong waves-effect" data-toggle="modal" data-target="#modal-{{ structure.getStructure.getStructureType }}"><strong><i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
+                                                                        <button type="button" style="border-radius:40px; width:80px; height:80px;" class="btn btn-default waves-effect" data-toggle="modal" data-target="#upgrade-{{ structure.getStructure.getStructureType }}"><strong><i class="fa fa-3x fa-arrow-circle-o-up" aria-hidden="true"></i></strong></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="upgrade-{{ key }}" role="dialog">
+                                                            <div class="modal-dialog">        <!-- Modal content-->
+                                                                <div style="background: rgba(44, 62, 80, 1)" class="modal-content ">
+                                                                    <div class="modal-header">
+                                                                        <button style="color:white" type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body text-xs-center">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12">
+                                                                                <p>Gebäude aufwerten:</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        {% if user.getUserInventory.getInventory.getBlueprintInventoriesByType(key)|length < 1 %}
+                                                                            <p> Du hast noch keine Baupläne im Inventar. Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen </p>
+                                                                        {% else %}
+                                                                            {%  set upgrades = false %}
+                                                                            {% set silvl = structure.getStructure.getBlueprintStructure.getBlueprint.getIlvl %}
+
+                                                                            {% for blueprint in user.getUserInventory.getInventory.getBlueprintInventoriesByType(key) %}
+                                                                                {% set bilvl = blueprint.getBlueprint.getIlvl %}
+                                                                                {% if silvl < bilvl %}
+                                                                                    {% set upgrades = true %}
+                                                                                    <div class="col-md-6" style="padding-top:20px">
+                                                                                        <div class="card rgba-stylish-light">
+                                                                                            <div class="row" style="padding-top:10px;">
+                                                                                                <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-55px; padding:10px; width:100px; height:100px" src="{{ asset( blueprint.getBlueprint.getBlueprintStructure.getStructure.getImg)}}"/>
+                                                                                            </div>
+                                                                                            <h4 style="padding-top:55px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>{{ blueprint.getBlueprint.getName_DE }}</strong></h4>
+                                                                                            <div class="card-block elegant-color">
+                                                                                                <div class="row">
+                                                                                                    <div class="col-xs-12">
+                                                                                                        Anzahl verfügbar: {{ blueprint.getAmount }}
+                                                                                                    </div>
+                                                                                                    <div class="col-xs-12">
+                                                                                                        Lebenspunkte: {{ blueprint.getBlueprint.getBlueprintStructure.getStructure.getHp }}
+                                                                                                    </div>
+                                                                                                    <div class="col-xs-12">
+                                                                                                        <form method="post" action="{{ path('upgrade')}}">
+                                                                                                            <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                                                            <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                                                            <input type="hidden" name="bid" value="{{ blueprint.getBlueprint.getBid }}">
+                                                                                                            <input type="hidden" name="nid" value="{{ blueprint.getBlueprint.getBlueprintStructure.getStructure.getSid }}">
+                                                                                                            <input type="hidden" name="sid" value="{{ structure.getStructure.getSid }}">
+                                                                                                            <input type="hidden" name="tid" value="{{ tile.getTid }}">
+                                                                                                            <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                                            <button type="submit" class="btn btn-default">Aufwerten!</button>
+                                                                                                        </form>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                {% endif%}
+                                                                            {% endfor %}
+                                                                            {% if upgrades == false %}
+                                                                                <p> Du kannst nichts bauen was besser ist als das vorhandene Gebäude. Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen </p>
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="modal-footer text-xs-center">
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12">
+                                                                                <button style="border-radius:33px; width:66px;height:66px" type="button" class="btn btn-default-outline waves-effect" data-dismiss="modal"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></button>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>

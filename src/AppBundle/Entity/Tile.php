@@ -2,14 +2,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\AbstractLazyCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
-use AppBundle\Entity\UserTile;
-use AppBundle\Entity\UserTileLost;
-use AppBundle\Entity\Structure;
-use AppBundle\Entity\TileStructure;
-
-
 
 
  
@@ -62,7 +55,6 @@ class Tile
     
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileStructure", type="HAS_STRUCTURE", direction="OUTGOING", collection=true, mappedBy="tile")
-     * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\TileStructure[]
      */
      
