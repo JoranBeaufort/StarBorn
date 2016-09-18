@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
+
 /**
  * @OGM\Node(label="Structure")
  */
@@ -49,7 +50,7 @@ class Structure
      * @var string
      */
      
-    protected $type;    
+    protected $type;
     
     /**
      * @OGM\Property(type="string")
@@ -89,7 +90,13 @@ class Structure
     {
         return $this->sid;
     }
-    
+
+    public function getIlvl()
+    {
+        $ilvl = $this->getBlueprintStructure()->getBlueprint()->getIlvl();
+        return $ilvl;
+    }
+
     public function getHp()
     {
         return $this->hp;

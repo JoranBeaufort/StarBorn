@@ -66,24 +66,27 @@ class ScanController extends Controller
         foreach($tile->getTileStructures() as $ts){
             if($ts->getStructure()->getStructureType() == 'drone'){
                 array_push($structures, $ts);
-                $attackable['drone'] = true;
+                $attackable['drone'] = false;
 
             }
             if($ts->getStructure()->getStructureType() == 'building'){
                 array_push($structures, $ts);
-                $attackable['building'] = true;
+                $attackable['building'] = false;
             }
             if($ts->getStructure()->getStructureType() == 'shield'){
                 array_push($structures, $ts);
-                $attackable['shield'] = true;
+                $attackable['shield'] = false;
             }
         }
 
-        if($attackable['drone'] == true &&  $attackable['building'] == true && $attackable['shield'] = true){
-            $attackable['building'] = false;
-            $attackable['drone'] = false;
-        }elseif(($attackable['drone'] == true &&  $attackable['building'] == true) || ($attackable['drone'] == true &&  $attackable['shield'] == true)){
-            $attackable['drone'] = false;
+        if($attackable['drone'] === false &&  $attackable['building'] === false && $attackable['shield'] === false){
+            $attackable['shield'] = true;
+        }elseif($attackable['drone'] === false &&  $attackable['building'] === null && $attackable['shield'] === false){
+            $attackable['shield'] = true;
+        }elseif($attackable['drone'] === false &&  $attackable['building'] === false && $attackable['shield'] === null){
+            $attackable['building'] = true;
+        }elseif($attackable['drone'] === false &&  $attackable['building'] === null && $attackable['shield'] === null){
+            $attackable['drone'] = true;
         }
 
         $message = null;

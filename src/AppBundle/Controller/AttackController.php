@@ -5,11 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
 
-use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 
@@ -130,35 +126,7 @@ class AttackController extends Controller
         $em->flush();
         $em->clear();
 
-        $structures = array();
-        $attackable = array('drone'=>null, 'building'=>null, 'shield'=>null);
+        return $this->forward('AppBundle:Scan:index',$_POST);
 
-        foreach($tile->getTileStructures() as $ts){
-            if($ts->getStructure()->getStructureType() == 'drone'){
-                array_push($structures, $ts);
-                $attackable['drone'] = true;
-
-            }
-            if($ts->getStructure()->getStructureType() == 'building'){
-                array_push($structures, $ts);
-                $attackable['building'] = true;
-            }
-            if($ts->getStructure()->getStructureType() == 'shield'){
-                array_push($structures, $ts);
-                $attackable['shield'] = true;
-            }
-        }
-
-        if($attackable['drone'] == true &&  $attackable['building'] == true && $attackable['shield'] = true){
-            $attackable['building'] = false;
-            $attackable['drone'] = false;
-        }elseif(($attackable['drone'] == true &&  $attackable['building'] == true) || ($attackable['drone'] == true &&  $attackable['shield'] == true)){
-            $attackable['drone'] = false;
-        }
-
-        /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
-        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
-        return $this->render('AppBundle:Scan:scan.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'attackable' => $attackable, 'message' => $message));
-        
     }
 }

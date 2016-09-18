@@ -18,17 +18,7 @@ class BuildController extends Controller
         // user coords
         $uLat = $request->request->get('ulat');
         $uLng = $request->request->get('ulng');
-        
-        // tile centroid
-        $tLat = $request->request->get('tlat');
-        $tLng = $request->request->get('tlng');
-        
-        // tile BBOX
-        $tblx = $request->request->get('tblx');
-        $tbly = $request->request->get('tbly');
-        $ttrx = $request->request->get('ttrx');
-        $ttry = $request->request->get('ttry');
-        
+
         $a = $encoder->decrypt($request->request->get('a'));
         
         // Get the node ID
@@ -50,7 +40,8 @@ class BuildController extends Controller
         $tile = $em->getRepository(Tile::class)->findOneBy('tid',$results[0]['val']);
 
         $structures = array('drone' => null, 'building' => null, 'shield' => null);
-        
+
+        /* @var $ts \AppBundle\Entity\TileStructure */
         foreach($tile->getTileStructures() as $ts){
             if($ts->getStructure()->getStructureType() == 'drone'){
                 $structures['drone'] = $ts;
@@ -73,23 +64,12 @@ class BuildController extends Controller
             $buildable['building'] = true;
         }
         
-        $message = null;
 
         $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
 
-       // $struc = $em->getRepository(Structure::class)->findOneBy('sid',4);
-       // $struc = $structures['drone']->getStructure();
-
-       // var_dump(   $struc->getBlueprintStructure()->getBlueprint()->getName());die;
-        // var_dump( get_class_methods ( get_class ($structures['drone']->getStructure())));die;
-
         $em->clear();
 
-
-
-
-
-        return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'buildable' => $buildable, 'message' => $message));
+        return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'buildable' => $buildable));
         
     }
 }

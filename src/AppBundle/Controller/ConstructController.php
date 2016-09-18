@@ -82,7 +82,7 @@ class ConstructController extends Controller
                     $blueprintInventory->setAmount($amountNew);
                 }
                 $user->addXP(6);
-                $em->flush();
+
 
                 // set flash messages
                 $fb = $this->get('session')->getFlashBag();
@@ -117,10 +117,10 @@ class ConstructController extends Controller
 
 
             $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
+            $em->flush();
             $em->clear();
 
-            // var_dump(count($user->getUserInventory()->getInventory()->getBlueprintInventoriesByType('building')));die;
-            return $this->render('AppBundle:Build:build.html.twig',array('uLat' => $uLat, 'uLng' => $uLng, 'a' => $a, 'user' => $user, 'tile' => $tile, 'structures' => $structures, 'buildable' => $buildable));
+            return $this->forward('AppBundle:Build:index',$_POST);
 
         }else{
             throw new \Exception('IDs dont match. Uiuiui!');

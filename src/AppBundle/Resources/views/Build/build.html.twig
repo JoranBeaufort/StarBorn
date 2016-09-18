@@ -210,8 +210,7 @@
                                                                             <p> Du hast noch keine Baupläne im Inventar. Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen </p>
                                                                         {% else %}
                                                                             {%  set upgrades = false %}
-                                                                            {% set silvl = structure.getStructure.getBlueprintStructure.getBlueprint.getIlvl %}
-
+                                                                            {% set silvl = structure.getStructure.getIlvl %}
                                                                             {% for blueprint in user.getUserInventory.getInventory.getBlueprintInventoriesByType(key) %}
                                                                                 {% set bilvl = blueprint.getBlueprint.getIlvl %}
                                                                                 {% if silvl < bilvl %}
