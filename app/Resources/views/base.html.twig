@@ -51,7 +51,7 @@
     {% endblock footer %}
 
     {% block navigation %}
-
+	{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         <!-- Modal -->
         <div class="modal fade" id="menu" role="dialog">
             <div class="modal-dialog">        <!-- Modal content-->
@@ -61,7 +61,6 @@
                     </div>
                     <div class="modal-body text-xs-left ">
                         <ul class="nav navbar-nav" >
-                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ path('map') }}"><i class="fa fa-street-view"></i>&nbsp;&nbsp;Radar</a>
                                 </li>
@@ -81,20 +80,6 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ path('neo4j_logout') }}"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a>
                                 </li>
-                            {% else %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-info"></i>&nbsp;&nbsp;About</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-envelope-o"></i>&nbsp;&nbsp;Contact</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('neo4j_login') }}"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('neo4j_register') }}" class="registration-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Sign up</a>
-                                </li>
-                            {% endif %}
                         </ul>
                     </div>
                     <div class="modal-footer">
@@ -123,7 +108,7 @@
             </div>
         </footer>
         <!--/.Navbar-->
-
+	{% endif %}
     {% endblock navigation %}
 
 

@@ -48,16 +48,20 @@ class AttackController extends Controller
         }else{
              throw new \Exception('IDs dont match. Uiuiui!');
         }
-        
-        $message = array();
-        $message['type'] = 'as';
-        
+
+        // set flash messages
+        $fb = $this->get('session')->getFlashBag();
+
         if($w == 'primary'){
             $dmg = 10;
-            $message['text'] = $dmg.' Schaden verursacht!';
+            $fb->add('success', true);
+            $fb->add('success-message', $dmg.' Schaden verursacht!');
         }elseif($w == 'secondary'){
             $dmg = 50;
-            $message['text'] = $dmg.' Schaden verursacht!';
+            $fb->add('success', true);
+            $fb->add('success-message', $dmg.' Schaden verursacht!');
+        }else{
+            $dmg = 0;
         }
 
 
@@ -65,7 +69,8 @@ class AttackController extends Controller
             /* @var $ts \AppBundle\Entity\TileStructure */
             if($ts->getStructure()->getStructureType() == $t){
                 $structure = $ts->getStructure();
-                $message['img'] = $structure->getImg();
+
+                $fb->add('success-img',$structure->getImg());
                 $hp = $ts->getHp();
                 $hpNew = $hp-$dmg;
                 if($hpNew <=0){
@@ -120,7 +125,6 @@ class AttackController extends Controller
                 }  
             }
         }
-
 
 
         $em->flush();

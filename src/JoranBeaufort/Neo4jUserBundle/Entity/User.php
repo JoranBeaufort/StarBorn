@@ -153,6 +153,20 @@ class User implements AdvancedUserInterface, \Serializable
     private $xp;
 
     /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+
+    private $primary;
+
+    /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+
+    private $secondary;
+
+    /**
      * @OGM\Property(type="string")
      * @var string
      */
@@ -454,6 +468,27 @@ class User implements AdvancedUserInterface, \Serializable
         $lvl = bcdiv(sqrt($this->xp),1,0);
         return $lvl;
     }
+
+    public function getPrimary()
+    {
+        return $this->primary;
+    }
+
+    public function setPrimary($primary)
+    {
+        $this->primary = $primary;
+    }
+
+    public function getSecondary()
+    {
+        return $this->secondary;
+    }
+
+    public function setSecondary($secondary)
+    {
+        $this->secondary = $secondary;
+    }
+
 
     public function getConfirmationToken()
     {

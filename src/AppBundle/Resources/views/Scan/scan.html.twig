@@ -81,29 +81,27 @@
                             </div>
                         </div>
 
-                        {% if message != null %}
-                            {% if message.type == 'as' %}
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="card">
-                                            <div class="card-header  rgba-green-strong white-text">
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:80px; height:80px" src="{{ asset(message.img)}}"/>
-                                                    </div>
-                                                    <div class="col-md-10 text-xs-left">
-                                                        <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
-                                                            <strong>Angriff erfolgreich!</strong><br>
-                                                            <p>{{ message.text }}</p>
-                                                        </div>
+                        {% if app.session.flashbag.get('success') == true %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="card">
+                                        <div class="card-header  rgba-green-strong white-text">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:110px; height:110px" src="{{ asset(app.session.flashbag.get('success-img')[0]) }}"/>
+                                                </div>
+                                                <div class="col-md-10 text-xs-left">
+                                                    <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
+                                                        <strong>Angriff erfolgreich!</strong><br>
+                                                        <p>{{ app.session.flashbag.get('success-message')[0] }}</p>
                                                     </div>
                                                 </div>
-
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
-                            {% endif %}
+                            </div>
                         {% endif %}
 
                         <div class="row">
@@ -125,28 +123,44 @@
                                                             </div>
                                                             {% if attackable[structure.getStructure.getStructureType] == true %}
                                                                 <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <form method="post" action="{{ path('attack')}}">
-                                                                            <input type="hidden" name="ulat" value="{{ uLat }}">
-                                                                            <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                                            <input type="hidden" name="t" value="{{ structure.getStructure.getStructureType }}">
-                                                                            <input type="hidden" name="w" value="primary">
-                                                                            <input type="hidden" name="tid" value="{{ tile.getTid }}">
-                                                                            <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
-                                                                            <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Laser Beam-96.png')}}"/></button>
-                                                                        </form>
-                                                                    </div>
-                                                                    <div class="col-xs-6">
-                                                                        <form method="post" action="{{ path('attack')}}">
-                                                                            <input type="hidden" name="ulat" value="{{ uLat }}">
-                                                                            <input type="hidden" name="ulng" value="{{ uLng }}">
-                                                                            <input type="hidden" name="t" value="{{ structure.getStructure.getStructureType }}">
-                                                                            <input type="hidden" name="w" value="secondary">
-                                                                            <input type="hidden" name="tid" value="{{ tile.getTid }}">
-                                                                            <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
-                                                                            <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Mushroom Cloud Filled-100.png')}}"/></button>
-                                                                        </form>
-                                                                    </div>
+                                                                    {% if user.getPrimary+10 < 'now'|date('U') %}
+                                                                        <div class="col-xs-6">
+                                                                            <form method="post" action="{{ path('attack')}}">
+                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect"><img style="padding:5px; width:50px; height:50px"/>{{  user.getPrimary+300 - 'now'|date('U') }} </button>
+                                                                            </form>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-xs-6">
+                                                                            <form method="post" action="{{ path('attack')}}">
+                                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                                <input type="hidden" name="t" value="{{ structure.getStructure.getStructureType }}">
+                                                                                <input type="hidden" name="w" value="primary">
+                                                                                <input type="hidden" name="tid" value="{{ tile.getTid }}">
+                                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Laser Beam-96.png')}}"/></button>
+                                                                            </form>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if user.getPrimary+300 < 'now'|date('U') %}
+                                                                        <div class="col-xs-6">
+                                                                            <form method="post" action="{{ path('attack')}}">
+                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect"><img style="padding:5px; width:50px; height:50px"/>{{  user.getPrimary+300 - 'now'|date('U') }} </button>
+                                                                            </form>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-xs-6">
+                                                                            <form method="post" action="{{ path('attack')}}">
+                                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                                <input type="hidden" name="t" value="{{ structure.getStructure.getStructureType }}">
+                                                                                <input type="hidden" name="w" value="secondary">
+                                                                                <input type="hidden" name="tid" value="{{ tile.getTid }}">
+                                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Mushroom Cloud Filled-100.png')}}"/></button>
+                                                                            </form>
+                                                                        </div>
+                                                                    {% endif %}
                                                                 </div>
                                                             {% else %}
                                                                 <button type="button" style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-strong waves-effect" data-toggle="modal" data-target="#modal-{{ structure.getStructure.getStructureType }}"><strong><i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i></strong></button>

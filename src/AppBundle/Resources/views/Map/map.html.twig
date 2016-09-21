@@ -432,7 +432,7 @@
                         {% endif %}
 
                         if(feature.properties.tid == {{ redGiantsId }}){
-                            polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#FF8800 ",fillOpacity: 0, weight: 1}).addTo(map);
+                            polygon = L.polygon([[feature.properties.bly, feature.properties.blx],[feature.properties.bry, feature.properties.brx],[feature.properties.try, feature.properties.trx],[feature.properties.tly, feature.properties.tlx]],{fillOpacity: 0.7, color: "#FF8800 ", weight: 1}).addTo(map);
 
                             modal.pretitle = '<h4 class="card-header warning-color white-text"><b>';
                             modal.title = 'Gebiet der "Red Giants"';
