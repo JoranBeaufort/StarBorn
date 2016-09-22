@@ -43,6 +43,9 @@ class AttackController extends Controller
         $results = $statement->fetchAll();  
         
         $em = $this->get('neo4j.graph_manager')->getClient();
+        /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
+        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
+
         if($results[0]['val'] == $tid){
             $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
         }else{
@@ -52,18 +55,19 @@ class AttackController extends Controller
         // set flash messages
         $fb = $this->get('session')->getFlashBag();
 
-        if($w == 'primary'){
+        if($w === 'primary'){
             $dmg = 10;
             $fb->add('success', true);
             $fb->add('success-message', $dmg.' Schaden verursacht!');
-        }elseif($w == 'secondary'){
+            $user->setPrimary(time());
+        }elseif($w === 'secondary'){
             $dmg = 50;
             $fb->add('success', true);
             $fb->add('success-message', $dmg.' Schaden verursacht!');
+            $user->setSecondary(time());
         }else{
             $dmg = 0;
         }
-
 
         foreach($tile->getTileStructures() as $ts){
             /* @var $ts \AppBundle\Entity\TileStructure */
@@ -73,6 +77,7 @@ class AttackController extends Controller
                 $fb->add('success-img',$structure->getImg());
                 $hp = $ts->getHp();
                 $hpNew = $hp-$dmg;
+                $user->addXP(1);
                 if($hpNew <=0){
                     if($t == 'drone'){
                         
@@ -106,18 +111,15 @@ class AttackController extends Controller
                         $statement->execute();
 
                         /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
-                        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
-                        $user->addXP(8);
+                        $user->addXP(4);
                         
                         
                         $url = $this->generateUrl('map');
                         return new RedirectResponse($url);
                         
                     }else{
-                        /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
-                        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
-                        $user->addXP(8);
 
+                        $user->addXP(4);
                         $tile->removeTileStructure($ts);
                     }     
                 }else{
@@ -130,7 +132,7 @@ class AttackController extends Controller
         $em->flush();
         $em->clear();
 
-        return $this->forward('AppBundle:Scan:index',$_POST);
+        return $this->forward('AppBundle:Scan:index');
 
     }
 }

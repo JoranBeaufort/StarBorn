@@ -123,14 +123,11 @@
                                                             </div>
                                                             {% if attackable[structure.getStructure.getStructureType] == true %}
                                                                 <div class="row">
-                                                                    {% if user.getPrimary+10 < 'now'|date('U') %}
-                                                                        <div class="col-xs-6">
-                                                                            <form method="post" action="{{ path('attack')}}">
-                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect"><img style="padding:5px; width:50px; height:50px"/>{{  user.getPrimary+300 - 'now'|date('U') }} </button>
-                                                                            </form>
+                                                                    {% if user.getPrimary+10 > 'now'|date('U') %}
+                                                                        <div class="col-xs-6 primarycd">
+                                                                                <a style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-strong waves-effect"><img style="padding:5px; width:50px; height:50px"/><p class="countdownprimary"></p></a>
                                                                         </div>
-                                                                    {% else %}
-                                                                        <div class="col-xs-6">
+                                                                        <div class="col-xs-6 primarynocd">
                                                                             <form method="post" action="{{ path('attack')}}">
                                                                                 <input type="hidden" name="ulat" value="{{ uLat }}">
                                                                                 <input type="hidden" name="ulng" value="{{ uLng }}">
@@ -138,14 +135,35 @@
                                                                                 <input type="hidden" name="w" value="primary">
                                                                                 <input type="hidden" name="tid" value="{{ tile.getTid }}">
                                                                                 <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
-                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Laser Beam-96.png')}}"/></button>
+                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Bullet 2-96.png')}}"/></button>
+                                                                            </form>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-xs-6 primary-nocd">
+                                                                            <form method="post" action="{{ path('attack')}}">
+                                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                                <input type="hidden" name="t" value="{{ structure.getStructure.getStructureType }}">
+                                                                                <input type="hidden" name="w" value="primary">
+                                                                                <input type="hidden" name="tid" value="{{ tile.getTid }}">
+                                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Bullet 2-96.png')}}"/></button>
                                                                             </form>
                                                                         </div>
                                                                     {% endif %}
-                                                                    {% if user.getPrimary+300 < 'now'|date('U') %}
-                                                                        <div class="col-xs-6">
+                                                                    {% if user.getSecondary+180 > 'now'|date('U') %}
+                                                                        <div class="col-xs-6 secondarycd">
+                                                                                <a style="border-radius:40px; width:80px; height:80px" class="btn rgba-grey-strong waves-effect"><img style="padding:5px; width:50px; height:50px"/><p class="countdownsecondary"></p></a>
+                                                                        </div>
+                                                                        <div class="col-xs-6 secondarynocd">
                                                                             <form method="post" action="{{ path('attack')}}">
-                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect"><img style="padding:5px; width:50px; height:50px"/>{{  user.getPrimary+300 - 'now'|date('U') }} </button>
+                                                                                <input type="hidden" name="ulat" value="{{ uLat }}">
+                                                                                <input type="hidden" name="ulng" value="{{ uLng }}">
+                                                                                <input type="hidden" name="t" value="{{ structure.getStructure.getStructureType }}">
+                                                                                <input type="hidden" name="w" value="secondary">
+                                                                                <input type="hidden" name="tid" value="{{ tile.getTid }}">
+                                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Missile Filled-100.png')}}"/></button>
                                                                             </form>
                                                                         </div>
                                                                     {% else %}
@@ -157,7 +175,7 @@
                                                                                 <input type="hidden" name="w" value="secondary">
                                                                                 <input type="hidden" name="tid" value="{{ tile.getTid }}">
                                                                                 <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
-                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Mushroom Cloud Filled-100.png')}}"/></button>
+                                                                                <button style="border-radius:40px; width:80px; height:80px" class="btn rgba-red-strong waves-effect" type="submit"><img style="padding:5px; width:50px; height:50px" src="{{ asset('img/Missile Filled-100.png')}}"/></button>
                                                                             </form>
                                                                         </div>
                                                                     {% endif %}
@@ -208,4 +226,55 @@
         </div>
     </div>
 {% endblock content %}
+{% block javascript %}
+    {{  parent() }}
+    <script>
+        $('.primarynocd').hide();
+        $('.secondarynocd').hide();
+        // Our countdown plugin takes a callback, a duration, and an optional message
+        $.fn.countdown = function (callback, duration, message) {
+            // If no message is provided, we use an empty string
+            message = message || "";
+            // Get reference to container, and set initial content
+            var container = $(this[0]).html(duration + message);
+            // Get reference to the interval doing the countdown
+            var countdown = setInterval(function () {
+                // If seconds remain
+                if (--duration) {
+                    // Update our container's message
+                    container.html(duration + message);
+                    // Otherwise
+                } else {
+                    // Clear the countdown interval
+                    clearInterval(countdown);
+                    // And fire the callback passing our container as `this`
+                    callback.call(container);
+                }
+                // Run interval every 1000ms (1 second)
+            }, 1000);
 
+        };
+
+        // Use p.countdown as container, pass redirect, duration, and optional message
+        {% if user.getPrimary+10 > 'now'|date('U') %}
+            $(".countdownprimary").countdown(redirectPrimary, {{  user.getPrimary+10 - 'now'|date('U') }} , "s");
+        {% endif %}
+
+        {% if user.getSecondary+180 > 'now'|date('U') %}
+            $(".countdownsecondary").countdown(redirectSecondary, {{  user.getSecondary+180 - 'now'|date('U') }}, "s");
+        {% endif %}
+
+        // Function to be called after 5 seconds
+        function redirectPrimary () {
+            $('.primarycd').hide();
+            $('.primarynocd').show();
+        }
+
+        // Function to be called after 5 seconds
+        function redirectSecondary () {
+            $('.secondarycd').hide();
+            $('.secondarynocd').show();
+        }
+
+    </script>
+{% endblock javascript %}
