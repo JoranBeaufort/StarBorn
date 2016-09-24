@@ -51,64 +51,66 @@
     {% endblock footer %}
 
     {% block navigation %}
-	{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        <!-- Modal -->
-        <div class="modal fade" id="menu" role="dialog">
-            <div class="modal-dialog">        <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body text-xs-left ">
-                        <ul class="nav navbar-nav" >
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('map') }}"><i class="fa fa-street-view"></i>&nbsp;&nbsp;Radar</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-shopping-basket"></i>&nbsp;&nbsp;Kollektor</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('inventory') }}"><i class="fa fa-shopping-bag"></i>&nbsp;&nbsp;Inventar</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('store') }}"><i class="fa fa-shopping-bag"></i>&nbsp;&nbsp;Store</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('neo4j_profile', {'slug': app.user.username}) }}"><i class="fa fa-user"></i>&nbsp;&nbsp;Profil</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('neo4j_logout') }}"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a>
-                                </li>
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="menu-toggle-wrap">
-            <button class="menu-toggle btn-default-outline waves-effect navbar-toggle" type="button" data-toggle="modal" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fa fa-star fa-2x" aria-hidden="true"></i>
-            </button>
-        </div>
-        <footer class="footer text-xs-center">
-            <div class=row" style="padding-top:10px; padding-right:10px;">
-                <div class="col-xs-6">
-                    <div class="col-xs-12">
-                        Stufe: {{  user.getLvl }}
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="col-xs-12">
-                        <progress style="margin-top:5px; height:5px; margin-left:45px" class="progress progress-success" value="{{ user.getXP-((user.getLvl)*(user.getLvl)) }}" max="{{ ((user.getLvl+1)*(user.getLvl+1))-((user.getLvl)*(user.getLvl)) }}" style="color:000"></progress>
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <!-- Modal -->
+            <div class="modal fade" id="menu" role="dialog">
+                <div class="modal-dialog">        <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body text-xs-center ">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <a class="nav-link" href="{{ path('map') }}"><i class="fa fa-3x fa-street-view"></i><br>Radar</a>
+                                </div>
+                                <div class="col-xs-4">
+                                    <a class="nav-link" href="{{  path('collector') }}"><i class="fa fa-3x fa-shopping-basket"></i><br>Kollektor</a>
+                                </div>
+                                <div class="col-xs-4">
+                                    <a class="nav-link" href="{{ path('inventory') }}"><i class="fa fa-3x fa-shopping-bag"></i><br>Inventar</a>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <a class="nav-link" href="{{ path('store') }}"><i class="fa fa-3x fa-balance-scale"></i><br>Store</a>
+                                </div>
+                                <div class="col-xs-4">
+                                    <a class="nav-link" href="{{ path('neo4j_profile', {'slug': app.user.username}) }}"><i class="fa fa-3x fa-user"></i><br>Profil</a>
+                                </div>
+                                <div class="col-xs-4">
+                                    <a class="nav-link" href="{{ path('neo4j_logout') }}"><i class="fa fa-3x fa-sign-out"></i><br>Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </footer>
-        <!--/.Navbar-->
-	{% endif %}
+            <div class="menu-toggle-wrap">
+                <button class="menu-toggle btn-default-outline waves-effect navbar-toggle" type="button" data-toggle="modal" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-star fa-2x" aria-hidden="true"></i>
+                </button>
+            </div>
+            <footer class="footer text-xs-center">
+                <div class=row" style="padding-top:10px; padding-right:10px;">
+                    <div class="col-xs-6">
+                        <div class="col-xs-12">
+                            Stufe: {{  user.getLvl }}
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-xs-12">
+                            <progress style="margin-top:5px; height:5px; margin-left:45px" class="progress progress-success" value="{{ user.getXP-((user.getLvl)*(user.getLvl)) }}" max="{{ ((user.getLvl+1)*(user.getLvl+1))-((user.getLvl)*(user.getLvl)) }}" style="color:000"></progress>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!--/.Navbar-->
+        {% endif %}
     {% endblock navigation %}
 
 

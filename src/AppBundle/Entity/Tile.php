@@ -62,7 +62,6 @@ class Tile
     
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserTile", type="CAPTURED", direction="INCOMING", collection=true, mappedBy="tile")
-     * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\UserTile[]
      */
      

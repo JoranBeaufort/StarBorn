@@ -1,0 +1,192 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sternenhändler{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        .col-md-12{
+            padding:0;
+        }
+
+
+        .main-content {
+            padding-bottom:60px;
+        }
+
+    </style>
+{% endblock css %}
+{% block content %}
+    <!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="alert alert-info">
+                                <h4>Hilfe</h4>
+                                <p>
+                                    Sammle hier die Resourcen die sich auf deinen Gebieten akkumulieren.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Mask-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center main-content">
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Kollektor&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3>
+                    <div class="card-block text-xs-left">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-3 text-xs-center">
+                                <img style="height:200px;" src="{{ asset('img/toy-576514.svg') }}">
+                            </div>
+                            <div class="col-xs-12 col-lg-8">
+                                <br>
+                                <div class="bubble">
+                                    <h4> Hallo</h4>
+                                    <p> Hier kannst du die Resourcen einsammeln, die deine Gebiete generieren. Du kannst einmal alle 24h die Resourcen einsammeln.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if app.session.flashbag.get('success') == true %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="card">
+                                        <div class="card-header  rgba-green-strong white-text">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:110px; height:110px" src="{{ asset(app.session.flashbag.get('success-img')[0]) }}"/>
+                                                </div>
+                                                <div class="col-md-10 text-xs-left">
+                                                    <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
+                                                        <strong>Kauf erfolgreich!</strong><br>
+                                                        <p>{{ app.session.flashbag.get('success-message')[0] }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <hr>
+                        <div class="row text-xs-center"  style="padding-bottom:20px">
+                            <div class="col-xs-12">
+                                {% for userTile in  user.getUserTiles %}
+                                    <div class="col-lg-4">
+                                        <div class="card rgba-stylish-light">
+                                            <div  class="card-block elegant-color ">
+                                                <hr>
+                                                <div class="row">
+                                                    {%  for structure in userTile.getTile.getTileStructures %}
+                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:70px; height:70px" src="{{ asset(structure.getStructure.getImg) }}" />
+                                                    {% endfor %}
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <p>Breitengrad: {{ userTile.getTile.getLat|round(3)}}</p>
+                                                    <p>Längengrad: {{ userTile.getTile.getLng|round(3) }}</p>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    {% if userTile.getCollected+86400 > 'now'|date('U') %}
+                                                        <div class="col-md-12">
+                                                            <a class="btn rgba-grey-strong btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important"><p class="countdown{{ userTile.getTile.getTid }}"></p></a>
+                                                        </div>
+                                                    {%  else %}
+                                                        <div class="col-md-12">
+                                                            <form method="post" action="{{  path('collect') }}">
+                                                                <input type="hidden" name="tid" value="{{ userTile.getTile.getTid }}">
+                                                                <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit"><p>Sammeln</p></button>
+                                                            </form>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="strike">
+                        <span>
+                           Meine Resourcen
+                        </span>
+                        </div>
+                        <div class="row">
+                            {% for resource in user.getUserResources %}
+                                <div class="col-md-6 text-xs-center">
+                                    <p style="color:{{resource.getResource.getIconColour }}">{{ resource.getResource.getName_DE }}: {{ resource.getAmount }} X <i style="color:{{ resource.getResource.getColour }} !important" class="fa {{ resource.getResource.getIcon }}"></i></p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block javascript %}
+    {{  parent() }}
+    <script>
+
+        $('.primarynocd').hide();
+        $('.secondarynocd').hide();
+        // Our countdown plugin takes a callback, a duration, and an optional message
+        $.fn.countdown = function (callback, duration, message) {
+            // If no message is provided, we use an empty string
+            message = message || "";
+            // Get reference to container, and set initial content
+            var container = $(this[0]).html((duration/3600).toFixed(1) + message);
+            // Get reference to the interval doing the countdown
+            var countdown = setInterval(function () {
+                // If seconds remain
+                if (--duration) {
+                    // Update our container's message
+                    container.html((duration/3600).toFixed(1) + message);
+                    // Otherwise
+                } else {
+                    // Clear the countdown interval
+                    clearInterval(countdown);
+                    // And fire the callback passing our container as `this`
+                    callback.call(container);
+                }
+                // Run interval every 1000ms (1 second)
+            }, 1000);
+
+        };
+
+        {% for userTile in  user.getUserTiles %}
+        $(".countdown{{ userTile.getTile.getTid }}").countdown(redirect{{ userTile.getTile.getTid }}, {{  (userTile.getCollected+86400 - 'now'|date('U')) }} , "h");
+        // Use p.countdown as container, pass redirect, duration, and optional message
+        function redirect{{ userTile.getTile.getTid }} () {
+            $('.primarycd').hide();
+            $('.primarynocd').show();
+        }
+        {% endfor %}
+    </script>
+{% endblock javascript %}

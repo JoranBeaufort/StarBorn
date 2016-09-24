@@ -56,6 +56,7 @@ class ConstructController extends Controller
              */
 
             $em = $this->get('neo4j.graph_manager')->getClient();
+            $em->clear();
 
             $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
             $structure =  $em->getRepository(Structure::class)->findOneBy('sid',intval($sid));

@@ -218,7 +218,6 @@ class User implements AdvancedUserInterface, \Serializable
         
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\UserResource", type="HAS_RESOURCE", direction="OUTGOING", collection=true, mappedBy="user")
-     * @OGM\Lazy()
      * @var ArrayCollection|\AppBundle\Entity\UserResource[]
      */
     protected $userResources;
