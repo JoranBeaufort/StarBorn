@@ -56,12 +56,12 @@ class AttackController extends Controller
         $fb = $this->get('session')->getFlashBag();
 
         if($w === 'primary'){
-            $dmg = 10;
+            $dmg = 20;
             $fb->add('success', true);
             $fb->add('success-message', $dmg.' Schaden verursacht!');
             $user->setPrimary(time());
         }elseif($w === 'secondary'){
-            $dmg = 50;
+            $dmg = 100;
             $fb->add('success', true);
             $fb->add('success-message', $dmg.' Schaden verursacht!');
             $user->setSecondary(time());

@@ -134,7 +134,7 @@
                                                     </div>
                                                     <hr>
                                                     <div class="row">
-                                                        {% for  blueprintResource in blueprint.getBlueprintResources|sort %}
+                                                        {% for  blueprintResource in blueprint.getBlueprintResources %}
                                                             {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
                                                                 {% set buyable = false %}
                                                             {% else %}
@@ -174,7 +174,7 @@
                                                                                         <div class="col-xs-12 md-form">
                                                                                             <label for="buyAmount">Anzahl:</label>
                                                                                             {% if buyAmount |length > 0 %}
-                                                                                            <input id="buyAmount" class="form-control" type="number" name="amount" min="0" max="{{ min(buyAmount) }}" />
+                                                                                            <input id="buyAmount" class="form-control" type="number" name="amount" min="1" max="{{ min(buyAmount) }}" />
                                                                                             {% endif %}
                                                                                         </div>
                                                                                     </div>

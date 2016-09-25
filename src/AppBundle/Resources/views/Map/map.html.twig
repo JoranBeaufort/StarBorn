@@ -71,11 +71,16 @@
         var Stamen_Toner = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
             attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             subdomains: 'abcd',
-            minZoom: 15,
-            maxZoom: 18,
+            maxZoom: 19,
             ext: 'png'
         }).addTo(map);
-
+/*
+        var CartoDB_DarkMatter = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+*/
 
         function generateModal(modal, coords, gauge){
 
@@ -382,7 +387,7 @@
 
         function populateField(){
 
-            L.circle([uLat,uLng],700,{fillOpacity:0, opacity:0, color:"#00ff00"}).addTo(map);
+            // L.circle([uLat,uLng],700,{fillOpacity:0, opacity:0, color:"#00ff00"}).addTo(map);
             var url = "{{ path('radar', {'lat': 'lat', 'lng':'lng', 'a':user.getUid()|urlencrypt }) }}";
             url = url.replace("lat",uLat);
             url = url.replace("lng",uLng);
@@ -528,7 +533,7 @@
 
 
             });
-
+            /*
             var maskCircle = new L.GridLayer.MaskCanvas({
                 radius: 700,  // radius in pixels or in meters (see useAbsoluteRadius)
                 useAbsoluteRadius: true,  // true: r in meters, false: r in pixels
@@ -538,9 +543,9 @@
                 lineColor: '#A00'   // color of the circle outline if noMask is true
 
             });
-
-            maskCircle.setData([[uLat,uLng]]);
-            maskCircle.addTo(map);
+            */
+            // maskCircle.setData([[uLat,uLng]]);
+            // maskCircle.addTo(map);
 
         }
         var LeafIcon = L.Icon.extend({
