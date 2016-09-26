@@ -3,14 +3,8 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
-
-use AppBundle\Entity\Resources;
+use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Blueprint;
-use JoranBeaufort\Neo4jUserBundle\Entity\User;
 
 class StoreController extends Controller
 {
@@ -19,11 +13,17 @@ class StoreController extends Controller
         $em = $this->get('neo4j.graph_manager')->getClient();
         $user = $this->getUser();  
         
-        $blueprints = $em->getRepository(Blueprint::class)->findAll();
+        $blueprints = new ArrayCollection($em->getRepository(Blueprint::class)->findAll());
+
+        $iterator = $blueprints->getIterator();
+        $iterator->uasort(function ($a, $b) {
+            return ($a->getIlvl() < $b->getIlvl()) ? -1 : 1;
+        });
+
+        $collection = new ArrayCollection(iterator_to_array($iterator));
         
         
-        
-        return $this->render('AppBundle:Store:store.html.twig',array('user' => $user, 'blueprints'=>$blueprints));
+        return $this->render('AppBundle:Store:store.html.twig',array('user' => $user, 'blueprints'=>$collection));
         
     }
 }

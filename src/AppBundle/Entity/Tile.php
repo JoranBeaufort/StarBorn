@@ -204,7 +204,13 @@ class Tile
      */
     public function getTileStructures()
     {
-        return $this->tileStructures;
+        $iterator = $this->tileStructures->getIterator();
+        $iterator->uasort(function ($a, $b) {
+            return ($a->getStructure()->getBlueprintStructure()->getBlueprint()->getIlvl() < $b->getStructure()->getBlueprintStructure()->getBlueprint()->getIlvl()) ? 1 : -1;
+        });
+        $collection = new ArrayCollection(iterator_to_array($iterator));
+
+        return $collection;
     }
     
     /**

@@ -57,9 +57,7 @@ class BuyController extends Controller
             $fb->add('success-message', $blueprint->getName_DE() . ' wurde erfolgreich gekauft!');
             $fb->add('success-img','/img/toy-576520.svg');
 
-            $blueprints = $em->getRepository(Blueprint::class)->findAll();
-
-            return $this->render('AppBundle:Store:store.html.twig', array('user' => $user, 'blueprints' => $blueprints));
+            return $this->forward('AppBundle:Store:index');
         } else {
             throw new \Exception('IDs dont match. Uiuiui!');
         }
