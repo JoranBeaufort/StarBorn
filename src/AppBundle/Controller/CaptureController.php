@@ -4,16 +4,10 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
-use Doctrine\Common\Collections\ArrayCollection;
 
 use AppBundle\Form\CaptureInterfaceType;
 use AppBundle\Entity\Tile;
 use AppBundle\Entity\Structure;
-use AppBundle\Entity\Resources;
 use JoranBeaufort\Neo4jUserBundle\Entity\User;
 
 class CaptureController extends Controller
@@ -165,16 +159,8 @@ class CaptureController extends Controller
                    
                     $statement = $connection->prepare($q);
                     $statement->execute();
-                    
-                    $q=   " INSERT INTO 
-                                tileLog ( uid,tid, timestamp, lat, lng)
-                            VALUES
-                                ('".$user->getUid()."','".$tile->getTid()."','".time()."','".$tLat."','".$tLng."')";
-                    
-                    $statement = $connection->prepare($q);
-                    $statement->execute();
 
-                    
+
                     return $this->render('AppBundle:Capture:success.html.twig',array('user' => $user));
                 
                 }elseif($results[0]['val'] !== '0' || $results[0]['val'] !== 0){

@@ -31,9 +31,9 @@ class CollectController extends Controller
             $stardust = $user->getUserResource('stardust');
             $sdamount = $stardust->getAmount();
             $stardust->setAmount($sdamount+40);
-            var_dump($stardust->getAmount());
         }else{
-            throw new \Exception('IDs dont match. Uiuiui!');
+
+            return $this->forward('AppBundle:Collector:index',$_POST);
         }
 
         $em->flush();
