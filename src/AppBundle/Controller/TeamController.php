@@ -31,7 +31,7 @@ class TeamController extends Controller
                 $user->addTeam($team, time());
                 $em->flush();  
                 
-                $url = $this->generateUrl('dashboard');            
+                $url = $this->generateUrl('map');
                 return new RedirectResponse($url);
             }
         }else{
