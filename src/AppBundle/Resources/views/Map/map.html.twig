@@ -31,7 +31,6 @@
 
     <script>
 
-
         function generateModal(modal, coords, gauge){
 
             var modalTemplate =  '   <div class="card text-xs-center">' +
@@ -337,7 +336,6 @@
         var minFrequency = 10*1000;
 
         var map = L.map('map').setView([46.7,8], 8);
-
         var Stamen_Toner = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
             attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             subdomains: 'abcd',
@@ -359,15 +357,15 @@
 
         function displayError(error) {
             var errors = {
-                1: 'Permission denied',
-                2: 'Position unavailable',
-                3: 'Request timeout'
+                1: 'Verbindung zum GPS verweigert. Überprüfe ob dein GPS aktiviert ist',
+                2: 'Deine Position konnte nicht ermittelt werden',
+                3: 'Dein GPS braucht zu lange um deine Position zu ermitteln.'
             };
             alert("Error: " + errors[error.code]);
         }
 
         function displayPosition(position) {
-
+            console.log('success loaded');
             // if accuracy is too bad, do not show position.
             console.log(position.coords.accuracy);
             if(position.coords.accuracy > 100){
