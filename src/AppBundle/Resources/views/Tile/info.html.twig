@@ -1,36 +1,137 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Information{% endblock %} 
+{% block title %}Information{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        .col-md-12{
+            padding:0;
+        }
+
+
+        .main-content {
+            padding-bottom:60px;
+        }
+
+    </style>
+{% endblock css %}
 {% block content %}
-     <!--Mask-->
-     <div class="container"> 
-         <div class="row">
-             <div class="col-xs-12" style="color:#fff" >                            
-                 <h3>Info</h3>
-             </div>
-         </div>    
-         <div class="row">
-            <div class="card">
-                 <!--Card image-->
-                 <img class="img-fluid" src="http://mdbootstrap.com/images/regular/nature/img%20(28).jpg" alt="Card image cap">
-                 <!--/.Card image-->
-             
-                 <!--Card content-->
-                 <div class="card-block">
-                     <!--Title-->
-                     <h4 class="card-title">Card title</h4>
-                     <!--Text-->
-                     <p class="card-text">Lat: {{ lat }}; Lng: {{ lng }};</p>
-                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                     {% if links.capture == true %}
-                         <a href="#" class="btn btn-primary">Einnehmen</a>
-                     {% else %}
-                         <p>Du bist ausser reichweite um mit diesem Gebiet zu interagieren</p>
-                     {% endif %}
-                 </div>
-                 <!--/.Card content-->
-             
-             </div>
-         </div>
-     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-left ">
+                    <div class="alert alert-info" role="alert">
+                        <h4 class="modal-title">Zur Info:</h4>
+                        <p>Hier kannst du die Informationen zu einem Gebiet anschauen. Du siehst ob das Gebiet schon eingenommen wurde, welchem User das Gebiet gehört und was alles schon auf dem Gebiet gebaut wurde!</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Mask-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center main-content">
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Gebietsinformationen!&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3>
+
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="background-color:transparent" class="card text-xs-center">
+                                    {% if tile == null %}
+                                        <div  style="background-color:transparent" class="card-header white-text">
+                                            <div class="row">
+                                                <h3>Dieses Gebiet wurde noch nicht erobert. Nimm es schnell ein!</h3>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div  style="background-color:transparent" class="card-header white-text">
+                                            <div class="row">
+                                                {% if tile.getUserTile.getUser.getProfileImage is null %}
+                                                    <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/defaults/user.png') }}">
+                                                {% else %}
+                                                    <img class="img-circle" style="background-color:white; border:solid grey; padding:10px; height:180px; width: 180px;" src="{{ asset('/users/'~tile.getUserTile.getUser.getUid~'/'~tile.getUserTile.getUser.getProfileImage) }}">
+                                                {% endif %}
+                                            </div>
+                                            <div class="row">
+                                                <button style="margin-left: 170px; margin-top:-200px; border-radius:20px; font-size:20px; border: solid rgba(62, 69, 81, 0.7); color:rgba(62, 69, 81, 0.7);" class="btn waves-effect"><strong>1</strong></button>
+                                            </div>
+                                            <div class="row">
+                                                <button style="margin-top:-70px; border-radius:20px; border: solid rgba(62, 69, 81, 0.7); color:rgba(62, 69, 81, 0.7); font-size:20px" class="btn waves-effect"><strong>{{ tile.getUserTile.getUser.getUsername }}</strong></button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if app.session.flashbag.get('success') == true %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="card">
+                                        <div class="card-header  rgba-green-strong white-text">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:110px; height:110px" src="{{ asset(app.session.flashbag.get('success-img')[0]) }}"/>
+                                                </div>
+                                                <div class="col-md-10 text-xs-left">
+                                                    <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
+                                                        <strong>Angriff erfolgreich!</strong><br>
+                                                        <p>{{ app.session.flashbag.get('success-message')[0] }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if tile != null %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div style="background-color:transparent" class="card text-xs-center ">
+                                        <div style="background-color:transparent" class="card-header white-text">
+                                            <div class="row">
+                                                {% for structure in structures %}
+                                                    <div class="{% if structure.getStructure.getStructureType == 'building' and attackable['shield'] == null %} col-md-offset-2 {% elseif structure.getStructure.getStructureType == 'drone' and attackable['shield'] == null and attackable['building'] == null %} col-md-offset-4 {% endif %} col-md-4">
+                                                        <div class="card rgba-stylish-light">
+                                                            <div class="row" style="padding-top:10px;">
+                                                                <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset( structure.getStructure.getImg)}}"/>
+                                                            </div>
+                                                            <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>{{ structure.getStructure.getName_DE }}</strong></h3>
+                                                            <div  class="card-block elegant-color">
+                                                                <div class="row">
+                                                                    {{ structure.getHp }} / {{ structure.getStructure.getHp }}<br>
+                                                                    <progress class="progress progress-success" value="{{ structure.getHp }}" max="{{ structure.getStructure.getHp }}" style="color:000"></progress>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

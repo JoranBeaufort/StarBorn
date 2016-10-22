@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bauen{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        .col-md-12{
+            padding:0;
+        }
+
+
+        .main-content {
+            padding-bottom:60px;
+        }
+
+        p {
+            text-align: justify;
+            text-justify: auto;
+        }
+
+        @media only screen and (max-width: 500px) {
+            img {
+                width:100% !important;
+            }
+        }
+
+    </style>
+{% endblock css %}
+{% block content %}
+    <!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-left ">
+                    <div class="alert alert-info" role="alert">
+                        <h4 class="modal-title">Zur Info:</h4>
+                        <p>Hier siehst du die aktuelle Rangliste aller Spieler</p>
+                        <p>Der Rang bezieht sich auf die insgesamt eroberte Gebiete eines Spielers</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Mask-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center main-content">
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Rangliste!&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3>
+
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="background-color:transparent" class="card text-xs-left">
+                                    <div style="background-color:transparent" class="card-header white-text">
+                                        <div class="row">
+                                            <div class="col-xs-2">
+                                                <strong>Rang</strong>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <strong>Spielername</strong>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <strong>Gebiete in Besitz</strong>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <strong>Eroberte Gebiete</strong>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        {% for key,value in ranklist %}
+                                            <div class="row">
+                                                <div class="col-xs-2">
+                                                    {{ key+1 }}
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    {{ value[0] }}
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    {{ value[1] }}
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    {{ value[2] }}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <a href="{{ path('home') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Zurück</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock content %}
+{% block navigation %}
+{% endblock navigation %}
+

@@ -2,7 +2,15 @@
 home:
     path:  /
     defaults: { _controller: AppBundle:Home:index }
-    
+
+story:
+    path:  /story
+    defaults: { _controller: AppBundle:Story:index }
+
+rank:
+    path:  /rank
+    defaults: { _controller: AppBundle:Rank:index }
+
 avatar_creator:
     path:  /avatar
     defaults: { _controller: AppBundle:Avatar:creator }

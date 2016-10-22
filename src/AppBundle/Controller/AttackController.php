@@ -56,78 +56,85 @@ class AttackController extends Controller
         $fb = $this->get('session')->getFlashBag();
 
         if($w === 'primary'){
-            $dmg = 20;
-            $fb->add('success', true);
-            $fb->add('success-message', $dmg.' Schaden verursacht!');
-            $user->setPrimary(time());
+            $cd = time()-($user->getPrimary()+10);
+            if($cd>=0) {
+                $dmg = 20;
+                $fb->add('success', true);
+                $fb->add('success-message', $dmg . ' Schaden verursacht!');
+                $user->setPrimary(time());
+            }
         }elseif($w === 'secondary'){
-            $dmg = 100;
-            $fb->add('success', true);
-            $fb->add('success-message', $dmg.' Schaden verursacht!');
-            $user->setSecondary(time());
+            $cd = time()-($user->getSecondary()+180);
+            if($cd>=0) {
+                $dmg = 100;
+                $fb->add('success', true);
+                $fb->add('success-message', $dmg . ' Schaden verursacht!');
+                $user->setSecondary(time());
+            }
         }else{
             $dmg = 0;
         }
 
-        foreach($tile->getTileStructures() as $ts){
+        foreach($tile->getTileStructures() as $ts) {
             /* @var $ts \AppBundle\Entity\TileStructure */
-            if($ts->getStructure()->getStructureType() == $t){
-                $structure = $ts->getStructure();
+            if ($cd >= 0) {
+                if ($ts->getStructure()->getStructureType() == $t) {
+                    $structure = $ts->getStructure();
 
-                $fb->add('success-img',$structure->getImg());
-                $hp = $ts->getHp();
-                $hpNew = $hp-$dmg;
-                $user->addXP(1);
-                if($hpNew <=0){
-                    if($t == 'drone'){
-                        
-                        $tLat = $tile->getLat();
-                        $tLng = $tile->getLng();
-                        
-                        $tileId = $tile->getTid();
-                        $userId = $tile->getUserTile()->getUser()->getUid();  
-                        
-                        
-                        $em->getDatabaseDriver()->run("MATCH(t:Tile{tid:'".$tileId."'})-[hs:HAS_STRUCTURE]->(s:Structure{type:'drone'}), (u:User{uid:'".$userId."'})-[c:CAPTURED]->(t) DELETE hs SET c.lost = ".time()." WITH c call apoc.refactor.setType(c, 'LOST') yield input, output return false"); 
-                        
-                        $q=   " UPDATE 
+                    $fb->add('success-img', $structure->getImg());
+                    $hp = $ts->getHp();
+                    $hpNew = $hp - $dmg;
+                    $user->addXP(1);
+                    if ($hpNew <= 0) {
+                        if ($t == 'drone') {
+
+                            $tLat = $tile->getLat();
+                            $tLng = $tile->getLng();
+
+                            $tileId = $tile->getTid();
+                            $userId = $tile->getUserTile()->getUser()->getUid();
+
+
+                            $em->getDatabaseDriver()->run("MATCH(t:Tile{tid:'" . $tileId . "'})-[hs:HAS_STRUCTURE]->(s:Structure{type:'drone'}), (u:User{uid:'" . $userId . "'})-[c:CAPTURED]->(t) DELETE hs SET c.lost = " . time() . " WITH c call apoc.refactor.setType(c, 'LOST') yield input, output return false");
+
+                            $q = " UPDATE 
                                     gameField 
                                 SET 
-                                    rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),0)
+                                    rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(" . $tLng . "," . $tLat . "),4326),2056),0)
                                 WHERE 
-                                    ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
-                        
-                        $statement = $connection->prepare($q);
-                        $statement->execute();
-                        
-                        $q=   " UPDATE 
+                                    ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(" . $tLng . "," . $tLat . "),4326),2056));";
+
+                            $statement = $connection->prepare($q);
+                            $statement->execute();
+
+                            $q = " UPDATE 
                                     gameField 
                                 SET 
-                                    rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),0)
+                                    rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(" . $tLng . "," . $tLat . "),4326),2056),0)
                                 WHERE 
-                                    ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
-                        
-                        $statement = $connection->prepare($q);
-                        $statement->execute();
+                                    ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(" . $tLng . "," . $tLat . "),4326),2056));";
 
-                        /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
-                        $user->addXP(4);
-                        
-                        
-                        $url = $this->generateUrl('map');
-                        return new RedirectResponse($url);
-                        
-                    }else{
+                            $statement = $connection->prepare($q);
+                            $statement->execute();
 
-                        $user->addXP(4);
-                        $tile->removeTileStructure($ts);
-                    }     
-                }else{
-                    $ts->setHp($hpNew);
-                }  
+                            /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
+                            $user->addXP(4);
+
+
+                            $url = $this->generateUrl('map');
+                            return new RedirectResponse($url);
+
+                        } else {
+
+                            $user->addXP(4);
+                            $tile->removeTileStructure($ts);
+                        }
+                    } else {
+                        $ts->setHp($hpNew);
+                    }
+                }
             }
         }
-
 
         $em->flush();
         $em->clear();
