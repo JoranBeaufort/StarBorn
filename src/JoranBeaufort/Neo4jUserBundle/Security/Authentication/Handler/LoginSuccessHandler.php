@@ -26,13 +26,15 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         // $referer_url = $request->headers->get('referer');
         
         // Default target for unknown roles. Everyone else go there.
-        $url = 'dashboard';
+        /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
         $user = $token->getUser();
         
         if($user->getProfileImage() == null || $user->getProfileImage() == false) {
             $url = 'avatar_creator';
+        }elseif($user->getUserTeam() == null || $user->getUserTeam() == false){
+            $url = 'team_apply';
         }
-        elseif($user->getProfileImage() != false) {
+        else{
             $url = 'map';
         }
         $response = new RedirectResponse($this->router->generate($url));

@@ -1,10 +1,12 @@
-<h3>Hello {{ username }}!</h3>
+<h3>Hallo {{ username }}!</h3>
 
-Please confirm your email by clicking on following link:
- 
- <a href="{{ url('neo4j_register_confirm_email',{ 'token': confirmationToken }) }}">{{ url('neo4j_register_confirm_email',{ 'token': confirmationToken }) }}</a><br>
+<p>Wilkommen zu StarBorn, ein "Location Based Game" indem du Erobern, Bauen und andere Angreiffen kannst!</p>
+<p>Dieses Mail ist die offizielle Einladung zur Sternenschmiede, wo du dein Charakter erstellen kannst und dann gleich mit Spielen beginnen darfst!</p>
+<hr>
+<p>Klicke einfach auf folgenden Link um zur Sternenschmiede zu gelangen:</p>
+<a href="{{ url('neo4j_register_confirm_email',{ 'token': confirmationToken }) }}">{{ url('neo4j_register_confirm_email',{ 'token': confirmationToken }) }}</a><br>
+<hr>
+Die Archivaren danken dir!
 
-Thank you!
- <br>
  
 

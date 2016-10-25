@@ -1,0 +1,198 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bauen{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        .col-md-12{
+            padding:0;
+        }
+
+
+        .main-content {
+            padding-bottom:60px;
+        }
+
+        p {
+            text-align: justify;
+            text-justify: auto;
+        }
+
+        ul li {
+            list-style-type: circle !important;
+            margin-left: 20px;
+        }
+
+        @media only screen and (max-width: 500px) {
+            img {
+                width:100% !important;
+            }
+        }
+
+    </style>
+{% endblock css %}
+{% block content %}
+    <!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-left ">
+                    <div class="alert alert-info" role="alert">
+                        <h4 class="modal-title">Zur Info:</h4>
+                        <p>Hier kannst du die Spielanleitung studieren... Solange wie du willst :)</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Mask-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center main-content">
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Spielanleitung!&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3>
+
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="background-color:transparent" class="card text-xs-left ">
+                                    <div style="background-color:transparent" class="card-header white-text">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <p>StarBorn ist ein "Location Based Game" (ein Spiel bei welchem die Möglichkeiten eines
+                                                Spielers von der geographischen Position des Spielers abhängen), wobei Spieler mit
+                                                einem GPS-fähigen Gerät spielen müssen. Das Spiel hat drei Hauptmerkmale: Gebiete einnehmen,
+                                                freundliche Gebiete bebauen und feindliche Gebiete angreifen und zerstören. Die meisten Aktionen können
+                                                vom «Radar» aus gestartet werden, welcher die Spielkarte anzeigt.</p>
+
+                                                <h2>Das wichtigste in Kürze:</h2>
+
+                                                <p>Du kannst auf deinem Radar mit Gebiete in einem Umkreis von 400m interagieren.
+                                                Das Gebiet indem du dich momentan befindest kannst du Einnehmen BILD (falls es noch
+                                                niemandem gehört), du kannst es bebauen (falls es deinem Team gehört) oder du kannst es Angreifen
+                                                (falls es dem feindlichen Team gehört). Bewege dich in der realen Welt um dein Standort zu ändern
+                                                und um mit anderen Gebieten zu interagieren! Wenn du ein Gebiet einnimmst, bebaust oder angreifst
+                                                erhältst du verschiedene Ressourcen, welche unter anderem beim «Händler» gegen Gebäudebaupläne
+                                                eintauschen kannst! Schaffst du es deinem Team zum Sieg zu verhelfen oder vielleicht sogar in die
+                                                Top-10 Spieler auf der Rangliste? Auf ins Spiel!</p>
+
+                                                <h2>Das Spiel im Detail:</h2>
+                                                <h3>Grundlegende Funktionen</h3>
+
+                                                <p>Der Hauptbildschirm im Spiel sieht folgendermassen aus:</p>
+                                                <hr>
+                                                <img src="{{ asset('img/tutorial/radar.png') }}">
+                                                <hr>
+                                                <p>Im oberen Bereich ist eine Karte zu sehen. Unten befindet
+                                                sich einen Balken, bei welchem Links deine Stufe dargestellt wird, Rechts deine Erfahrungspunkte
+                                                und in der Mitte befindet sich der Menu-Knopf.</p>
+
+                                                <p>Öffnest du das Menu siehst du eine Auswahl an Unterseiten:</p>
+                                                <hr>
+                                                <img src="{{ asset('img/tutorial/menu.png') }}">
+                                                <hr>
+                                                <ul>
+                                                <li><strong>Radar:</strong> Die Spielkarte von welcher die Meisten Aktionen gestartet werden</li>
+                                                <li><strong>Kollektor:</strong> Hier kannst du die generierten Ressourcen deiner Gebiete einsammeln</li>
+                                                <li><strong>Inventar:</strong> Hier kannst du dein Inventar betrachten</li>
+                                                <li><strong>Händler:</strong> Hier kannst du Ressourcen gegen Gegenstände eintauschen.</li>
+                                                <li><strong>Profil:</strong> Hier kannst du dein Profil anschauen und bearbeiten</li>
+                                                <li><strong>Rangliste:</strong> Hier kannst du die aktuelle Rangliste aller Spieler betrachten</li>
+                                                <li><strong>Spielanleitung:</strong> Hier kommst du auf diese Seite</li>
+                                                <li><strong>Abmelden:</strong> Hier kannst du dich Abmelden</li>
+                                                </ul>
+
+                                                <h3>Radar</h3>
+
+                                                <p>Der Radar zeigt deine Spielkarte. Dabei siehst du eine Karte auf der deine Position
+                                                zu sehen ist. Die Position wird über eine kleine Figur in der Farbe deines Teams dargestellt.
+                                                Die Karte Zeigt auch eine Anzahl an Vierecke. Dies sind Gebiete, mit welchen du interagieren.</p>
+
+                                                <p>Die Vierecke sind folgendermassen Eingefärbt:</p>
+                                                <ul>
+                                                <li><strong>Grau:</strong> Gebiet wurde noch nicht eingenommen</li>
+                                                <li><strong>Orange:</strong> Das Gebiet gehört den Roten Riesen</li>
+                                                <li><strong>Blau:</strong> Das Gebiet gehört den Blauen Zwergen</li>
+                                                </ul>
+
+                                                <p>Klickst du auf ein Gebiet erscheint ein Fenster, welches unter anderem Informationen zum
+                                                Gebiet in Form eines Tachometers anzeigt. Das Tachometer oben zeigt an, ob das Gebiet freundlich
+                                                oder feindlich ist und ob du dich im Gebiet befindet (starkes Signal) oder nicht (schwaches Signal).
+                                                Unten Fenster sind 4 verschiedene Optionen auflistet, wovon nur eine Auswahl wählbar ist. Diese Auswahl
+                                                kommt auf deine Position in der realen Welt und dein Team an. Von links oben nach rechts unten haben die Optionen
+                                                folgende Bedeutung:</p>
+                                                <ul>
+                                                <li><strong>Option 1:</strong> Informationen zum Gebiet abrufen. Diese Option ist immer wählbar und Zeigt dir Informationen zum gewählten Gebiet an</li>
+                                                <li><strong>Option 2:</strong> Gebiet Einnehmen. Diese Option ist nur Verfügbar in dem Gebiet in welchem du dich befindest und nur wenn das Gebiet noch nicht eingenommen wurde. Wenn diese Option geklickt wird kannst du das Gebiet einnehmen.</li>
+                                                <li><strong>Option 3:</strong> Gebiet bebauen. Diese Option ist nur Verfügbar in dem Gebiet in welchem du dich befindest und nur wenn das Gebiet dem freundlichen Team gehört</li>
+                                                <li><strong>Option 4:</strong> Gebiet Angreifen. Diese Option ist nur Verfügbar in dem Gebiet in welchem du dich befindest und nur wenn das Gebiet dem feindlichen Team gehört.</li>
+                                                </ul>
+
+                                                <h3>Gebiet einnehmen</h3>
+                                                <hr>
+                                                <img src="{{ asset('img/tutorial/capture.png') }}">
+                                                <hr>
+                                                <p>Wenn du dich in einem nicht eroberten Gebiet befindest, dann kannst du das Gebiet einnehmen.
+                                                Um das Gebiet einnehmen zu können musst du die virtuelle Drohne Kalibrieren indem du angibst,
+                                                was in dem Gebiet alles vorkommt. Du solltest hier möglichst genau antworten um keine Punkte zu
+                                                verlieren. Wenn du ein Gebiet einnimmst kriegst du sowohl Sternenstaub wie auch eine Äthermarke.
+                                                Äthermarken können nur durch Einnehmen von Gebieten gewonnen werden und sind wichtig um eine
+                                                Vielzahl an Bauplänen zu kaufen, also los, nimm so viele Gebiete ein wie möglich!</p>
+
+                                                <h3>Gebiet bebauen</h3>
+                                                <hr>
+                                                <img src="{{ asset('img/tutorial/build.png') }}">
+                                                <hr>
+                                                <p>Sobald du dich in einem Gebiet befindest, welches dem freundlichen Team gehört, dann kannst
+                                                du das Gebiet bebauen. Du kannst auf das + Zeichen klicken um ein neues Gebäude zu bauen,
+                                                oder auf den Pfeil gegen oben um ein vorhandenes Gebäude mit einem besseren zu ersetzen.
+                                                Du musst einen Bauplan vom Gebäude welches du bauen willst im Inventar haben. Baue mit
+                                                Bedacht denn grundsätzlich sind Teure Gebäude auch schwieriger zu zerstören!</p>
+
+                                                <h3>Gebiet Angreifen</h3>
+                                                <hr>
+                                                <img src="{{ asset('img/tutorial/attack.png') }}">
+                                                <hr>
+                                                <p>Sobald du dich in einem Gebiet befindest, welches dem feindlichen Team gehört,
+                                                dann kannst du das Gebiet angreifen. Du hast zwei Attacke Möglichkeiten. Eine
+                                                kleine Attacke mit einer kleinen Ladezeit und eine grosse Attacke mit einer
+                                                langen Ladezeit. Wähle deine Attacke mit Bedacht!</p>
+
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        {% if app.user %}
+                                                            <a href="{{ path('map') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD ; margin-left:0px !important">Zur Karte</a>
+                                                        {% else %}
+                                                            <a href="{{ path('home') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD ; margin-left:0px !important">Zurück</a>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block navigation %}
+{% endblock navigation %}
+
+

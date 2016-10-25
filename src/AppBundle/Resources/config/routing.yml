@@ -7,6 +7,10 @@ story:
     path:  /story
     defaults: { _controller: AppBundle:Story:index }
 
+tutorial:
+    path:  /tutorial
+    defaults: { _controller: AppBundle:Tutorial:index }
+
 rank:
     path:  /rank
     defaults: { _controller: AppBundle:Rank:index }

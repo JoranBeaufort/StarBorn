@@ -133,7 +133,7 @@
                         <hr>
                         <div class="row">
                             <div class="team-select">
-                                <form name="team_apply" method="post" action="/app_dev.php/team/apply">
+                                <form name="team_apply" method="post" action="{{ path('team_apply') }}">
                                 {% for team in teams %}
                                 <div class="col-xs-12">
                                     <input id="{{ team.getName }}" type="radio" value="{{ team.getName }}" name="team"/>
