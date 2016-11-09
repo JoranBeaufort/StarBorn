@@ -10,9 +10,9 @@
                 <div class="alert alert-info" role="alert">
                     <h4 class="modal-title">Info:</h4>
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and user.getUsername() == app.user.username %}
-                        <p>Hier siehst du dein Profil. Teile dieser Seite sind Öffentlich zugänglich damit andere Spieler dein Fortschritt bewundern können!</p>
+                        <p>Hier siehst du dein Profil.</p>
                     {% else %}
-                        <p>Das ist das Profil von <strong>"{{ user.getUsername }}"</strong>! Hier siehst du den Fortschritt und die Leistungen dieses Spielers!</p>
+                        <p>Das ist das Profil von <strong>"{{ user.getScreenname }}"</strong>! Hier siehst du den Fortschritt und die Leistungen dieses Spielers!</p>
                     {% endif %}
                 </div>
             </div>
@@ -59,7 +59,7 @@
                                 <div style="background-color:transparent" class="card-header white-text">
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <p>Name: {{ user.getUsername }}</p>
+                                            <p>Name: {{ user.getScreenname }}</p>
                                         </div>
                                         <div class="col-xs-12">
                                             <p>Stufe: {{  user.getLvl }}</p>

@@ -41,7 +41,7 @@
                                     <p>Gib hier deine Daten ein, um mit dem Spiel zu beginnen.</p>
                                     <ul>
                                         <li>
-                                            Benutzername und Email sind nicht öffentlich einsehbar
+                                            Benutzername, Email, Gechlecht und Alter sind nicht öffentlich einsehbar
                                         </li>
                                         <li>
                                             Anzeigename wird öffentlich angezeigt
@@ -52,7 +52,7 @@
                                     <h4>Allgemeine Bedingungen:</h4>
                                     <ul>
                                         <li>
-                                            Die Verbindung wird mit SSL-Verschlüsselung geschützt und die Daten werden zusätzlich mit einem
+                                            Die Verbindung wird mit SSL-Verschlüsselung gesichert und die Daten werden zusätzlich mit einem
                                             von Kryptographen empfohlenen Algorithmus verschlüsselt. Ich versuche die Verbindung und die Daten so 
                                             gut wie möglich zu schützen.
                                         </li>
@@ -60,12 +60,12 @@
                                             Die Angaben werden vertraulich behandelt. Persönliche Daten wie Email-Adresse werden nicht an Dritte weitergegeben
                                         </li>
                                         <li>
-                                            Beim Anmelden erklärt sich der Anmeldende einverstanden, dass die generierten Daten für wissenschaftliche Zwecke
+                                            Beim Anmelden erklärt sich der/die Anmeldende einverstanden, dass die generierten Daten für wissenschaftliche Zwecke
                                             verwendet werden dürfen. 
                                         </li>
                                         <li>
-                                            Die Benutzer erklären sich einverstanden, dass Sie nicht unangebrachte Inhalte in Form von Bilder oder Text
-                                            erstellen und/oder hochladen.
+                                            Die Benutzer erklären sich einverstanden, dass Sie nicht unangebrachte Inhalte in Form von Bildern und/oder Text
+                                            erstellen und/oder hochladen. Benutzer können bei widerhandeln gegen diese Bestimmung gebannt werden.
                                         </li>
                                      </ul>
                                         
@@ -120,40 +120,40 @@
                             <div class="md-form">
                                 <i class="fa fa-user prefix"></i>
                                 {{ form_widget(form.username, { 'attr': {'class': "form-control"} }) }}
-                                <label for="user_username">Wählen Sie einen Benutzernamen</label>
+                                <label for="user_username">Benutzernamen</label>
                                 {% if form_errors(form.username) %}<div class="alert alert-danger">{{ form_errors(form.username) }}</div>{% endif %}
                             </div>
                             <div class="md-form">
                                 <i class="fa fa-user prefix"></i>
                                 {{ form_widget(form.screenname, { 'attr': {'class': "form-control"} }) }}
-                                <label for="user_screenname">Wählen Sie einen Anzeigenamen</label>
+                                <label for="user_screenname">Anzeigenamen</label>
                                 {% if form_errors(form.screenname) %}<div class="alert alert-danger">{{ form_errors(form.screenname) }}</div>{% endif %}
                             </div>                            
                             <div class="md-form">
                                 <i class="fa fa-lock prefix"></i>
                                 {{ form_widget(form.plainPassword.first, { 'attr': {'class': "form-control "} }) }}
-                                <label for="user_plainPassword_first" data-error="" >Wählen Sie ein Passwort</label>
+                                <label for="user_plainPassword_first" data-error="" >Passwort</label>
                                 {% if form_errors(form.plainPassword.first) %} <div class="alert alert-danger">{{ form_errors(form.plainPassword.first) }}</div> {% endif %}
                             </div>
                             
                             <div class="md-form">
                                 <i class="fa fa-unlock-alt prefix"></i>
                                 {{ form_widget(form.plainPassword.second, { 'attr': {'class': "form-control "} }) }}
-                                <label for="user_plainPassword_second" >Wiederholen Sie ihr Passwort</label>
+                                <label for="user_plainPassword_second" >Passwort Wiederholen</label>
                                 {% if form_errors(form.plainPassword.second) %} <div class="alert alert-danger">{{ form_errors(form.plainPassword.second) }}</div> {% endif %}
                             </div>
                             <div class="md-form">
-                                <p>Bitte geben Sie ihr Geschlecht an</p>
+                                <p>Bitte gib dein Geschlecht an</p>
                                 {{ form_widget(form.gender, { 'attr': {'class': "form-control "} }) }}
                                 {% if form_errors(form.gender) %} <div class="alert alert-danger">{{ form_errors(form.gender) }}</div> {% endif %}
                             </div>
                             <div class="md-form">
-                                <p>Bitte geben Sie ihr Alter an</p>
+                                <p>Bitte gib dein Alter an</p>
                                 {{ form_widget(form.birthdate, { 'attr': {'class': "form-control "} }) }}
                                 {% if form_errors(form.birthdate) %} <div class="alert alert-danger">{{ form_errors(form.birthdate) }}</div> {% endif %}
                             </div>
                             <br/>
-                            <button class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" type="submit">Angaben Übermitteln</button>
+                            <button class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" type="submit">Angaben übermitteln</button>
                             {{ form_end(form) }}
                         </div>
                     </div>

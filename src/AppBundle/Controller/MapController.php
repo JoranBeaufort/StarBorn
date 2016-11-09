@@ -31,7 +31,7 @@ class MapController extends Controller
        
        $a = $encoder->decrypt($a);
        
-       if($this->getUser()->getUid() == $a){ 
+       if($this->getUser()->getUid() == $a){
             // Get all the tiles in the area
             $q=   "SELECT 
                 row_to_json(fc) as GeoJSON

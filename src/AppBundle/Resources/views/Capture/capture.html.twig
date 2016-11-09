@@ -61,6 +61,8 @@
                     <hr>
                     <div class="card-block">
                         <h4>Gib an was in diesem Gebiet alles vorkommt!</h4>
+                        <small>*mehrere Antworten möglich. Sei aber so genau wie möglich, denn zuviele falsche Antworten können zu einem Punkteabzug führen!</small>
+                        <hr>
                         {% form_theme form 'AppBundle:Capture:Form/fields.html.twig' %}        
                         {{ form_start(form, {'method': 'post', 'action': path('capture')}) }}
                         <div class="row">

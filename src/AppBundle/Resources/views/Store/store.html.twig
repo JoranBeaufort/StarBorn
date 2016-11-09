@@ -31,7 +31,17 @@
                             <div class="alert alert-info">
                                 <h4>Hilfe</h4>
                                 <p>
-                                    Tausche hier deine Resourcen gegen Baupläne und Gegenstände ein.
+                                    Tausche hier deine Ressourcen gegen Baupläne und Gegenstände ein.
+                                </p>
+                                <hr>
+                                <p>
+                                    Bei den Gegenständen bedeutet HP die Anzahl an Lebenspunkte die ein Gegenstand hat. Hat ein Gegenstand zum Beispiel 300 HP muss ein feindlicher
+                                    Spieler 300 Schadenspunkte verursachen um den Gegenstand zu zerstören.
+                                </p>
+                                <hr>
+                                <p>
+                                    Das Symbol in Form eines Sterns (<i style="color:#fdd835 !important" class="fa fa-star"></i>) gibt an, wie viel Sternenstaub der Gegenstand kostet. Das Symbol in Form von drei Würfeln (<i style="color:#69f0ae !important" class="fa fa-cubes"></i>) symbolisiert die
+                                    benötigte Anzahl an Äthermarken.
                                 </p>
                             </div>
                         </div>
@@ -56,7 +66,7 @@
                 <div class="modal-body">
                     <div class="alert alert-danger" role="alert">
                         <h4 class="modal-title">Achtung</h4>
-                        <p>Du hast ungenügende Resourcen um dies zu kaufen! </p>
+                        <p>Du hast ungenügende Ressourcen um dies zu kaufen! </p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -84,8 +94,8 @@
                             <div class="col-xs-12 col-lg-8">
                                 <br>
                                 <div class="bubble">
-                                    <h4> Hallo {{ user.getUsername() }}!</h4>
-                                    <p> Willkommen in unserem kleinen Sternenladen. Wir haben eine kleine Auswahl an Bauplänen, welche du gegen Resourcen erwerben kannst!
+                                    <h4> Hallo {{ user.getScreenname }}!</h4>
+                                    <p> Willkommen in unserem Sternenladen. Wir haben eine kleine Auswahl an Bauplänen, welche du gegen Ressourcen erwerben kannst!
                                     </p>
                                 </div>
                             </div>
@@ -143,7 +153,7 @@
                                                                     {% set buyAmount = buyAmount|merge(amount) %}
                                                                 {% endif %}
                                                             {% endif %}
-                                                            <div class="col-xs-4">
+                                                            <div class="col-xs-6">
                                                                 <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>
                                                             </div>
                                                         {% endfor %}
@@ -224,12 +234,12 @@
                     </div>
                     <div class="strike">
                         <span>
-                           Meine Resourcen 
+                           Meine Ressourcen
                         </span>
                     </div>
                     <div class="row">
                         {% for resource in user.getUserResources %}
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <p style="color:{{resource.getResource.getIconColour }}">{{ resource.getResource.getName_DE }}: {{ resource.getAmount }} X <i style="color:{{ resource.getResource.getColour }} !important" class="fa {{ resource.getResource.getIcon }}"></i></p>
                             </div>
                         {% endfor %}
