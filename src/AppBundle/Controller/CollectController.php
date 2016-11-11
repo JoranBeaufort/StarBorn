@@ -22,21 +22,35 @@ class CollectController extends Controller
          *  @var $tile \AppBundle\Entity\Tile
          *  @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User
          */
-
-        $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
         $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
 
-        if($tile->getUserTile()->getUser()->getUid() == $a && $tile->getUserTile()->getCollected()+86400 < time() ){
-            $tile->getUserTile()->setCollected(time());
-            $stardust = $user->getUserResource('stardust');
-            $sdamount = $stardust->getAmount();
-            $stardust->setAmount($sdamount+40);
+        if($tid === 'all'){
+            foreach($user->getUserTiles() as $tile){
+                if ($tile->getUser()->getUid() == $a && $tile->getCollected() + 86400 < time()) {
+                    $tile->setCollected(time());
+                    $stardust = $user->getUserResource('stardust');
+                    $sdamount = $stardust->getAmount();
+                    $stardust->setAmount($sdamount + 40);
+                }
+            }
+            $em->flush();
+            return $this->forward('AppBundle:Collector:index', $_POST);
         }else{
+            $tile = $em->getRepository(Tile::class)->findOneBy('tid', $tid);
 
-            return $this->forward('AppBundle:Collector:index',$_POST);
+            if ($tile->getUserTile()->getUser()->getUid() == $a && $tile->getUserTile()->getCollected() + 86400 < time()) {
+                $tile->getUserTile()->setCollected(time());
+                $stardust = $user->getUserResource('stardust');
+                $sdamount = $stardust->getAmount();
+                $stardust->setAmount($sdamount + 40);
+            } else {
+
+                return $this->forward('AppBundle:Collector:index', $_POST);
+            }
+
+            $em->flush();
+            return $this->forward('AppBundle:Collector:index', $_POST);
         }
-
-        $em->flush();
-        return $this->forward('AppBundle:Collector:index',$_POST);
+        return $this->render('AppBundle:Collector:collect.html.twig',array('user' => $user));
     }
 }

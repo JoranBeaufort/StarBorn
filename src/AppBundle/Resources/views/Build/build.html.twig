@@ -128,10 +128,14 @@
                                                                                 <p>Verfügbare Baupläne:</p>
                                                                             </div>
                                                                         </div>
+                                                                        {% set empty=false %}
                                                                         {% if user.getUserInventory.getInventory.getBlueprintInventoriesByType(key)|length < 1 %}
-                                                                            <p> Du hast noch keine Baupläne im Inventar. Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen </p>
+                                                                            {% set empty=true %}
                                                                         {% else %}
                                                                             {% for blueprint in user.getUserInventory.getInventory.getBlueprintInventoriesByType(key) %}
+                                                                                {% if blueprint.getAmount <= 0 %}
+                                                                                    {% set empty=true %}
+                                                                                {% else %}
                                                                                 <div class="col-md-6" style="padding-top:20px">
                                                                                     <div class="card rgba-stylish-light">
                                                                                         <div class="row" style="padding-top:10px;">
@@ -161,8 +165,13 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
+                                                                                {% endif %}
                                                                             {% endfor %}
                                                                         {% endif %}
+                                                                        {% if empty == true %}
+                                                                            <p> Du hast noch keine Baupläne im Inventar. Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen </p>
+                                                                        {% endif %}
+
                                                                     </div>
                                                                     <div class="modal-footer text-xs-center">
                                                                         <div class="row">

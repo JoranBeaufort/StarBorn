@@ -524,6 +524,11 @@
                                 } else {
                                     gauge.nPos = -70;
                                 }
+                                polygon.setStyle({
+                                    opacity:1,
+                                    fillOpacity:0.2
+
+                                });
 
                                 polygon.on('click', function () {
 
@@ -540,6 +545,12 @@
                                     gauge.nPos = -70;
                                 }
 
+                                polygon.setStyle({
+                                    opacity:1,
+                                    fillOpacity:0.2
+
+                                });
+
 
                                 polygon.on('click', function () {
                                     generateModal(modal, coords, gauge);
@@ -548,6 +559,12 @@
 
                                 modal.contentText = '<div class="alert alert-info">Dein Radar registriert kein Signal... Nimm dieses Gebiet ein. Schnell!</div>';
                                 modal.capture = true;
+
+                                polygon.setStyle({
+                                    fillColor: "#ab47bc ",
+                                    fillOpacity:0.3
+                                });
+
                                 polygon.on('click', function () {
                                     generateModal(modal, coords, gauge);
                                 });

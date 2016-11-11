@@ -23,6 +23,9 @@ class BuyController extends Controller
 
         // tile centroid
         $amount = $request->request->get('amount');
+        if($amount <= 0 || $amount == null){
+            $amount = 1;
+        }
         $bid = $request->request->get('bid');
         $uid = $encoder->decrypt($request->request->get('a'));
 

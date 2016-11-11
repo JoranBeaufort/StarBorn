@@ -51,30 +51,94 @@
                         <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
                     </h3>                    
                     <div class="card-block text-xs-center">                        
-                        <div class="row">
+
                             {% if user.getUserInventory.getInventory.getBlueprintInventory|length == 0 %}
+                        <div class="row">
                                 <div class="col-xs-12">
                                     <h3> Dein Inventar ist leer </h3>
                                     <p> Besuche den <a href="{{ path('store') }}">Sternenhändler</a> um Baupläne zu kaufen.</p>
                                 </div>
+                            </div>
                             {% else %}
-                                {% for item in user.getUserInventory.getInventory.getBlueprintInventory %}
-                                    <div class="col-lg-4">
-                                        <div class="card rgba-stylish-light">
-                                            <h3 class="elegant-color card-header white-text">{{ item.getBlueprint.getName_DE }}</h3>
-                                            <div  class="card-block">
-                                                <div class="row">
-                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( item.getBlueprint.getImg)}}"/>
-                                                </div>
-                                                <hr>
-                                                <p>Anzahl: {{ item.getAmount }}</p>
-                                                <hr>
-                                            </div>
-                                        </div>
+                                <div class="row" style="padding-bottom:15px;">
+                                    <div class="strike">
+                        <span>
+                           Drohnen
+                        </span>
                                     </div>
-                                {% endfor %}
+                                </div>
+                                <div class="row">
+                                    {% for item in user.getUserInventory.getInventory.getBlueprintInventory %}
+                                        {% if item.getBlueprint.getBlueprintType == 'drone' %}
+                                            <div class="col-lg-3 col-xs-6">
+                                                <div class="card rgba-stylish-light">
+                                                    <h3 class="elegant-color card-header white-text">{{ item.getBlueprint.getName_DE }}</h3>
+                                                    <div  class="card-block">
+                                                        <div class="row">
+                                                            <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:100px; height:100px" src="{{ asset( item.getBlueprint.getImg)}}"/>
+                                                        </div>
+                                                        <hr>
+                                                        <p>Anzahl: {{ item.getAmount }}</p>
+                                                        <hr>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="row" style="padding-bottom:15px;">
+                                    <div class="strike">
+                        <span>
+                           Schilde
+                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    {% for item in user.getUserInventory.getInventory.getBlueprintInventory %}
+                                        {% if item.getBlueprint.getBlueprintType == 'shield' %}
+                                            <div class="col-lg-3 col-xs-6">
+                                                <div class="card rgba-stylish-light">
+                                                    <h3 class="elegant-color card-header white-text">{{ item.getBlueprint.getName_DE }}</h3>
+                                                    <div  class="card-block">
+                                                        <div class="row">
+                                                            <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:100px; height:100px" src="{{ asset( item.getBlueprint.getImg)}}"/>
+                                                        </div>
+                                                        <hr>
+                                                        <p>Anzahl: {{ item.getAmount }}</p>
+                                                        <hr>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="row" style="padding-bottom:15px;">
+                                    <div class="strike">
+                        <span>
+                           Gebäude
+                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    {% for item in user.getUserInventory.getInventory.getBlueprintInventory %}
+                                        {% if item.getBlueprint.getBlueprintType == 'building' %}
+                                            <div class="col-lg-3 col-xs-6">
+                                                <div class="card rgba-stylish-light">
+                                                    <h3 class="elegant-color card-header white-text">{{ item.getBlueprint.getName_DE }}</h3>
+                                                    <div  class="card-block">
+                                                        <div class="row">
+                                                            <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:100px; height:100px" src="{{ asset( item.getBlueprint.getImg)}}"/>
+                                                        </div>
+                                                        <hr>
+                                                        <p>Anzahl: {{ item.getAmount }}</p>
+                                                        <hr>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
                             {% endif %}
-                        </div>
                     </div>
                     <div class="strike">
                         <span>

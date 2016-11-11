@@ -79,7 +79,7 @@
                                                 </div>
                                                 <div class="col-md-10 text-xs-left">
                                                     <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
-                                                        <strong>Kauf erfolgreich!</strong><br>
+                                                        <strong>Einsammeln erfolgreich!</strong><br>
                                                         <p>{{ app.session.flashbag.get('success-message')[0] }}</p>
                                                     </div>
                                                 </div>
@@ -90,7 +90,16 @@
                                 </div>
                             </div>
                         {% endif %}
-
+                        <hr>
+                        <div class="row text-xs-center">
+                             <div class="col-md-12">
+                                 <form method="post" action="{{  path('collect') }}">
+                                     <input type="hidden" name="tid" value="all">
+                                     <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                     <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit"><p>Alles Sammeln</p></button>
+                                 </form>
+                             </div>
+                        </div>
                         <hr>
                         <div class="row text-xs-center"  style="padding-bottom:20px">
                             <div class="col-xs-12">
@@ -98,29 +107,22 @@
                                     <div class="col-lg-4">
                                         <div class="card rgba-stylish-light">
                                             <div  class="card-block elegant-color ">
-                                                <hr>
                                                 <div class="row">
-                                                    {%  for structure in userTile.getTile.getTileStructures %}
-                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:70px; height:70px" src="{{ asset(structure.getStructure.getImg) }}" />
-                                                    {% endfor %}
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <p>Breitengrad: {{ userTile.getTile.getLat|round(3)}}</p>
-                                                    <p>Längengrad: {{ userTile.getTile.getLng|round(3) }}</p>
-                                                </div>
-                                                <hr>
-                                                <div class="row">
+                                                    <div class="col-xs-6 flex-center" style="padding:0px">
+                                                        {%  for structure in userTile.getTile.getTileStructures %}
+                                                            <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:45px; height:45px" src="{{ asset(structure.getStructure.getImg) }}" />
+                                                        {% endfor %}
+                                                    </div>
                                                     {% if userTile.getCollected+86400 > 'now'|date('U') %}
-                                                        <div class="col-md-12">
-                                                            <a class="btn rgba-grey-strong btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important"><p class="countdown{{ userTile.getTile.getTid }}"></p></a>
+                                                        <div class="col-xs-6">
+                                                            <a class="btn rgba-grey-strong btn-block" style="padding: 0px 5px 0px 0px; border-radius: 10px; background-color: #2BBBAD; margin-left:0px !important"><p class="countdown{{ userTile.getTile.getTid }}"></p></a>
                                                         </div>
                                                     {%  else %}
-                                                        <div class="col-md-12">
+                                                        <div class="col-xs-6">
                                                             <form method="post" action="{{  path('collect') }}">
                                                                 <input type="hidden" name="tid" value="{{ userTile.getTile.getTid }}">
                                                                 <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
-                                                                <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit"><p>Sammeln</p></button>
+                                                                <button class="btn btn-inverse btn-block" style="padding: 0px 5px 0px 0px; border-radius: 10px; background-color: #2BBBAD; margin-left:0px !important" type="submit"><p>Sammeln</p></button>
                                                             </form>
                                                         </div>
                                                     {% endif %}

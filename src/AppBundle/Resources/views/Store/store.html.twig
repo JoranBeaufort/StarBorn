@@ -125,37 +125,62 @@
                         {% endif %}
 
                         <hr>
+                        <div class="row" style="padding-bottom:15px;">
+                            <div class="strike">
+                        <span>
+                           Drohnen
+                        </span>
+                            </div>
+                        </div>
+
                         <div class="row text-xs-center"  style="padding-bottom:20px">
                             <div class="col-xs-12">
                                 {% for blueprint in blueprints %}
-                                    {% if blueprint.getName != 'nova_xs' %}
+                                    {% if blueprint.getName != 'nova_xs' and blueprint.getBlueprintType == 'drone' %}
                                         {% set buyable=true %}
                                         {% set buyAmount=[] %}
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3 col-xs-6">
                                             <div class="card rgba-stylish-light">
                                                 <div class="row">
-                                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
+                                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:100px; height:100px" src="{{ asset( blueprint.getImg)}}"/>
                                                 </div>
-                                                <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;"  class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
+                                                <h6 style="padding-top:75px; margin-top:10px; margin-bottom:0px;"  class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h6>
                                                 <div  class="card-block elegant-color ">
-                                                    <hr>
+
                                                     <div class="row">
                                                         <p>HP: {{ blueprint.getBlueprintStructure.getStructure.getHp }} </p>
                                                     </div>
-                                                    <hr>
+
                                                     <div class="row">
                                                         {% for  blueprintResource in blueprint.getBlueprintResources %}
-                                                            {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
-                                                                {% set buyable = false %}
-                                                            {% else %}
-                                                                {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
-                                                                    {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
-                                                                    {% set buyAmount = buyAmount|merge(amount) %}
+                                                            {% if blueprintResource.getResources.getName == 'stardust' %}
+                                                                {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
+                                                                    {% set buyable = false %}
+                                                                {% else %}
+                                                                    {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
+                                                                        {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
+                                                                        {% set buyAmount = buyAmount|merge(amount) %}
+                                                                    {% endif %}
                                                                 {% endif %}
+                                                                <div class="col-xs-6" style="padding:0px">
+                                                                    <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>
+                                                                </div>
                                                             {% endif %}
-                                                            <div class="col-xs-6">
-                                                                <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>
-                                                            </div>
+                                                        {% endfor %}
+                                                        {% for  blueprintResource in blueprint.getBlueprintResources %}
+                                                            {% if blueprintResource.getResources.getName == 'ethertoken' %}
+                                                                {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
+                                                                    {% set buyable = false %}
+                                                                {% else %}
+                                                                    {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
+                                                                        {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
+                                                                        {% set buyAmount = buyAmount|merge(amount) %}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                                <div class="col-xs-6" style="padding:0px">
+                                                                    <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>
+                                                                </div>
+                                                            {% endif %}
                                                         {% endfor %}
                                                     </div>
                                                     <hr>
@@ -184,7 +209,7 @@
                                                                                         <div class="col-xs-12 md-form">
                                                                                             <label for="buyAmount">Anzahl:</label>
                                                                                             {% if buyAmount |length > 0 %}
-                                                                                            <input id="buyAmount" class="form-control" type="number" name="amount" min="1" max="{{ min(buyAmount) }}" />
+                                                                                                <input id="buyAmount" class="form-control" type="number" name="amount" min="1" max="{{ min(buyAmount) }}" />
                                                                                             {% endif %}
                                                                                         </div>
                                                                                     </div>
@@ -218,7 +243,268 @@
                                                             {% if blueprint.getMinlvl <= user.getLvl %}
                                                                 <a class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" data-toggle="modal" data-target="#{{ blueprint.getName }}"><strong>Kaufen...</strong></a>
                                                             {%  else %}
-                                                                <a class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"><strong>Benötigt Stufe: {{ blueprint.getMinlvl }}</strong></a>
+                                                                <a class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"><strong>Stufe: {{ blueprint.getMinlvl }}</strong></a>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <button class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"  data-toggle="modal" data-target="#modal-resources"><strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            </div>
+                            <div class="row" style="padding-bottom:15px;">
+                                <div class="strike">
+                        <span>
+                           Schilde
+                        </span>
+                                </div>
+                            </div>
+                        <div class="row text-xs-center"  style="padding-bottom:20px">
+                            <div class="col-xs-12">
+                                {% for blueprint in blueprints %}
+                                    {% if blueprint.getBlueprintType == 'shield' %}
+                                        {% set buyable=true %}
+                                        {% set buyAmount=[] %}
+                                        <div class="col-lg-3 col-xs-6">
+                                            <div class="card rgba-stylish-light">
+                                                <div class="row">
+                                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:100px; height:100px" src="{{ asset( blueprint.getImg)}}"/>
+                                                </div>
+                                                <h6 style="padding-top:75px; margin-top:10px; margin-bottom:0px;"  class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h6>
+                                                <div  class="card-block elegant-color ">
+
+                                                    <div class="row">
+                                                        <p>HP: {{ blueprint.getBlueprintStructure.getStructure.getHp }} </p>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        {% for  blueprintResource in blueprint.getBlueprintResources %}
+                                                            {% if blueprintResource.getResources.getName == 'stardust' %}
+                                                                {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
+                                                                    {% set buyable = false %}
+                                                                {% else %}
+                                                                    {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
+                                                                        {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
+                                                                        {% set buyAmount = buyAmount|merge(amount) %}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                                <div class="col-xs-6" style="padding:0px">
+                                                                    <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% for  blueprintResource in blueprint.getBlueprintResources %}
+                                                            {% if blueprintResource.getResources.getName == 'ethertoken' %}
+                                                                {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
+                                                                    {% set buyable = false %}
+                                                                {% else %}
+                                                                    {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
+                                                                        {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
+                                                                        {% set buyAmount = buyAmount|merge(amount) %}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                                <div class="col-xs-6" style="padding:0px">
+                                                                    <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row">
+
+                                                        <!-- modal -->
+                                                        <div class="modal fade" id="{{ blueprint.getName }}" role="dialog">
+                                                            <div class="modal-dialog" style="background: rgba(44, 62, 80, 1)">
+
+                                                                <!-- Modal content-->
+                                                                <div class="modal-content" style="background: rgba(44, 62, 80, 1)">
+                                                                    <form method="post" action="{{  path('buy') }}">
+                                                                        <div class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                            <h4>Kaufen</h4>
+                                                                        </div>
+                                                                        <div class="modal-body ">
+                                                                            <div class="card rgba-stylish-light">
+                                                                                <h3 class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
+                                                                                <div  class="card-block">
+                                                                                    <div class="row">
+                                                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
+                                                                                    </div>
+                                                                                    <hr>
+                                                                                    <div class="row">
+                                                                                        <div class="col-xs-12 md-form">
+                                                                                            <label for="buyAmount">Anzahl:</label>
+                                                                                            {% if buyAmount |length > 0 %}
+                                                                                                <input id="buyAmount" class="form-control" type="number" name="amount" min="1" max="{{ min(buyAmount) }}" />
+                                                                                            {% endif %}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <div class="row">
+                                                                                <div class="col-xs-6">
+                                                                                    <button type="button" class="btn btn-inverse btn-lg btn-block" data-dismiss="modal" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Abbrechen</button>
+                                                                                </div>
+                                                                                {% if blueprint.getMinlvl <= user.getLvl %}
+                                                                                    <div class="col-xs-6">
+                                                                                        <input type="hidden" name="bid" value="{{ blueprint.getBid }}">
+                                                                                        <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                        <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit">Kaufen</button>
+                                                                                    </div>
+                                                                                {% else %}
+                                                                                    <div class="col-xs-6">
+                                                                                        <button class="btn rgba-grey-strong btn-lg btn-block" style="border-radius: 20px; margin-left:0px !important" >Ungenügende Stufe...</button>
+                                                                                    </div>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- modal end -->
+                                                        {% if buyable == true %}
+                                                            {% if blueprint.getMinlvl <= user.getLvl %}
+                                                                <a class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" data-toggle="modal" data-target="#{{ blueprint.getName }}"><strong>Kaufen...</strong></a>
+                                                            {%  else %}
+                                                                <a class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"><strong>Stufe: {{ blueprint.getMinlvl }}</strong></a>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <button class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"  data-toggle="modal" data-target="#modal-resources"><strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></strong></button>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                    <div class="row" style="padding-bottom:15px;">
+                    <div class="strike">
+                        <span>
+                           Gebäude
+                        </span>
+                    </div>
+                        </div>
+                    <div class="row text-xs-center"  style="padding-bottom:20px">
+                            <div class="col-xs-12">
+                                {% for blueprint in blueprints %}
+                                    {% if blueprint.getBlueprintType == 'building' %}
+                                        {% set buyable=true %}
+                                        {% set buyAmount=[] %}
+                                        <div class="col-lg-3 col-xs-6">
+                                            <div class="card rgba-stylish-light">
+                                                <div class="row">
+                                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:100px; height:100px" src="{{ asset( blueprint.getImg)}}"/>
+                                                </div>
+                                                <h6 style="padding-top:75px; margin-top:10px; margin-bottom:0px;"  class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h6>
+                                                <div  class="card-block elegant-color ">
+
+                                                    <div class="row">
+                                                        <p>HP: {{ blueprint.getBlueprintStructure.getStructure.getHp }} </p>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        {% for  blueprintResource in blueprint.getBlueprintResources %}
+                                                            {% if blueprintResource.getResources.getName == 'stardust' %}
+                                                                {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
+                                                                    {% set buyable = false %}
+                                                                {% else %}
+                                                                    {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
+                                                                        {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
+                                                                        {% set buyAmount = buyAmount|merge(amount) %}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                                <div class="col-xs-6" style="padding:0px">
+                                                                    <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% for  blueprintResource in blueprint.getBlueprintResources %}
+                                                            {% if blueprintResource.getResources.getName == 'ethertoken' %}
+                                                                {% if blueprintResource.getAmount > user.getUserResource(blueprintResource.getResources.getName).getAmount %}
+                                                                    {% set buyable = false %}
+                                                                {% else %}
+                                                                    {% if (user.getUserResource(blueprintResource.getResources.getName).getAmount != 0 and blueprintResource.getAmount != 0) or blueprintResource.getAmount != 0 %}
+                                                                        {% set amount = [(user.getUserResource(blueprintResource.getResources.getName).getAmount / blueprintResource.getAmount)|round(0, 'floor')] %}
+                                                                        {% set buyAmount = buyAmount|merge(amount) %}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                                <div class="col-xs-6" style="padding:0px">
+                                                                    <p style="color:{{blueprintResource.getResources.getIconColour }}">{{ blueprintResource.getAmount }} <i style="color:{{ blueprintResource.getResources.getColour }} !important" class="fa {{ blueprintResource.getResources.getIcon }}"></i></p>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row">
+
+                                                        <!-- modal -->
+                                                        <div class="modal fade" id="{{ blueprint.getName }}" role="dialog">
+                                                            <div class="modal-dialog" style="background: rgba(44, 62, 80, 1)">
+
+                                                                <!-- Modal content-->
+                                                                <div class="modal-content" style="background: rgba(44, 62, 80, 1)">
+                                                                    <form method="post" action="{{  path('buy') }}">
+                                                                        <div class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                            <h4>Kaufen</h4>
+                                                                        </div>
+                                                                        <div class="modal-body ">
+                                                                            <div class="card rgba-stylish-light">
+                                                                                <h3 class="elegant-color card-header white-text">{{ blueprint.getName_DE }}</h3>
+                                                                                <div  class="card-block">
+                                                                                    <div class="row">
+                                                                                        <img  class="img-circle" style="background-color:white; border:solid grey; padding:10px; width:150px; height:150px" src="{{ asset( blueprint.getImg)}}"/>
+                                                                                    </div>
+                                                                                    <hr>
+                                                                                    <div class="row">
+                                                                                        <div class="col-xs-12 md-form">
+                                                                                            <label for="buyAmount">Anzahl:</label>
+                                                                                            {% if buyAmount |length > 0 %}
+                                                                                                <input id="buyAmount" class="form-control" type="number" name="amount" min="1" max="{{ min(buyAmount) }}" />
+                                                                                            {% endif %}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <div class="row">
+                                                                                <div class="col-xs-6">
+                                                                                    <button type="button" class="btn btn-inverse btn-lg btn-block" data-dismiss="modal" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Abbrechen</button>
+                                                                                </div>
+                                                                                {% if blueprint.getMinlvl <= user.getLvl %}
+                                                                                    <div class="col-xs-6">
+                                                                                        <input type="hidden" name="bid" value="{{ blueprint.getBid }}">
+                                                                                        <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                                                        <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit">Kaufen</button>
+                                                                                    </div>
+                                                                                {% else %}
+                                                                                    <div class="col-xs-6">
+                                                                                        <button class="btn rgba-grey-strong btn-lg btn-block" style="border-radius: 20px; margin-left:0px !important" >Ungenügende Stufe...</button>
+                                                                                    </div>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- modal end -->
+                                                        {% if buyable == true %}
+                                                            {% if blueprint.getMinlvl <= user.getLvl %}
+                                                                <a class="btn btn-inverse btn-lg btn-block" style="background-color: #2BBBAD; margin-left:0px !important" data-toggle="modal" data-target="#{{ blueprint.getName }}"><strong>Kaufen...</strong></a>
+                                                            {%  else %}
+                                                                <a class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"><strong>Stufe: {{ blueprint.getMinlvl }}</strong></a>
                                                             {% endif %}
                                                         {% else %}
                                                             <button class="btn rgba-grey-strong btn-lg btn-block" style="margin-left:0px !important"  data-toggle="modal" data-target="#modal-resources"><strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></strong></button>

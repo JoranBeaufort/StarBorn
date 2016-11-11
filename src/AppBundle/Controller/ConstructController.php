@@ -73,10 +73,11 @@ class ConstructController extends Controller
 
             if($typeLocked == false) {
                 $tile->addTileStructure($structure);
-                $blueprintInventory = $user->getUserInventory()->getInventory()->getBlueprintInventoryByBid($bid);
+                $inventory =  $user->getUserInventory()->getInventory();
+                $blueprintInventory = $inventory->getBlueprintInventoryByBid($bid);
 
-                if ($blueprintInventory->getAmount() == 1) {
-                    $user->getUserInventory()->getInventory()->removeBlueprintInventory($blueprintInventory);
+                if ($blueprintInventory->getAmount() <= 1) {
+                    $inventory->removeBlueprintInventory($blueprintInventory);
                 } else {
                     $amount = $blueprintInventory->getAmount();
                     $amountNew = $amount - 1;
