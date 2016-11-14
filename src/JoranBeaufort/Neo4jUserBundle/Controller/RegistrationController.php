@@ -41,6 +41,7 @@ class RegistrationController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setUsernameCanonical(mb_convert_case($user->getUsername(), MB_CASE_LOWER, "UTF-8"));
             $user->setEmailCanonical(mb_convert_case($user->getEmail(), MB_CASE_LOWER, "UTF-8"));
+            $uniqueScreenname=$em->getRepository(User::class)->findOneBy('screenname', $user->getScreenname());
             $uniqueUsername=$em->getRepository(User::class)->findOneBy('usernameCanonical', $user->getUsernameCanonical());
             $uniqueEmail=$em->getRepository(User::class)->findOneBy('emailCanonical', $user->getEmailCanonical());
             
@@ -50,16 +51,25 @@ class RegistrationController extends Controller
             
             if ($uniqueUsername) {
                 // Check for uniqueness
-                $error = new FormError("This username is already taken.");
+                $error = new FormError("Dieser Benutzername ist schon vergeben.");
                  
                 $form->get('username')->addError($error);
                
                 $errors=TRUE;
-            }    
-            
+            }
+
+            if ($uniqueScreenname) {
+                // Check for uniqueness
+                $error = new FormError("Dieser Anzeigenamen ist schon vergeben.");
+
+                $form->get('screenname')->addError($error);
+
+                $errors=TRUE;
+            }
+
             if ($uniqueEmail) {
                 // Check for uniqueness
-                $error = new FormError("This email already has an account.");
+                $error = new FormError("Diese Emailadresse wird schon verwendet!");
                 $form->get('email')->addError($error);
                 $errors=TRUE;
             }

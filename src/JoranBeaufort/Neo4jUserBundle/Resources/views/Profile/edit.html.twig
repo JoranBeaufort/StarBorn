@@ -1,5 +1,19 @@
 {% extends "Neo4jUserBundle::layout.html.twig" %}
 {% block title %} Edit Profile {% endblock title %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        .col-md-12{
+            padding:0;
+        }
+
+
+        .main-content {
+            padding-bottom:60px;
+        }
+
+    </style>
+{% endblock css %}
 {% block neo4j_user_content %}
 {% include "Neo4jUserBundle:Profile:edit_content.html.twig" %}
 {% endblock neo4j_user_content %}

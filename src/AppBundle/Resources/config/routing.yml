@@ -38,7 +38,11 @@ inventory:
 map:
     path:  /map
     defaults: { _controller: AppBundle:Map:index }
-    
+
+activity:
+    path:  /activity
+    defaults: { _controller: AppBundle:Activity:index }
+
 radar:
     path:  /api/geo/json/radar/{lat}/{lng}/{a}
     defaults: { _controller: AppBundle:Map:getJson }

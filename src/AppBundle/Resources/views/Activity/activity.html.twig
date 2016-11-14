@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Aktivitäten{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        .col-md-12{
+            padding:0;
+        }
+
+
+        .main-content {
+            padding-bottom:60px;
+        }
+
+        p {
+            text-align: justify;
+            text-justify: auto;
+        }
+
+        /*
+        @media only screen and (max-width: 500px) {
+            img {
+                width:100% !important;
+            }
+        }
+        */
+
+    </style>
+{% endblock css %}
+{% block content %}
+    <!-- Modal -->
+    <div class="modal fade" id="help" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-left ">
+                    <div class="alert alert-info" role="alert">
+                        <h4 class="modal-title">Zur Info:</h4>
+                        <p>Hier siehst du deine Aktivitäten</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Mask-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="color:#fff" >
+                <div style="background: rgba(44, 62, 80, 0.85)" class="card text-xs-center main-content">
+                    <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Aktivitäten!&nbsp;&nbsp;
+                        <!-- Trigger the modal with a button -->
+                        <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                    </h3>
+
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="background-color:transparent" class="card text-xs-left">
+                                    <div style="background-color:transparent" class="card-header white-text">
+                                        {% for activity in activities %}
+                                            <div class="row text-xs-center">
+                                                <div class="col-xs-5">
+                                                    {{ activity[0] | date }}
+                                                </div>
+                                                <div class="col-xs-5">
+                                                    {% if  activity[1] == 'captured' %}
+                                                    Gebiet eingenommen!
+                                                    {% elseif activity[1] == 'lost' %}
+                                                    Gebiet verloren!
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-xs-2">
+                                                    <form method="post" action="{{ path('tile')}}">
+                                                        <input type="hidden" name="ulat" value="null">
+                                                        <input type="hidden" name="ulng" value="null">
+                                                        <input type="hidden" name="tlat" value="{{ activity[2].getLat }}">
+                                                        <input type="hidden" name="tlng" value="{{ activity[2].getLng }}">
+                                                        <input type="hidden" name="tblx" value="null">
+                                                        <input type="hidden" name="tbly" value="null">
+                                                        <input type="hidden" name="ttlx" value="null">
+                                                        <input type="hidden" name="ttly" value="null">
+                                                        <input type="hidden" name="ttrx" value="null">
+                                                        <input type="hidden" name="ttry" value="null">
+                                                        <input type="hidden" name="tbrx" value="null">
+                                                        <input type="hidden" name="tbry" value="null">
+                                                        <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                        <button style="border:none; background: none; color:white" type="submit"><i class="fa fa-info-circle fa-2x"></i></button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        {% endfor %}
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        {% if app.user %}
+                                                            <a href="{{ path('map') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Zurück</a>
+                                                        {% else %}
+                                                            <a href="{{ path('home') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Zurück</a>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block navigation %}
+{% endblock navigation %}
+

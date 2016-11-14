@@ -53,6 +53,7 @@ security:
         - { path: ^/tile$, role: ROLE_USER }
         - { path: ^/scan$, role: ROLE_USER }
         - { path: ^/build$, role: ROLE_USER }
+        - { path: ^/activity$, role: ROLE_USER }
         - { path: ^/capture$, role: ROLE_USER }
         - { path: ^/collector$, role: ROLE_USER }
         - { path: ^/inventory$, role: ROLE_USER }

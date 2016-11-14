@@ -77,7 +77,7 @@
                                     <a class="nav-link" href="{{ path('store') }}"><i class="fa fa-3x fa-balance-scale"></i><br>Händler</a>
                                 </div>
                                 <div class="col-xs-4">
-                                    <a class="nav-link" href="{{ path('neo4j_profile', {'slug': app.user.username}) }}"><i class="fa fa-3x fa-user"></i><br>Profil</a>
+                                    <a class="nav-link" href="{{ path('neo4j_profile', {'slug': app.user.screenname}) }}"><i class="fa fa-3x fa-user"></i><br>Profil</a>
                                 </div>
                                 <div class="col-xs-4">
                                     <a class="nav-link" href="{{ path('rank') }}"><i class="fa fa-3x fa-trophy"></i><br>Rangliste</a>
@@ -89,7 +89,7 @@
                                     <a class="nav-link" href="{{ path('tutorial') }}"><i class="fa fa-3x fa-question-circle-o"></i><br>Spielanleitung</a>
                                 </div>
                                 <div class="col-xs-4">
-
+                                    <a class="nav-link" href="{{ path('activity') }}"><i class="fa fa-3x fa-bell"></i><br>Aktivitäten</a>
                                 </div>
                                 <div class="col-xs-4">
                                     <a class="nav-link" href="{{ path('neo4j_logout') }}"><i class="fa fa-3x fa-sign-out"></i><br>Abmelden</a>
