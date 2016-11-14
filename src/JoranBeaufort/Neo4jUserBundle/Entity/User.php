@@ -698,14 +698,23 @@ class User implements AdvancedUserInterface, \Serializable
         $tile->removeUserTile($userTile);
         return $this;
     }
-    
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection|\AppBundle\Entity\UserTileLost[]
+     */
+
+    public function getUserTilesLost()
+    {
+            return $this->userTilesLost;
+    }
+
     /**
      * @param \AppBundle\Entity\Tile $tile
      * @param int $lost
      */
     public function addUserTileLost(Tile $tile, $lost)
     {
-        
+
             $utl = new UserTileLost($this, $tile, $lost);
             $this->userTilesLost->add($utl);
             $tile->setUserTileLost($utl);

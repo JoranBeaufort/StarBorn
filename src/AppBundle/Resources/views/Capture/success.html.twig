@@ -1,11 +1,23 @@
 {% extends 'base.html.twig' %}
-{% block title %}Dashboard{% endblock %} 
+{% block title %}Erfolg{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <!-- capture interface css -->
+    <style>
+
+        .main-content {
+            padding-bottom:80px;
+        }
+
+    </style>
+
+{% endblock css %}
     {% block content %}
     
     <!--Mask-->
-    <div class="container"> 
+    <div class="container ">
         <div class="row">
-            <div class="col-md-12" style="color:#fff" >
+            <div class="col-md-12 main-content" style="color:#fff" >
                 <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">                
                     <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Gebiet erfolgreich eingenommen!&nbsp;&nbsp;
                         <!-- Trigger the modal with a button -->
@@ -20,7 +32,7 @@
                             <div class="bubble">
                                 <h4> Gut gemacht {{ user.getUsername }}!</h4>
                                 <p>
-                                    Das Sternenarchiv und dein Team sind dir Dankbar.!
+                                    Das Sternenarchiv und dein Team sind dir dankbar!
                                     Die Aufklärungsdrohne wurde erfolgreich kalibriert und ist nun auf dem Weg. 
                                 </p>                               
                                 <p>

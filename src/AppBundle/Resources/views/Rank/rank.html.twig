@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bauen{% endblock %}
+{% block title %}Rangliste{% endblock %}
 {% block css %}
     {{ parent() }}
     <style>
@@ -27,6 +27,172 @@
     </style>
 {% endblock css %}
 {% block content %}
+    <!-- Modal -->
+    <div class="modal fade" id="medal-entdecker" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-center">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card rgba-stylish-light white-text">
+                                <div class="row" style="padding-top:10px;">
+                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset('img/medals/Compass-96.png')}}"/>
+                                </div>
+                                <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>Entdecker</strong></h3>
+                                <div  class="card-block elegant-color">
+                                    <div class="row">
+                                        Mehr als 20 Gebiete eingenommen!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="medal-weltenbummler" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-center">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card rgba-stylish-light white-text">
+                                <div class="row" style="padding-top:10px;">
+                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset('img/medals/Globe Earth-80.png')}}"/>
+                                </div>
+                                <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>Weltenbummler</strong></h3>
+                                <div  class="card-block elegant-color">
+                                    <div class="row">
+                                        Mehr als 50 Gebiete eingenommen!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="medal-eroberer" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-center">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card rgba-stylish-light white-text">
+                                <div class="row" style="padding-top:10px;">
+                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset('img/medals/Christmas Star-96.png')}}"/>
+                                </div>
+                                <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>Eroberer</strong></h3>
+                                <div  class="card-block elegant-color">
+                                    <div class="row">
+                                        Mehr als 100 Gebiete eingenommen!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="medal-unaufhaltbar" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-center">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card rgba-stylish-light white-text">
+                                <div class="row" style="padding-top:10px;">
+                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset('img/medals/Medal-96.png')}}"/>
+                                </div>
+                                <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>Unaufhaltbar!</strong></h3>
+                                <div  class="card-block elegant-color">
+                                    <div class="row">
+                                        Mehr als 200 Gebiete eingenommen!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="medal-legendar" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-center">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card rgba-stylish-light white-text">
+                                <div class="row" style="padding-top:10px;">
+                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset('img/medals/Trophy-96.png')}}"/>
+                                </div>
+                                <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>LEGENDÄR!</strong></h3>
+                                <div  class="card-block elegant-color">
+                                    <div class="row">
+                                        Mehr als 500 Gebiete eingenommen!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Modal -->
     <div class="modal fade" id="help" role="dialog">
         <div class="modal-dialog">
@@ -100,6 +266,14 @@
                                             </div>
                                         </div>
                                         <hr>
+                                        <!--
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <h3>Bester Spieler: {{ ranklist[0][0] }}</h3>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        -->
                                         <div class="row">
                                             <div class="col-xs-2">
                                                 <strong>Rang</strong>
@@ -107,7 +281,7 @@
                                             <div class="col-xs-6">
                                                 <strong>Spielername</strong>
                                             </div>
-                                            <div class="col-xs-4 ">
+                                            <div class="col-xs-3 ">
                                                 <strong>Eingenommene Gebiete</strong>
                                             </div>
                                         </div>
@@ -115,15 +289,73 @@
                                         {% for key,value in ranklist %}
                                             <div class="row">
                                                 <div class="col-xs-2">
+                                                    {% if key+1 == 1 %}
+                                                    <h1>{{ key+1 }}</h1>
+                                                    {% elseif key+1 == 2 %}
+                                                    <h2>{{ key+1 }}</h2>
+                                                    {% elseif key+1 == 3 %}
+                                                    <h3>{{ key+1 }}</h3>
+                                                    {% elseif key+1 == 4 %}
+                                                    <h4>{{ key+1 }}</h4>
+                                                    {% else %}
                                                     {{ key+1 }}
+                                                    {% endif %}
                                                 </div>
-                                                <div class="col-xs-6">
-                                                    {{ value[0] }}
+                                                <div class="col-xs-5">
+                                                    {% if key+1 == 1 %}
+                                                        <h1>{{value[0] }}</h1>
+                                                    {% elseif key+1 == 2 %}
+                                                        <h2>{{ value[0] }}</h2>
+                                                    {% elseif key+1 == 3 %}
+                                                        <h3>{{ value[0] }}</h3>
+                                                    {% elseif key+1 == 4 %}
+                                                        <h4>{{ value[0] }}</h4>
+                                                    {% else %}
+                                                        {{ value[0] }}
+                                                    {% endif %}
                                                 </div>
-                                                <div class="col-xs-4">
-                                                    {{ value[1] }}
+                                                <div class="col-xs-2">
+                                                    {% if value[1] >= 20 %}
+                                                        <a data-toggle="modal" data-target="#medal-entdecker">
+                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:20px; height:20px" src="{{ asset('img/medals/Compass-96.png')}}"/>
+                                                            </a>
+                                                    {% endif %}
+                                                    {% if value[1] >= 50 %}
+                                                    <a data-toggle="modal" data-target="#medal-weltenbummler">
+                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:20px; height:20px" src="{{ asset('img/medals/Globe Earth-80.png')}}"/>
+                                                        </a>
+                                                    {% endif %}
+                                                    {% if value[1] >= 100 %}
+                                                        <a data-toggle="modal" data-target="#medal-eroberer">
+                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:20px; height:20px" src="{{ asset('img/medals/Christmas Star-96.png')}}"/>
+                                                            </a>
+                                                    {% endif %}
+                                                    {% if value[1] >= 200 %}
+                                                            <a data-toggle="modal" data-target="#medal-unaufhaltbar">
+                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:20px; height:20px" src="{{ asset('img/medals/Medal-96.png')}}"/>
+                                                                </a>
+                                                    {% endif %}
+                                                    {% if value[1] >= 500 %}
+                                                                <a data-toggle="modal" data-target="#medal-legendar">
+                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:20px; height:20px" src="{{ asset('img/medals/Trophy-96.png')}}"/>
+                                                                    </a>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    {% if key+1 == 1 %}
+                                                        <h1>{{value[1] }}</h1>
+                                                    {% elseif key+1 == 2 %}
+                                                        <h2>{{ value[1] }}</h2>
+                                                    {% elseif key+1 == 3 %}
+                                                        <h3>{{ value[1] }}</h3>
+                                                    {% elseif key+1 == 4 %}
+                                                        <h4>{{ value[1] }}</h4>
+                                                    {% else %}
+                                                        {{ value[1] }}
+                                                    {% endif %}
                                                 </div>
                                             </div>
+                                            <hr>
                                         {% endfor %}
                                         <hr>
                                         <div class="row">

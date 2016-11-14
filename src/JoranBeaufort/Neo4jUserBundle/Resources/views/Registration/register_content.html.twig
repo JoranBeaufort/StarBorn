@@ -148,8 +148,8 @@
                                 {% if form_errors(form.gender) %} <div class="alert alert-danger">{{ form_errors(form.gender) }}</div> {% endif %}
                             </div>
                             <div class="md-form">
-                                <p>Bitte gib dein Alter an</p>
-                                {{ form_widget(form.birthdate, { 'attr': {'class': "form-control "} }) }}
+                                <p>Bitte gib dein Geburtsdatum an</p>
+                                {{ form_widget(form.birthdate, { 'value' : '2000-01-01' , 'attr': {'class': "form-control "} }) }}
                                 {% if form_errors(form.birthdate) %} <div class="alert alert-danger">{{ form_errors(form.birthdate) }}</div> {% endif %}
                             </div>
                             <br/>
@@ -160,6 +160,15 @@
                 </div>
             </div>
         </div>
+    <script>
+        $("#user_birthdate_year").val('2000');
+    </script>
 {% endblock neo4j_user_content %}
 {%  block navigation %}
+{% endblock %}
+{% block javascript %}
+{{  parent() }}
+    <script>
+        $("#user_birthdate_year").val('2000');
+    </script>
 {% endblock %}

@@ -23,7 +23,7 @@ class UserController extends Controller
     {
 
         $em = $this->get('neo4j.graph_manager')->getClient();
-        $user = $em->getRepository(User::class)->findOneBy('usernameCanonical', $slug);
+        $user = $em->getRepository(User::class)->findOneBy('usernameCanonical', strtolower($slug));
 
         if (!$user) {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $slug));
@@ -35,7 +35,7 @@ class UserController extends Controller
     public function profileEditAction($slug, Request $request)
     {
         $error=null;
-
+        
         if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException();
         }
