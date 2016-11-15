@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+{% block title %}Spielkarte{% endblock %} 
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{  asset("css/L.Control.Locate.min.css") }} "/>
+{% endblock %}
+{% block content %}
+    <!--Mask-->
+    <div id="map"></div>
+    <!-- Large modal -->
+    <div style="z-index:99999" id="modal-map" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-map-content">
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--/.Mask-->
+{% endblock content %}
+{% block javascript %}
+    {{ parent() }}
+    <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
+    <script src="{{ asset('js/L.Control.Locate.js') }}"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="{{ asset('js/QuadTree.js') }}"></script>
+    <script src="{{ asset('js/L.GridLayer.MaskCanvas.js') }}"></script>
+
+    <script>
+	var data = { "type": "FeatureCollection",
+    "features": [
+		{ "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [null, null]},
+        "properties": {"team": null}
+        }
+		{% for tile in tiles %}
+		,{ "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [{{tile.getLng}}, {{tile.getLat}}]},
+        "properties": {"team": "{% if tile.getUserTile != null %}{{ tile.getUserTile.getUser.getUserTeam.getTeam.getName }}{% else %} neutral {% endif %}"}
+        }
+		{% endfor %}
+       ]
+     };
+        var map = L.map('map').setView([46.7,8], 8);
+        
+        var Stamen_Toner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png', {
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            subdomains: 'abcd',
+            ext: 'png'
+        }).addTo(map);
+		
+		function getValue(d) {
+			return 	d == 'red_giants' ? "#FF8800" :
+					d == 'blue_dwarfs' ? "#33b5e5" :
+					"#eee";
+			   }
+			   
+		function style(feature) {
+			return {
+				radius: 5,
+				fillColor: getValue(feature.properties.team),
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			};
+		}
+
+		L.geoJSON(data, {
+			pointToLayer: function (feature, latlng) {
+					return L.circleMarker(latlng, style(feature));
+				}
+		}).addTo(map);
+		
+        // L.geoJSON(data).addTo(map);
+
+    </script>
+{% endblock %}
+

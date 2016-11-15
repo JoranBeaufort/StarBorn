@@ -14,7 +14,7 @@ class RankController extends Controller
 
         $em = $this->get('neo4j.graph_manager')->getClient();
 
-        $result = $em->getDatabaseDriver()->run("match (u:User)-[r:CAPTURED|LOST]->(t) with u,t return u.screenname,count(t)");
+        $result = $em->getDatabaseDriver()->run("match (team:Team)<-[:IN_TEAM]-(u:User)-[r:CAPTURED|LOST]->(t) with u,t,team return u.screenname,count(t),team.name");
 
         $ranklist = array();
         foreach($result->records() as $record){

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Team Auswahl{% endblock %} 
+{% block title %}Charaktererstellung{% endblock %} 
 {% block css %}
     {{ parent() }}
 	<link href="{{ asset('svgavatars/css/spectrum.css') }}" rel="stylesheet">
@@ -78,9 +78,9 @@
                             <div class="col-xs-12 col-lg-8">
                                 <br>
                                 <div class="bubble">
-                                    <h4> Herzlich Willkommen {{ user.getUsername() }}!</h4>
+                                    <h4> Herzlich willkommen {{ user.getScreenname() }}!</h4>
                                     <p> Glückwunsch, du hast es erfolgreich zur Sternenschmiede geschafft! Leider sind momentan unsere biogenetischen Scanner offline.
-                                        Übermittle hier dein gewünschtes Aussehen, damit wir dies im Sternenarchiv speichern können! Danach darfst du in der Fusionshalle
+                                        Übermittle hier dein gewünschtes Aussehen, damit wir es im Sternenarchiv speichern können! Danach darfst du in der Fusionshalle
                                         einer Fraktion beitreten.
                                     </p>    
                                     <p>

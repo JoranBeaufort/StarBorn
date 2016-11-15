@@ -38,6 +38,10 @@ inventory:
 map:
     path:  /map
     defaults: { _controller: AppBundle:Map:index }
+    
+overview:
+    path:  /overview
+    defaults: { _controller: AppBundle:Overview:index }
 
 activity:
     path:  /activity
