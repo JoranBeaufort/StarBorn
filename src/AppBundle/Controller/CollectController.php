@@ -28,9 +28,25 @@ class CollectController extends Controller
             foreach($user->getUserTiles() as $tile){
                 if ($tile->getUser()->getUid() == $a && $tile->getCollected() + 86400 < time()) {
                     $tile->setCollected(time());
+                    $bonus = 0;
+                    foreach($tile->getTile()->getTileStructures() as $tileStructure){
+                        $s = $tileStructure->getStructure();
+                        if($s->getName() == 'nova_s' || $s->getName() == 'neutron_shield'){
+                            $bonus += 5;
+                        }elseif($s->getName() == 'nova_m' || $s->getName() == 'nova_l' || $s->getName() == 'electron_shield'){
+                            $bonus += 10;
+                        }elseif($s->getName() == 'outpost' || $s->getName() == 'proton_shield'){
+                            $bonus += 20;
+                        }elseif($s->getName() == 'infohub'){
+                            $bonus += 30;
+                        }elseif($s->getName() == 'starport'){
+                            $bonus += 50;
+                        }
+                    }
+
                     $stardust = $user->getUserResource('stardust');
                     $sdamount = $stardust->getAmount();
-                    $stardust->setAmount($sdamount + 40);
+                    $stardust->setAmount($bonus + $sdamount + 40);
                 }
             }
             $em->flush();
@@ -40,9 +56,24 @@ class CollectController extends Controller
 
             if ($tile->getUserTile()->getUser()->getUid() == $a && $tile->getUserTile()->getCollected() + 86400 < time()) {
                 $tile->getUserTile()->setCollected(time());
+                $bonus = 0;
+                foreach($tile->getTileStructures() as $tileStructure){
+                    $s = $tileStructure->getStructure();
+                    if($s->getName() == 'nova_s' || $s->getName() == 'neutron_shield'){
+                        $bonus += 5;
+                    }elseif($s->getName() == 'nova_m' || $s->getName() == 'nova_l' || $s->getName() == 'electron_shield'){
+                        $bonus += 10;
+                    }elseif($s->getName() == 'outpost' || $s->getName() == 'proton_shield'){
+                        $bonus += 20;
+                    }elseif($s->getName() == 'infohub'){
+                        $bonus += 30;
+                    }elseif($s->getName() == 'starport'){
+                        $bonus += 50;
+                    }
+                }
                 $stardust = $user->getUserResource('stardust');
                 $sdamount = $stardust->getAmount();
-                $stardust->setAmount($sdamount + 40);
+                $stardust->setAmount($bonus + $sdamount + 40);
             } else {
 
                 return $this->forward('AppBundle:Collector:index', $_POST);

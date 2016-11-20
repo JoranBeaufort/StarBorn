@@ -128,7 +128,7 @@ class Tile
         $this->bBox = $bBox;
     }
     
-    public function getBBox($bBox)
+    public function getBBox()
     {
         return $this->bBox;
     }

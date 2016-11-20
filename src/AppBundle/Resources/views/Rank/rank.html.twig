@@ -252,17 +252,17 @@
                                             <div class="col-xs-5">
                                                 {% for key,value in teamlist %}
                                                 {% if value[0] == 'blue_dwarfs' %}
-                                                <strong style="color:#33b5e5;  text-shadow: 3px 3px 0px #000; font-size:55px; font-weight:bold; float:right;" >{{ value[1] }}</strong>
+                                                <strong style="color:#33b5e5;  text-shadow: 3px 3px 0px #000; font-size:45px; font-weight:bold; float:right;" >{{ value[1] }}</strong>
                                                 {% endif %}
                                                 {% endfor %}
                                             </div>
                                             <div class="col-xs-2 text-xs-center">
-                                                <strong style="color:#aaa;  text-shadow: 3px 3px 0px #000; font-size:55px; font-weight:bold;" >:</strong>
+                                                <strong style="color:#aaa;  text-shadow: 3px 3px 0px #000; font-size:45px; font-weight:bold;" >:</strong>
                                             </div>
                                             <div class="col-xs-5">
                                                 {% for key,value in teamlist %}
                                                 {% if value[0] == 'red_giants' %}
-                                                <strong style="color:#FF8800;  text-shadow: 3px 3px 0px #000; font-size:55px; font-weight:bold; float:left;" >{{ value[1] }}</strong>
+                                                <strong style="color:#FF8800;  text-shadow: 3px 3px 0px #000; font-size:45px; font-weight:bold; float:left;" >{{ value[1] }}</strong>
                                                 {% endif %}
                                                 {% endfor %}
                                             </div>
@@ -277,50 +277,67 @@
                                         <hr>
                                         -->
                                         <div class="row">
-                                            <div class="col-xs-2">
+                                            <div class="col-xs-4">
                                                 <strong>Rang</strong>
                                             </div>
-                                            <div class="col-xs-6">
+                                            <div class="col-xs-5">
                                                 <strong>Spielername</strong>
                                             </div>
                                             <div class="col-xs-3 ">
-                                                <strong>Eingenommene Gebiete</strong>
+                                                <strong>Gebiete</strong>
                                             </div>
                                         </div>
                                         <hr>
                                         {% for key,value in ranklist %}
                                             <div class="row">
-                                                <div class="col-xs-2">
-                                                    {% if key+1 == 1 %}
-                                                    <h1>{{ key+1 }}</h1>
-                                                    {% elseif key+1 == 2 %}
-                                                    <h2>{{ key+1 }}</h2>
-                                                    {% elseif key+1 == 3 %}
-                                                    <h3>{{ key+1 }}</h3>
-                                                    {% elseif key+1 == 4 %}
-                                                    <h4>{{ key+1 }}</h4>
-                                                    {% else %}
-                                                    {{ key+1 }}
+                                                <div class="col-xs-4">
+                                                    {% if value[1] >= 500 %}
+                                                       {{ key+1 }} &nbsp;&nbsp;&nbsp;
+                                                        <a data-toggle="modal" data-target="#medal-legendar">
+                                                            <img  class="img-circle" style="background-color:white; padding:1px; width:40px; height:40px" src="{{ asset('img/medals/Trophy-96.png')}}"/>
+                                                        </a>
+                                                    {% elseif value[1] >= 200 %}
+                                                        {{ key+1 }}&nbsp;&nbsp;&nbsp;
+                                                        <a data-toggle="modal" data-target="#medal-unaufhaltbar">
+                                                            <img  class="img-circle" style="background-color:white; padding:1px; width:40px; height:40px" src="{{ asset('img/medals/Medal-96.png')}}"/>
+                                                        </a>
+                                                    {% elseif value[1] >= 100 %}
+                                                        {{ key+1 }}&nbsp;&nbsp;&nbsp;
+                                                        <a data-toggle="modal" data-target="#medal-eroberer">
+                                                            <img  class="img-circle" style="background-color:white; padding:1px; width:40px; height:40px" src="{{ asset('img/medals/Christmas Star-96.png')}}"/>
+                                                        </a>
+                                                    {% elseif value[1] >= 50 %}
+                                                        {{ key+1 }}&nbsp;&nbsp;&nbsp;
+                                                        <a data-toggle="modal" data-target="#medal-weltenbummler">
+                                                            <img  class="img-circle" style="background-color:white; padding:1px; width:35px; height:35px" src="{{ asset('img/medals/Globe Earth-80.png')}}"/>
+                                                        </a>
+                                                    {% elseif value[1] >= 20 %}
+                                                        {{ key+1 }}&nbsp;&nbsp;&nbsp;
+                                                        <a data-toggle="modal" data-target="#medal-entdecker">
+                                                            <img  class="img-circle" style="background-color:white; padding:1px; width:30px; height:30px" src="{{ asset('img/medals/Compass-96.png')}}"/>
+                                                        </a>
+                                                        {% else %}
+                                                        <p>{{ key+1 }}</p>
                                                     {% endif %}
                                                 </div>
-                                                <div class="col-xs-5">
+                                                <div class="col-xs-6">
                                                     {% if key+1 == 1 %}
 														{% if value[2] ==  'blue_dwarfs' %}
-															<a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#33b5e5;"><h1>{{value[0] }}</h1></a>
+															<a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#33b5e5;"><h4>{{value[0] }}</h4></a>
 														{% elseif value[2] == 'red_giants' %}
-															<a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#FF8800;"><h1>{{value[0] }}</h1></a>
+															<a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#FF8800;"><h4>{{value[0] }}</h4></a>
 														{% endif %}
 													{% elseif key+1 == 2 %}
 														{% if value[2] ==  'blue_dwarfs' %}
-                                                        <a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#33b5e5;"><h2>{{ value[0] }}</h2></a>
+                                                        <a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#33b5e5;"><h4>{{ value[0] }}</h4></a>
                                                         {% elseif value[2] == 'red_giants' %}
-														<a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#FF8800;"><h2>{{ value[0] }}</h2></a>
+														<a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#FF8800;"><h4>{{ value[0] }}</h4></a>
 														{% endif %}
 													{% elseif key+1 == 3 %}
 														{% if value[2] ==  'blue_dwarfs' %}
-                                                        <a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#33b5e5;"><h3>{{ value[0] }}</h3></a>
+                                                        <a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#33b5e5;"><h4>{{ value[0] }}</h4></a>
                                                         {% elseif value[2] == 'red_giants' %}
-														<a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#FF8800;"><h3>{{ value[0] }}</h3></a>
+														<a href="{{ path('neo4j_profile', {'slug': value[0]}) }}" style="color:#FF8800;"><h4>{{ value[0] }}</h4></a>
 														{% endif %}
 													{% elseif key+1 == 4 %}
 														{% if value[2] ==  'blue_dwarfs' %}
@@ -337,35 +354,12 @@
 													{% endif %}
                                                 </div>
                                                 <div class="col-xs-2">
-                                                    {% if value[1] >= 500 %}
-                                                    <a data-toggle="modal" data-target="#medal-legendar">
-                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:40px; height:40px" src="{{ asset('img/medals/Trophy-96.png')}}"/>
-                                                    </a>
-                                                    {% elseif value[1] >= 200 %}
-                                                    <a data-toggle="modal" data-target="#medal-unaufhaltbar">
-                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:20px; height:20px" src="{{ asset('img/medals/Medal-96.png')}}"/>
-                                                    </a>
-                                                    {% elseif value[1] >= 100 %}
-                                                    <a data-toggle="modal" data-target="#medal-eroberer">
-                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:40px; height:40px" src="{{ asset('img/medals/Christmas Star-96.png')}}"/>
-                                                    </a>
-                                                    {% elseif value[1] >= 50 %}
-                                                    <a data-toggle="modal" data-target="#medal-weltenbummler">
-                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:35px; height:35px" src="{{ asset('img/medals/Globe Earth-80.png')}}"/>
-                                                    </a>
-                                                    {% elseif value[1] >= 20 %}
-                                                        <a data-toggle="modal" data-target="#medal-entdecker">
-                                                        <img  class="img-circle" style="background-color:white; padding:1px; width:30px; height:30px" src="{{ asset('img/medals/Compass-96.png')}}"/>
-                                                            </a>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-xs-3">
                                                     {% if key+1 == 1 %}
-                                                        <h1>{{value[1] }}</h1>
+                                                        <h4>{{value[1] }}</h4>
                                                     {% elseif key+1 == 2 %}
-                                                        <h2>{{ value[1] }}</h2>
+                                                        <h4>{{ value[1] }}</h4>
                                                     {% elseif key+1 == 3 %}
-                                                        <h3>{{ value[1] }}</h3>
+                                                        <h4>{{ value[1] }}</h4>
                                                     {% elseif key+1 == 4 %}
                                                         <h4>{{ value[1] }}</h4>
                                                     {% else %}

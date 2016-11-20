@@ -3,7 +3,7 @@
 {% block css %}
     {{ parent() }}
     <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
-    <link rel="stylesheet" href="{{  asset("css/L.Control.Locate.min.css") }} "/>
+
 {% endblock %}
 {% block content %}
     <!--Mask-->
@@ -24,10 +24,6 @@
 {% block javascript %}
     {{ parent() }}
     <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
-    <script src="{{ asset('js/L.Control.Locate.js') }}"></script>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="{{ asset('js/QuadTree.js') }}"></script>
-    <script src="{{ asset('js/L.GridLayer.MaskCanvas.js') }}"></script>
 
     <script>
 	var data = { "type": "FeatureCollection",
@@ -38,8 +34,8 @@
         }
 		{% for tile in tiles %}
 		,{ "type": "Feature",
-        "geometry": {"type": "Point", "coordinates": [{{tile.getLng}}, {{tile.getLat}}]},
-        "properties": {"team": "{% if tile.getUserTile != null %}{{ tile.getUserTile.getUser.getUserTeam.getTeam.getName }}{% else %} neutral {% endif %}"}
+        "geometry": {"type": "Polygon", "coordinates": [[{{ tile.getBBox }}]]},
+        "properties": {"team": "{% if tile.getUserTile != null %}{{ tile.getUserTile.getUser.getUserTeam.getTeam.getName }}{% else %}neutral{% endif %}"}
         }
 		{% endfor %}
        ]
@@ -70,13 +66,14 @@
 		}
 
 		L.geoJSON(data, {
-			pointToLayer: function (feature, latlng) {
-					return L.circleMarker(latlng, style(feature));
+			style: function(feature) {
+				switch (feature.properties.team) {
+					case 'red_giants': return {color: "#FF8800"};
+					case 'blue_dwarfs':   return {color: "#33b5e5"};
+					case 'neutral': return {color: "#adadad"}
 				}
+			}
 		}).addTo(map);
-		
-        // L.geoJSON(data).addTo(map);
 
     </script>
 {% endblock %}
-
