@@ -14,7 +14,7 @@ class CaptureController extends Controller
 {
     public function indexAction(Request $request)
     {
-        
+        // var_dump("1 ".time());
         $encoder = $this->get('nzo_url_encryptor');
         
         // user coords
@@ -34,19 +34,20 @@ class CaptureController extends Controller
         $ttry = $request->request->get('ttry');
         $tbrx = $request->request->get('tbrx');
         $tbry = $request->request->get('tbry');
-        
+        // var_dump("2 ".time());
         $bBox = '['.$tblx.','.$tbly.'],['.$ttlx.','.$ttly.'],['.$ttrx.','.$ttry.'],['.$tbrx.','.$tbry.']';
-        // var_dump($bBox);die;
-        // var_dump($uLat);die;
+        // // var_dump($bBox);die;
+        // // var_dump($uLat);die;
        
         $a = $encoder->decrypt($request->request->get('a'));
         
         $form = $this->createForm(CaptureInterfaceType::class);
         
         $form->handleRequest($request);
-        
-        
+
+        // var_dump("3 ".time());
         if ($form->isSubmitted() && $form->isValid()) {
+            // var_dump("4 ".time());
             /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
                 $em = $this->get('neo4j.graph_manager')->getClient();
                 
@@ -59,8 +60,8 @@ class CaptureController extends Controller
                 $tLng = $request->request->get('tlng'); 
 
                 $bBox = $request->request->get('bBox');
-                
 
+            // var_dump("5 ".time());
                 $em_pgsql = $this->getDoctrine()->getManager();
                 $connection = $em_pgsql->getConnection();
                 $q=   " SELECT 
@@ -73,8 +74,8 @@ class CaptureController extends Controller
                 
                 $statement = $connection->prepare($q);
                 $statement->execute();
-                $results = $statement->fetchAll();   
-
+                $results = $statement->fetchAll();
+            // var_dump("6 ".time());
                 if(!$results || $results[0]['val'] === '0' || $results[0]['val'] === 0){                    
                     
                     // get potential resources
@@ -82,18 +83,8 @@ class CaptureController extends Controller
                     
                     $landcover = join(',', $landcover);
                     
-                    $em->clear(); 
+                    $em->clear();
 
-                    $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
-
-                    $sd = $user->getUserResource('stardust');
-                    $sda = $sd->getAmount();
-                    $sd->setAmount($sda+50);
-                    
-                    $et = $user->getUserResource('ethertoken');
-                    $eta = $et->getAmount();
-                    $et->setAmount($eta+1);                    
-                    
                     $q=   " SELECT 
                                 rid, 
                                 ST_Value(rast, 3, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat."),4326),2056),false) val 
@@ -104,64 +95,55 @@ class CaptureController extends Controller
                     
                     $statement = $connection->prepare($q);
                     $statement->execute();
-                    $results = $statement->fetchAll(); 
+                    $results = $statement->fetchAll();
+                    // var_dump("9 ".time());
                     
-                    // get the tile
+                    // get the tile and create the things
                     if($results[0]['val'] != -9999){
-                        $tile = $em->getRepository(Tile::class)->findOneBy('tid',$results[0]['val']);
+                        $tid=$results[0]['val'];
+                        $em->getDatabaseDriver()->run("match (s:Structure{name:'nova_xs'}),(u:User{uid:'".$this->getUser()->getUid()."'})-[hrs:HAS_RESOURCE]->(rs:Resources{name:'stardust'}), (u)-[hre:HAS_RESOURCE]->(re:Resources{name:'ethertoken'}), (t:Tile{tid:'".$tid."'}) create (u)-[c:CAPTURED{landcover:'".$landcover."', captured:'".time()."', collected:'".time()."'}]->(t) create (t)-[hs:HAS_STRUCTURE{hp:'10'}]->(s) set u.xp=(u.xp+4), hrs.amount=(hrs.amount+50), hre.amount=(hre.amount+1)");
                     }else{
                         $tokenGenerator=$this->get('tile.token_generator');
                         $tid=$tokenGenerator->generateTileToken(9);
-                        $tile = new Tile($tid,$results[0]['rid'], $tLat, $tLng, $bBox);
+                        $em->getDatabaseDriver()->run("match (s:Structure{name:'nova_xs'}), (u:User{uid:'".$this->getUser()->getUid()."'})-[hrs:HAS_RESOURCE]->(rs:Resources{name:'stardust'}), (u)-[hre:HAS_RESOURCE]->(re:Resources{name:'ethertoken'}) create (t:Tile{tid:'".$tid."', rid:'".$results[0]['rid']."', tLat:'".$tLat."', tLng:'".$tLng."', bBox:'".$bBox."'}), (u)-[c:CAPTURED{landcover:'".$landcover."', captured:'".time()."', collected:'".time()."'}]->(t), (t)-[hs:HAS_STRUCTURE{hp:'10'}]->(s) set u.xp=(u.xp+4), hrs.amount=(hrs.amount+50), hre.amount=(hre.amount+1)");
                     }
-                    
 
-                    $drone = $em->getRepository(Structure::class)->findOneBy('name','nova_xs');
-                    
-                    $tile->addTileStructure($drone);
 
-                    $user->addUserTile($tile, time(),time(), $landcover);
-
-                    $user->addXP(4);
-                    
-                    // $user->addUserTileLost($tile, time());
-                    
-                    
-                    $em->flush();          
-                    $em->clear(); 
-                  
                     $q=   " UPDATE 
                                 gameField 
                             SET 
-                                rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$user->getUint().")
+                                rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$this->getUser()->getUint().")
                             WHERE 
                                 ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
                    
                     $statement = $connection->prepare($q);
                     $statement->execute();
+                    // var_dump("12 ".time());
                     
                     $q=   " UPDATE 
                                 gameField 
                             SET 
-                                rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$user->getUserTeam()->getTeam()->getTid().")
+                                rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$this->getUser()->getUserTeam()->getTeam()->getTid().")
                             WHERE 
                                 ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
                    
                     $statement = $connection->prepare($q);
                     $statement->execute();
+                    // var_dump("13 ".time());
                     
                     $q=   " UPDATE 
                                 gameField 
                             SET 
-                                rast = ST_SetValue(rast,3,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$tile->getTid().")
+                                rast = ST_SetValue(rast,3,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),".$tid.")
                             WHERE 
                                 ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
                    
                     $statement = $connection->prepare($q);
                     $statement->execute();
+                    // var_dump("14 ".time());
+                    
 
-
-                    return $this->render('AppBundle:Capture:success.html.twig',array('user' => $user));
+                    return $this->render('AppBundle:Capture:success.html.twig',array('user' => $this->getUser()));
                 
                 }elseif($results[0]['val'] !== '0' || $results[0]['val'] !== 0){
                     $user = $this->getUser();

@@ -59,16 +59,12 @@ class AttackController extends Controller
             $cd = time()-($user->getPrimary()+10);
             if($cd>=0) {
                 $dmg = 20;
-                $fb->add('success', true);
-                $fb->add('success-message', $dmg . ' Schaden verursacht!');
                 $user->setPrimary(time());
             }
         }elseif($w === 'secondary'){
             $cd = time()-($user->getSecondary()+180);
             if($cd>=0) {
                 $dmg = 100;
-                $fb->add('success', true);
-                $fb->add('success-message', $dmg . ' Schaden verursacht!');
                 $user->setSecondary(time());
             }
         }else{
@@ -125,11 +121,14 @@ class AttackController extends Controller
                             return new RedirectResponse($url);
 
                         } else {
-
+                            $fb->add('success', true);
+                            $fb->add('success-message', $dmg . ' Schaden verursacht!');
                             $user->addXP(4);
                             $tile->removeTileStructure($ts);
                         }
                     } else {
+                        $fb->add('success', true);
+                        $fb->add('success-message', $dmg . ' Schaden verursacht!');
                         $ts->setHp($hpNew);
                     }
                 }

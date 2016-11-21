@@ -82,7 +82,7 @@
                                 <a href="{{ path('map') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Zurück</a>
                             </div>
                             <div class="col-md-6">  
-                                <button class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit">Bestätigen</button>
+                                <button id="capture-submit" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD; margin-left:0px !important" type="submit">Bestätigen</button>
                             </div>
                         </div>
                         {{ form_end(form) }}
@@ -92,4 +92,17 @@
          </div>
      </div>     
 {% endblock content %}
+{% block javascript %}
+{{  parent() }}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#capture-submit").click(function () {
+            setTimeout(function () { disableButton(); }, 0);
+        });
 
+        function disableButton() {
+            $("#capture-submit").prop('disabled', true);
+        }
+    });
+</script>
+{% endblock %}

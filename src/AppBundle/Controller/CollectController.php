@@ -41,6 +41,8 @@ class CollectController extends Controller
                             $bonus += 30;
                         }elseif($s->getName() == 'starport'){
                             $bonus += 50;
+                        }elseif($s->getName() == 'ethermine'){
+                            $bonus += 100;
                         }
                     }
 
@@ -69,6 +71,8 @@ class CollectController extends Controller
                         $bonus += 30;
                     }elseif($s->getName() == 'starport'){
                         $bonus += 50;
+                    }elseif($s->getName() == 'ethermine'){
+                        $bonus += 100;
                     }
                 }
                 $stardust = $user->getUserResource('stardust');
