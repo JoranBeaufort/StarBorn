@@ -21,6 +21,7 @@ class ConstructController extends Controller
     {
         $encoder = $this->get('nzo_url_encryptor');
 
+
         // user coords
         $uLat = $request->request->get('ulat');
         $uLng = $request->request->get('ulng');
@@ -69,22 +70,14 @@ class ConstructController extends Controller
                 }
             }
 
-            $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
-
             if($typeLocked == false) {
-                $tile->addTileStructure($structure);
-                $inventory =  $user->getUserInventory()->getInventory();
-                $blueprintInventory = $inventory->getBlueprintInventoryByBid($bid);
+                $nr = $em->getDatabaseDriver()->run("match (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."}), (t:Tile{tid:'" . $tid . "'}), (s:Structure{sid:".intval($sid)."}) create (t)-[hs:HAS_STRUCTURE]->(s) set hs.hp = s.hp, u.xp = (u.xp+6) return c.amount as amount");
 
-                if ($blueprintInventory->getAmount() <= 1) {
-                    $inventory->removeBlueprintInventory($blueprintInventory);
+                if (intval($nr->firstRecord()->get('amount')) <= 1) {
+                    $em->getDatabaseDriver()->run("match (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."}) delete c");
                 } else {
-                    $amount = $blueprintInventory->getAmount();
-                    $amountNew = $amount - 1;
-                    $blueprintInventory->setAmount($amountNew);
+                    $em->getDatabaseDriver()->run("match (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."}) set c.amount = (c.amount-1)");
                 }
-                $user->addXP(6);
-
 
                 // set flash messages
                 $fb = $this->get('session')->getFlashBag();
@@ -117,12 +110,7 @@ class ConstructController extends Controller
                 $buildable['building'] = true;
             }
 
-
-            $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
-            $em->flush();
-            $em->clear();
-
-            return $this->forward('AppBundle:Build:index',$_POST);
+            return $this->forward('AppBundle:Build:index');
 
         }else{
             throw new \Exception('IDs dont match. Uiuiui!');

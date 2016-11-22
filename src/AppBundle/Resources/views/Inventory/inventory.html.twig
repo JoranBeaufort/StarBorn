@@ -50,7 +50,19 @@
                         <!-- Trigger the modal with a button -->
                         <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
                     </h3>                    
-                    <div class="card-block text-xs-center">                        
+                    <div class="card-block text-xs-center">
+                        <div class="strike">
+                        <span>
+                           Meine Ressourcen
+                        </span>
+                        </div>
+                        <div class="row">
+                            {% for resource in user.getUserResources %}
+                                <div class="col-md-6">
+                                    <p style="color:{{resource.getResource.getIconColour }}">{{ resource.getResource.getName_DE }}: {{ resource.getAmount }} X <i style="color:{{ resource.getResource.getColour }} !important" class="fa {{ resource.getResource.getIcon }}"></i></p>
+                                </div>
+                            {% endfor %}
+                        </div>
 
                             {% if user.getUserInventory.getInventory.getBlueprintInventory|length == 0 %}
                         <div class="row">
@@ -139,18 +151,6 @@
                                     {% endfor %}
                                 </div>
                             {% endif %}
-                    </div>
-                    <div class="strike">
-                        <span>
-                           Meine Ressourcen
-                        </span>
-                    </div>
-                    <div class="row">
-                        {% for resource in user.getUserResources %}
-                        <div class="col-md-6">
-                            <p style="color:{{resource.getResource.getIconColour }}">{{ resource.getResource.getName_DE }}: {{ resource.getAmount }} X <i style="color:{{ resource.getResource.getColour }} !important" class="fa {{ resource.getResource.getIcon }}"></i></p>
-                        </div>
-                        {% endfor %}
                     </div>
                 </div>
             </div>

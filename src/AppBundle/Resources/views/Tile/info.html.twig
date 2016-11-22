@@ -52,7 +52,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div style="background-color:transparent" class="card text-xs-center">
-                                    {% if tile == null %}
+                                    {% if tile == null or  tile.getUserTile == null %}
                                         <div  style="background-color:transparent" class="card-header white-text">
                                             <div class="row">
                                                 <h3>Dieses Gebiet wurde noch nicht erobert. Nimm es schnell ein!</h3>

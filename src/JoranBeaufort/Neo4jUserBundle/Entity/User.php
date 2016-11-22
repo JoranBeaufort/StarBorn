@@ -454,6 +454,11 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->xp;
     }
 
+    public function setXP($xp)
+    {
+        $this->xp = $xp;
+    }
+
 
     public function addXP($amount)
     {

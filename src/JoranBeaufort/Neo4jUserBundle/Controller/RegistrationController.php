@@ -93,6 +93,7 @@ class RegistrationController extends Controller
                 $user->setIsCredentialsNonExpired(true);
                 $user->setUint($uint);
                 $user->setUid($uid);
+                $user->setXP(0);
                 $user->setRegistrationDateTime($dateTime);                  
                 
                 $inventory = new Inventory(20);

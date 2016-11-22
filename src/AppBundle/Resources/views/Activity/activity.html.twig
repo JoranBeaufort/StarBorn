@@ -67,22 +67,25 @@
                                     <div style="background-color:transparent" class="card-header white-text">
                                         {% for activity in activities %}
                                             <div class="row text-xs-center">
-                                                <div class="col-xs-5">
-                                                    {{ activity[0] | date }}
+                                                <div class="col-xs-2">
+                                                    {{ activity[4] | date("M. d H:i", "Europe/Zurich") }}
                                                 </div>
                                                 <div class="col-xs-5">
-                                                    {% if  activity[1] == 'captured' %}
-                                                    Gebiet eingenommen!
-                                                    {% elseif activity[1] == 'lost' %}
-                                                    Gebiet verloren!
+                                                    {{ activity[3] }}
+                                                </div>
+                                                <div class="col-xs-2">
+                                                    {% if  activity[0] == 'c' %}
+                                                        <i class="fa fa-flag fa-2x"></i>
+                                                    {% elseif activity[0] == 'l' %}
+                                                        <i class="fa fa-crosshairs fa-2x"></i>
                                                     {% endif %}
                                                 </div>
                                                 <div class="col-xs-2">
                                                     <form method="post" action="{{ path('tile')}}">
                                                         <input type="hidden" name="ulat" value="null">
                                                         <input type="hidden" name="ulng" value="null">
-                                                        <input type="hidden" name="tlat" value="{{ activity[2].getLat }}">
-                                                        <input type="hidden" name="tlng" value="{{ activity[2].getLng }}">
+                                                        <input type="hidden" name="tlat" value="{{ activity[1] }}">
+                                                        <input type="hidden" name="tlng" value="{{ activity[2] }}">
                                                         <input type="hidden" name="tblx" value="null">
                                                         <input type="hidden" name="tbly" value="null">
                                                         <input type="hidden" name="ttlx" value="null">

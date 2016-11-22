@@ -121,7 +121,6 @@ class AttackController extends Controller
         }else{
              throw new \Exception('IDs dont match. Uiuiui!');
         }
-        // set flash messages
         return $this->forward('AppBundle:Scan:index');
     }
 }
