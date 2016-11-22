@@ -21,7 +21,7 @@ class ConstructController extends Controller
     {
         $encoder = $this->get('nzo_url_encryptor');
 
-
+//var_dump("1: ".time());
         // user coords
         $uLat = $request->request->get('ulat');
         $uLng = $request->request->get('ulng');
@@ -32,7 +32,7 @@ class ConstructController extends Controller
         $sid = $request->request->get('sid');
 
         $a = $encoder->decrypt($request->request->get('a'));
-
+        //var_dump("2: ".time());
         // Get the node ID
         $em_pgsql = $this->getDoctrine()->getManager();
         $connection = $em_pgsql->getConnection();
@@ -47,7 +47,7 @@ class ConstructController extends Controller
         $statement = $connection->prepare($q);
         $statement->execute();
         $results = $statement->fetchAll();
-
+        //var_dump("3: ".time());
         if($results[0]['val'] == $tid){
             /**
              * @var $structure \AppBundle\Entity\Structure
@@ -55,12 +55,15 @@ class ConstructController extends Controller
              * @var $blueprint \AppBundle\Entity\Blueprint
              * @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User
              */
+            //var_dump("4: ".time());
 
             $em = $this->get('neo4j.graph_manager')->getClient();
             $em->clear();
+            //var_dump("5: ".time());
 
             $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
             $structure =  $em->getRepository(Structure::class)->findOneBy('sid',intval($sid));
+            //var_dump("6: ".time());
 
 
             $typeLocked = false;
@@ -69,15 +72,19 @@ class ConstructController extends Controller
                     $typeLocked = true;
                 }
             }
+            //var_dump("7: ".time());
+
 
             if($typeLocked == false) {
                 $nr = $em->getDatabaseDriver()->run("match (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."}), (t:Tile{tid:'" . $tid . "'}), (s:Structure{sid:".intval($sid)."}) create (t)-[hs:HAS_STRUCTURE]->(s) set hs.hp = s.hp, u.xp = (u.xp+6) return c.amount as amount");
+                //var_dump("8: ".time());
 
                 if (intval($nr->firstRecord()->get('amount')) <= 1) {
                     $em->getDatabaseDriver()->run("match (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."}) delete c");
                 } else {
-                    $em->getDatabaseDriver()->run("match (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."}) set c.amount = (c.amount-1)");
+                    $em->getDatabaseDriver()->run("match (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."}) set c.amount = (TOINT(c.amount)-TOINT(1))");
                 }
+                //var_dump("9: ".time());
 
                 // set flash messages
                 $fb = $this->get('session')->getFlashBag();
@@ -86,6 +93,11 @@ class ConstructController extends Controller
                 $fb->add('success-img',$structure->getImg());
 
             }
+            //var_dump("10: ".time());
+
+
+            $em->clear();
+            $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
 
             $structures = array('drone' => null, 'building' => null, 'shield' => null);
 
@@ -101,6 +113,7 @@ class ConstructController extends Controller
                     $structures['shield'] = $ts;
                 }
             }
+            //var_dump("11: ".time());
 
             $buildable = array('drone'=>null, 'building'=>null, 'shield'=>null);
 
@@ -109,9 +122,9 @@ class ConstructController extends Controller
             }elseif(count($tile->getTileStructures()) == 1){
                 $buildable['building'] = true;
             }
+            //var_dump("12: ".time());
 
             return $this->forward('AppBundle:Build:index');
-
         }else{
             throw new \Exception('IDs dont match. Uiuiui!');
         }

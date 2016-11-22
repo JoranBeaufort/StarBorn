@@ -13,6 +13,11 @@ class UpgradeController extends Controller
 {
     public function indexAction(Request $request)
     {
+        /*
+        if($this->getUser()->getUsername() != 'mfbaer'){
+            echo "work in progress on this page"; die;
+        }
+        */
         $encoder = $this->get('nzo_url_encryptor');
 
         // user coords
@@ -52,7 +57,6 @@ class UpgradeController extends Controller
 
             $em = $this->get('neo4j.graph_manager')->getClient();
             $em->clear();
-
             $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
             $structureNew =  $em->getRepository(Structure::class)->findOneBy('sid',intval($nid));
 
@@ -64,36 +68,22 @@ class UpgradeController extends Controller
             }
 
             if($upgradeable == true){
-                $structure =  $em->getRepository(Structure::class)->findOneBy('sid',intval($sid));
-                $em->getDatabaseDriver()->run("MATCH(t:Tile{tid:'".$tid."'})-[hs:HAS_STRUCTURE]->(s:Structure{type:'".$structure->getStructureType()."'}) DELETE hs");
+                $q = "MATCH (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."})-[:BUILDS]->(sn:Structure), (t:Tile{tid:'".$tid."'})-[hs:HAS_STRUCTURE]->(s:Structure{sid:".$sid."}) DELETE hs CREATE (t)-[hsn:HAS_STRUCTURE]->(sn) SET u.xp=(TOINT(u.xp)+6), hsn.hp=sn.hp, c.amount = (TOINT(c.amount)-1) return c.amount as amount";
+                $nr = $em->getDatabaseDriver()->run($q);
+                // var_dump($nr->firstRecord()->get('amount'));die;
 
-                $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
-
-                $structureNew =  $em->getRepository(Structure::class)->findOneBy('sid',intval($nid));
-
-                $tile->addTileStructure($structureNew);
-
-                $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
-
-                $blueprintInventory = $user->getUserInventory()->getInventory()->getBlueprintInventoryByBid($bid);
-
-                if ($blueprintInventory->getAmount() == 1) {
-                    $user->getUserInventory()->getInventory()->removeBlueprintInventory($blueprintInventory);
-                } else {
-                    $amount = $blueprintInventory->getAmount();
-                    $amountNew = $amount - 1;
-                    $blueprintInventory->setAmount($amountNew);
+                if (intval($nr->firstRecord()->get('amount')) < 1) {
+                    $em->getDatabaseDriver()->run("MATCH (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."}) DELETE c");
                 }
-                $user->addXP(6);
-
-
                 // set flash messages
                 $fb = $this->get('session')->getFlashBag();
                 $fb->add('success', true);
                 $fb->add('success-message', $structureNew->getName_DE() . ' wurde erfolgreich gebaut!');
                 $fb->add('success-img',$structureNew->getImg());
             }
+            $em->clear();
 
+            $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
             $structures = array('drone' => null, 'building' => null, 'shield' => null);
 
             foreach($tile->getTileStructures() as $ts){
@@ -117,12 +107,7 @@ class UpgradeController extends Controller
                 $buildable['building'] = true;
             }
 
-
-            $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
-            $em->flush();
-            $em->clear();
-
-            return $this->forward('AppBundle:Build:index',$_POST);
+            return $this->forward('AppBundle:Build:index');
 
         }else{
             throw new \Exception('IDs dont match. Uiuiui!');
