@@ -40,105 +40,88 @@ class AttackController extends Controller
         
         $statement = $connection->prepare($q);
         $statement->execute(); 
-        $results = $statement->fetchAll();  
-        
+        $team = $statement->fetchAll();
+
+        $q=   " SELECT 
+                    rid, 
+                    ST_Value(rast, 1, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat."),4326),2056),false) val 
+                FROM 
+                    gameField 
+                WHERE
+                    ST_Intersects(rast, 1, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat.") ,4326),2056))";
+
+        $statement = $connection->prepare($q);
+        $statement->execute();
+        $uint = intval($statement->fetchAll()[0]['val']);
+
+
         $em = $this->get('neo4j.graph_manager')->getClient();
         /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
         $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
 
-        if($results[0]['val'] == $tid){
-            $tile = $em->getRepository(Tile::class)->findOneBy('tid',$tid);
+        if($team[0]['val'] == $tid){
+            $fb = $this->get('session')->getFlashBag();
+
+            if($w === 'primary'){
+                $cd = time()-($user->getPrimary()+10);
+                if($cd>=0) {
+                    $dmg = 20;
+                    $user->setPrimary(time());
+                }
+            }elseif($w === 'secondary'){
+                $cd = time()-($user->getSecondary()+180);
+                if($cd>=0) {
+                    $dmg = 100;
+                    $user->setSecondary(time());
+                }
+            }else{
+                $dmg = 0;
+            }
+
+            if ($cd >= 0) {
+                $nr = $em->getDatabaseDriver()->run("match (t:Tile{tid:'" . $tid . "'})-[hs:HAS_STRUCTURE]->(s:Structure{type:'" . $t . "'}), (u:User{uid:'" . $this->getUser()->getUid() . "'}) set u.".$w." = ".time().", u.xp=(u.xp+1), hs.hp=(TOINT(hs.hp)-TOINT(".$dmg.")) return hs.hp as hp, s.img as img, t.tLat as lat, t.tLng as lng");
+
+                if($nr->firstRecord()->get('hp')<=0){
+
+                    if ($t == 'drone') {
+                        $q="MATCH(t:Tile{tid:'" . $tid . "'})-[hs:HAS_STRUCTURE]->(s:Structure{type:'drone'}), (u:User)-[c:CAPTURED]->(t), (u2:User{uid:'" . $this->getUser()->getUid() . "'}) WHERE TOINT(u.uint)=TOINT('".$uint."') DELETE hs SET u2.xp=(u2.xp+4), c.lost = " . time() . " WITH c call apoc.refactor.setType(c, 'LOST') yield input, output return false";
+                        $em->getDatabaseDriver()->run($q);
+                        $lat = $nr->firstRecord()->get('lat');
+                        $lng = $nr->firstRecord()->get('lng');
+                        $q = " UPDATE 
+                                    gameField 
+                                SET 
+                                    rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(" . $lng . "," . $lat . "),4326),2056),0)
+                                WHERE 
+                                    ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(" . $lng . "," . $lat . "),4326),2056));";
+
+                        $statement = $connection->prepare($q);
+                        $statement->execute();
+
+                        $q = " UPDATE 
+                                    gameField 
+                                SET 
+                                    rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(" . $lng . "," . $lat . "),4326),2056),0)
+                                WHERE 
+                                    ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(" . $lng . "," . $lat . "),4326),2056));";
+
+                        $statement = $connection->prepare($q);
+                        $statement->execute();
+
+                        $url = $this->generateUrl('map');
+                        return new RedirectResponse($url);
+                    }else{
+                        $em->getDatabaseDriver()->run("match (t:Tile{tid:'" . $tid . "'})-[hs:HAS_STRUCTURE]->(s:Structure{type:'" . $t . "'}), (u:User{uid:'" . $this->getUser()->getUid() . "'}) set u.xp=(u.xp+4) delete hs");
+                    }
+                }
+                $fb->add('success', true);
+                $fb->add('success-message', $dmg . ' Schaden verursacht!');
+                $fb->add('success-img', $nr->firstRecord()->get('img'));
+            }
         }else{
              throw new \Exception('IDs dont match. Uiuiui!');
         }
-
         // set flash messages
-        $fb = $this->get('session')->getFlashBag();
-
-        if($w === 'primary'){
-            $cd = time()-($user->getPrimary()+10);
-            if($cd>=0) {
-                $dmg = 20;
-                $user->setPrimary(time());
-            }
-        }elseif($w === 'secondary'){
-            $cd = time()-($user->getSecondary()+180);
-            if($cd>=0) {
-                $dmg = 100;
-                $user->setSecondary(time());
-            }
-        }else{
-            $dmg = 0;
-        }
-
-        foreach($tile->getTileStructures() as $ts) {
-            /* @var $ts \AppBundle\Entity\TileStructure */
-            if ($cd >= 0) {
-                if ($ts->getStructure()->getStructureType() == $t) {
-                    $structure = $ts->getStructure();
-
-                    $fb->add('success-img', $structure->getImg());
-                    $hp = $ts->getHp();
-                    $hpNew = $hp - $dmg;
-                    $user->addXP(1);
-                    if ($hpNew <= 0) {
-                        if ($t == 'drone') {
-
-                            $tLat = $tile->getLat();
-                            $tLng = $tile->getLng();
-
-                            $tileId = $tile->getTid();
-                            $userId = $tile->getUserTile()->getUser()->getUid();
-
-
-                            $em->getDatabaseDriver()->run("MATCH(t:Tile{tid:'" . $tileId . "'})-[hs:HAS_STRUCTURE]->(s:Structure{type:'drone'}), (u:User{uid:'" . $userId . "'})-[c:CAPTURED]->(t) DELETE hs SET c.lost = " . time() . " WITH c call apoc.refactor.setType(c, 'LOST') yield input, output return false");
-
-                            $q = " UPDATE 
-                                    gameField 
-                                SET 
-                                    rast = ST_SetValue(rast,2,ST_Transform(ST_SetSRID(ST_MakePoint(" . $tLng . "," . $tLat . "),4326),2056),0)
-                                WHERE 
-                                    ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(" . $tLng . "," . $tLat . "),4326),2056));";
-
-                            $statement = $connection->prepare($q);
-                            $statement->execute();
-
-                            $q = " UPDATE 
-                                    gameField 
-                                SET 
-                                    rast = ST_SetValue(rast,1,ST_Transform(ST_SetSRID(ST_MakePoint(" . $tLng . "," . $tLat . "),4326),2056),0)
-                                WHERE 
-                                    ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(" . $tLng . "," . $tLat . "),4326),2056));";
-
-                            $statement = $connection->prepare($q);
-                            $statement->execute();
-
-                            /* @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User */
-                            $user->addXP(4);
-
-
-                            $url = $this->generateUrl('map');
-                            return new RedirectResponse($url);
-
-                        } else {
-                            $fb->add('success', true);
-                            $fb->add('success-message', $dmg . ' Schaden verursacht!');
-                            $user->addXP(4);
-                            $tile->removeTileStructure($ts);
-                        }
-                    } else {
-                        $fb->add('success', true);
-                        $fb->add('success-message', $dmg . ' Schaden verursacht!');
-                        $ts->setHp($hpNew);
-                    }
-                }
-            }
-        }
-
-        $em->flush();
-        $em->clear();
-
         return $this->forward('AppBundle:Scan:index');
-
     }
 }
