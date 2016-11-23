@@ -147,12 +147,12 @@ class CaptureController extends Controller
                 
                 }elseif($results[0]['val'] !== '0' || $results[0]['val'] !== 0){
                     $user = $this->getUser();
-                    $tileUser = $em->getRepository(User::class)->findOneById(intval($results[0]['val']));                
+                    $tileUser = $em->getRepository(User::class)->findOneBy('uint',intval($results[0]['val']));
                     if($user ===  $tileUser){
                         $error = null;
                         $info = 'Dieses Gebiet gehört bereits dir!';     
                     }else{
-                        $error = 'Gebiet wurde bereits Eingenommen.';     
+                        $error = 'Gebiet wurde bereits Eingenommen.';
                         if($user->getUserTeam()->getTeam()->getTid() ===  $tileUser->getUserTeam()->getTeam()->getTid()){
                             $info = 'Dieses Gebiet gehört bereits deinem Team!';
                         }else{
@@ -180,7 +180,7 @@ class CaptureController extends Controller
             $results = $statement->fetchAll();   
             if($results[0]['val'] != '0' || $results[0]['val'] != 0){
                 $user = $this->getUser();
-                $tileUser = $em->getRepository(User::class)->findOneById(intval($results[0]['val']));                
+                $tileUser = $em->getRepository(User::class)->findOneBy('uint',intval($results[0]['val']));
                 if($user ===  $tileUser){
                     $error = null;
                     $info = 'Dieses Gebiet gehört bereits dir!';     
