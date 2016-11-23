@@ -123,6 +123,28 @@
                                 </div>
                             </div>
                         {% endif %}
+                        {% if app.session.flashbag.get('error') == true %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="card">
+                                        <div class="card-header  rgba-red-strong white-text">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <img  class="img-circle" style="background-color:white; border:solid #00C851; padding:10px; width:110px; height:110px" src="{{ asset(app.session.flashbag.get('error-img')[0]) }}"/>
+                                                </div>
+                                                <div class="col-md-10 text-xs-left">
+                                                    <div style="width:100%; border-radius:20px; padding:10px; height:80px" class="rgba-grey-light">
+                                                        <strong>Achtung!</strong><br>
+                                                        <p>{{ app.session.flashbag.get('error-message')[0] }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                         <div class="strike">
                         <span>
                            Meine Ressourcen

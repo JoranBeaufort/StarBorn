@@ -18,6 +18,11 @@ class BuyController extends Controller
          * @var $blueprint \AppBundle\Entity\Blueprint
          * @var $user \JoranBeaufort\Neo4jUserBundle\Entity\User
          */
+/*
+        if($this->getUser()->getUsername() != 'mfbaer'){
+            echo "I am currently working on this page and apologise for the inconvenience. Check back soon!"; die;
+        }
+*/
 
         $encoder = $this->get('nzo_url_encryptor');
 
@@ -30,35 +35,48 @@ class BuyController extends Controller
         $uid = $encoder->decrypt($request->request->get('a'));
 
         $em = $this->get('neo4j.graph_manager')->getClient();
+
         if ($uid == $this->getUser()->getUid()) {
+
             $user = $em->getRepository(User::class)->findOneBy('uid', $this->getUser()->getUid());
             $blueprint = $em->getRepository(Blueprint::class)->findOneBy('bid', intval($bid));
 
-
-            if ($user->getUserInventory()->getInventory()->getBlueprintInventoryByBid($bid) != null) {
-                // save new amount
-                $bi = $user->getUserInventory()->getInventory()->getBlueprintInventoryByBid($bid);
-                $biAmount = $bi->getAmount();
-                $bi->setAmount($biAmount + $amount);
-
-            } else {
-                $user->getUserInventory()->getInventory()->addBlueprintInventory($blueprint, $amount);
-            }
-
-            // save new resource amounts of user
+            $buyable = true;
+            $resAmount = array();
+            $resAmount['stardust'] = 0;
+            $resAmount['ethertoken'] = 0;
             foreach ($blueprint->getBlueprintResources() as $resource) {
                 $r = $user->getUserResource($resource->getResources()->getName());
                 $rAmount = $r->getAmount();
-                $r->setAmount($rAmount - ($resource->getAmount() * $amount));
-            }
-            $em->flush();
-            $em->clear();
+                $resAmount[$resource->getResources()->getName()] = intval($resource->getAmount()) * intval($amount);
+                if(intval($rAmount) - (intval($resource->getAmount()) * intval($amount)) < 0){
+                    $buyable = false;
+                }
 
-            // set flash messages
-            $fb = $this->get('session')->getFlashBag();
-            $fb->add('success', true);
-            $fb->add('success-message', $blueprint->getName_DE() . ' wurde erfolgreich gekauft!');
-            $fb->add('success-img','/img/toy-576520.svg');
+            }
+
+            if($buyable === true){
+
+                if ($user->getUserInventory()->getInventory()->getBlueprintInventoryByBid($bid) != null) {
+                    $q = "MATCH (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i)-[c:CONTAINS]->(b:Blueprint{bid:".$bid."}), (u)-[hrs:HAS_RESOURCE]->(rs:Resources{name:'stardust'}), (u)-[hre:HAS_RESOURCE]->(re:Resources{name:'ethertoken'}) SET hrs.amount = (TOINT(hrs.amount)-TOINT(".$resAmount['stardust'].")), hre.amount = (TOINT(hre.amount)-TOINT(".$resAmount['ethertoken'].")), c.amount = (TOINT(c.amount)+TOINT(".$amount."))";
+                    $em->getDatabaseDriver()->run($q);
+                } else {
+                    $q = "MATCH (u:User{uid:'".$this->getUser()->getUid()."'})-[:HAS_INVENTORY]->(i), (b:Blueprint{bid:".$bid."}), (u)-[hrs:HAS_RESOURCE]->(rs:Resources{name:'stardust'}), (u)-[hre:HAS_RESOURCE]->(re:Resources{name:'ethertoken'})  create (i)-[c:CONTAINS]->(b) SET hrs.amount = (TOINT(hrs.amount)-TOINT(".$resAmount['stardust'].")), hre.amount = (TOINT(hre.amount)-TOINT(".$resAmount['ethertoken'].")), c.amount = TOINT(".$amount.")";
+                    $em->getDatabaseDriver()->run($q);
+
+                }
+                // set flash messages
+                $fb = $this->get('session')->getFlashBag();
+                $fb->add('success', true);
+                $fb->add('success-message', $blueprint->getName_DE() . ' wurde erfolgreich gekauft!');
+                $fb->add('success-img','/img/toy-576520.svg');
+            }else{
+                // set flash messages
+                $fb = $this->get('session')->getFlashBag();
+                $fb->add('error', true);
+                $fb->add('error-message', 'Du hast nicht genügend Ressourcen um diese Menge zu kaufen!');
+                $fb->add('error-img','/img/toy-576520.svg');
+            }
 
             return $this->forward('AppBundle:Store:index');
         } else {
