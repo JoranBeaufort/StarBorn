@@ -41,7 +41,12 @@
                 <div class="modal-body text-xs-left ">
                     <div class="alert alert-info" role="alert">
                         <h4 class="modal-title">Zur Info:</h4>
-                        <p>Hier siehst du deine Aktivitäten</p>
+                        <p>Hier siehst du letzten Aktivitäten</p>
+                        <p>
+                            <i class="fa fa-flag fa-2x"></i> = Gebiet eingenommen
+                            <br>
+                            <i class="fa fa-ban fa-2x"></i> = Gebiet verloren
+                        </p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -77,7 +82,7 @@
                                                     {% if  activity[0] == 'c' %}
                                                         <i class="fa fa-flag fa-2x"></i>
                                                     {% elseif activity[0] == 'l' %}
-                                                        <i class="fa fa-crosshairs fa-2x"></i>
+                                                          <i class="fa fa-ban fa-2x"></i>
                                                     {% endif %}
                                                 </div>
                                                 <div class="col-xs-2">
