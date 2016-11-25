@@ -127,6 +127,8 @@ class AttackController extends Controller
         }else{
              throw new \Exception('IDs dont match. Uiuiui!');
         }
+        $em->clear();
+        // $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
         return $this->forward('AppBundle:Scan:index');
     }
 }

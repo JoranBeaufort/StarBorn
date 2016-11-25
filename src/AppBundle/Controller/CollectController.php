@@ -24,68 +24,75 @@ class CollectController extends Controller
          */
         $user = $em->getRepository(User::class)->findOneById($this->getUser()->getId());
 
+        $ethertoken = 0;
+        $stardust = 0;
+        $tidarray = array();
+
         if($tid === 'all'){
+
             foreach($user->getUserTiles() as $tile){
+
                 if ($tile->getUser()->getUid() == $a && $tile->getCollected() + 86400 < time()) {
-                    $tile->setCollected(time());
-                    $bonus = 0;
+                    array_push($tidarray,"'".$tile->getTile()->getTid()."'");
                     foreach($tile->getTile()->getTileStructures() as $tileStructure){
                         $s = $tileStructure->getStructure();
                         if($s->getName() == 'nova_s' || $s->getName() == 'neutron_shield'){
-                            $bonus += 5;
+                            $stardust += 5;
                         }elseif($s->getName() == 'nova_m' || $s->getName() == 'nova_l' || $s->getName() == 'electron_shield'){
-                            $bonus += 10;
+                            $stardust += 10;
                         }elseif($s->getName() == 'outpost' || $s->getName() == 'proton_shield'){
-                            $bonus += 20;
+                            $stardust += 20;
                         }elseif($s->getName() == 'infohub'){
-                            $bonus += 30;
+                            $stardust += 30;
                         }elseif($s->getName() == 'starport'){
-                            $bonus += 50;
+                            $stardust += 50;
+                        }elseif($s->getName() == 'starmine'){
+                            $stardust += 100;
                         }elseif($s->getName() == 'ethermine'){
-                            $bonus += 100;
+                            $stardust += 40;
+                            $ethertoken += 1;
                         }
                     }
-
-                    $stardust = $user->getUserResource('stardust');
-                    $sdamount = $stardust->getAmount();
-                    $stardust->setAmount($bonus + $sdamount + 40);
+                    $stardust += 40;
                 }
             }
-            $em->flush();
-            return $this->forward('AppBundle:Collector:index', $_POST);
         }else{
             $tile = $em->getRepository(Tile::class)->findOneBy('tid', $tid);
 
             if ($tile->getUserTile()->getUser()->getUid() == $a && $tile->getUserTile()->getCollected() + 86400 < time()) {
-                $tile->getUserTile()->setCollected(time());
-                $bonus = 0;
+                array_push($tidarray,"'".$tile->getTid()."'");
                 foreach($tile->getTileStructures() as $tileStructure){
                     $s = $tileStructure->getStructure();
                     if($s->getName() == 'nova_s' || $s->getName() == 'neutron_shield'){
-                        $bonus += 5;
+                        $stardust += 5;
                     }elseif($s->getName() == 'nova_m' || $s->getName() == 'nova_l' || $s->getName() == 'electron_shield'){
-                        $bonus += 10;
+                        $stardust += 10;
                     }elseif($s->getName() == 'outpost' || $s->getName() == 'proton_shield'){
-                        $bonus += 20;
+                        $stardust += 20;
                     }elseif($s->getName() == 'infohub'){
-                        $bonus += 30;
+                        $stardust += 30;
                     }elseif($s->getName() == 'starport'){
-                        $bonus += 50;
+                        $stardust += 50;
+                    }elseif($s->getName() == 'starmine'){
+                        $stardust += 100;
                     }elseif($s->getName() == 'ethermine'){
-                        $bonus += 100;
+                        $stardust += 40;
+                        $ethertoken += 1;
                     }
                 }
-                $stardust = $user->getUserResource('stardust');
-                $sdamount = $stardust->getAmount();
-                $stardust->setAmount($bonus + $sdamount + 40);
-            } else {
-
-                return $this->forward('AppBundle:Collector:index', $_POST);
+                $stardust += 40;
             }
-
-            $em->flush();
-            return $this->forward('AppBundle:Collector:index', $_POST);
         }
-        return $this->render('AppBundle:Collector:collect.html.twig',array('user' => $user));
+
+        if(intval($stardust) != 0){
+            $tids = join(',',$tidarray);
+            $q = "MATCH (u:User{uid:'".$this->getUser()->getUid()."'})-[c:CAPTURED]->(t:Tile) WHERE t.tid in [".$tids."] set c.collected = ".time();
+            $em->getDatabaseDriver()->run($q);
+            $q="match (u:User{uid:'".$this->getUser()->getUid()."'})-[hrs:HAS_RESOURCE]->(rs:Resources{name:'stardust'}), (u)-[hre:HAS_RESOURCE]->(re:Resources{name:'ethertoken'}) SET hrs.amount = (TOINT(hrs.amount)+TOINT(".$stardust.")), hre.amount = (TOINT(hre.amount)+TOINT(".$ethertoken."))";
+            $em->getDatabaseDriver()->run($q);
+        }
+
+
+        return $this->forward('AppBundle:Collector:index');
     }
 }

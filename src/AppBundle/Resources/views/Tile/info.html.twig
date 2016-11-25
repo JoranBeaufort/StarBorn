@@ -106,6 +106,25 @@
                                 <div class="col-xs-12">
                                     <div style="background-color:transparent" class="card text-xs-center ">
                                         <div style="background-color:transparent" class="card-header white-text">
+                                            {% if links['collect'] == true and tile.getUserTile.getUser == app.getUser %}
+                                                <hr>
+                                                <div class="row">
+                                                {% if tile.getUserTile.getTileCollected+3600 > 'now'|date('U') %}
+                                                    <div class="col-xs-6 col-md-offset-3">
+                                                        <a class="btn rgba-grey-strong btn-block" style="padding: 0px 5px 0px 0px; border-radius: 10px; background-color: #2BBBAD; margin-left:0px !important"><p class="countdown{{ tile.getTid }}"></p></a>
+                                                    </div>
+                                                {%  else %}
+                                                    <div class="col-xs-6  col-md-offset-3">
+                                                        <form method="post" action="{{  path('tile_collect') }}">
+                                                            <input type="hidden" name="tid" value="{{ tile.getTid }}">
+                                                            <input type="hidden" name="a" value="{{ user.getUid()|urlencrypt }}">
+                                                            <button class="btn btn-inverse btn-block" style="padding: 0px 5px 0px 0px; border-radius: 10px; background-color: #2BBBAD; margin-left:0px !important" type="submit"><p>Ressourcen einsammeln</p></button>
+                                                        </form>
+                                                    </div>
+                                                {% endif %}
+                                                </div>
+                                              <hr>
+                                            {% endif %}
                                             <div class="row">
                                                 {% for structure in structures %}
                                                     <div class="{% if structure.getStructure.getStructureType == 'building' and attackable['shield'] == null %} col-md-offset-2 {% elseif structure.getStructure.getStructureType == 'drone' and attackable['shield'] == null and attackable['building'] == null %} col-md-offset-4 {% endif %} col-md-4">
@@ -135,3 +154,43 @@
         </div>
     </div>
 {% endblock content %}
+{% block javascript %}
+    {{  parent() }}
+    <script>
+
+        $('.primarynocd').hide();
+        $('.secondarynocd').hide();
+        // Our countdown plugin takes a callback, a duration, and an optional message
+        $.fn.countdown = function (callback, duration, message) {
+            // If no message is provided, we use an empty string
+            message = message || "";
+            // Get reference to container, and set initial content
+            var container = $(this[0]).html("Erneut einsammeln in "+(duration/60).toFixed(0) + message);
+            // Get reference to the interval doing the countdown
+            var countdown = setInterval(function () {
+                // If seconds remain
+                if (--duration) {
+                    // Update our container's message
+                    container.html("Erneut einsammeln in "+(duration/60).toFixed(0) + message);
+                    // Otherwise
+                } else {
+                    // Clear the countdown interval
+                    clearInterval(countdown);
+                    // And fire the callback passing our container as `this`
+                    callback.call(container);
+                }
+                // Run interval every 1000ms (1 second)
+            }, 1000);
+
+        };
+
+        {% for userTile in  user.getUserTiles %}
+        $(".countdown{{ tile.getTid }}").countdown(redirect{{ tile.getTid }}, {{  (tile.getUserTile.getTileCollected+3600 - 'now'|date('U')) }} , "m");
+        // Use p.countdown as container, pass redirect, duration, and optional message
+        function redirect{{tile.getTid }} () {
+            $('.primarycd').hide();
+            $('.primarynocd').show();
+        }
+        {% endfor %}
+    </script>
+{% endblock javascript %}

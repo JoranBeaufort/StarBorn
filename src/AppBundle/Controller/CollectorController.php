@@ -13,7 +13,12 @@ class CollectorController extends Controller
 {
     public function indexAction(Request $request)
     {
-
+        /*
+        if($this->getUser()->getUsername() != 'mfbaer'){
+            echo "work in progress on this page"; die;
+        }
+        */
+        
         $em = $this->get('neo4j.graph_manager')->getClient();
         $em->clear();
 

@@ -21,23 +21,12 @@ class ScanController extends Controller
 {
     public function indexAction(Request $request)
     {    
-        $user = $this->getUser();               
-        
+
         $encoder = $this->get('nzo_url_encryptor');
         
         // user coords
         $uLat = $request->request->get('ulat');
         $uLng = $request->request->get('ulng');
-        
-        // tile centroid
-        $tLat = $request->request->get('tlat');
-        $tLng = $request->request->get('tlng');
-        
-        // tile BBOX
-        $tblx = $request->request->get('tblx');
-        $tbly = $request->request->get('tbly');
-        $ttrx = $request->request->get('ttrx');
-        $ttry = $request->request->get('ttry');
         
         $a = $encoder->decrypt($request->request->get('a'));
         
@@ -57,6 +46,8 @@ class ScanController extends Controller
         $results = $statement->fetchAll();  
         
         $em = $this->get('neo4j.graph_manager')->getClient();
+
+        $user = $em->getRepository(User::class)->findOneBy('uid',$this->getUser()->getUid());
         
         $tile = $em->getRepository(Tile::class)->findOneBy('tid', $results[0]['val']);
         

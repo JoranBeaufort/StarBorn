@@ -41,8 +41,15 @@ class UserTile
      * @var int
      */
      
-    protected $collected;            
-    
+    protected $collected;
+
+    /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+
+    protected $tileCollected;
+
     /**
      * @OGM\Property(type="string")
      * @var string
@@ -108,6 +115,20 @@ class UserTile
         return $this->collected;
     }
 
-        
-    
+    /**
+     * @var int $collected
+     */
+    public function setTileCollected($tileCollected)
+    {
+        $this->tileCollected = $tileCollected;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTileCollected()
+    {
+        return $this->tileCollected;
+    }
+
 }

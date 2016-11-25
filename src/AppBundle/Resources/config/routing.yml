@@ -79,6 +79,10 @@ tile:
     path:  /tile
     defaults: { _controller: AppBundle:Tile:index }
     
+tile_collect:
+    path:  /tile_collect
+    defaults: { _controller: AppBundle:Tile:collect }
+
 store:
     path:  /store
     defaults: { _controller: AppBundle:Store:index }
