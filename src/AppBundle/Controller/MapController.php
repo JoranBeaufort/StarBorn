@@ -56,7 +56,8 @@ class MapController extends Controller
                             ST_Y(b.BBOX_TR) as try, 
                             (b.UID).val as UID, 
                             (b.TID).val as TID, 
-                            (b.NID).val as NID 
+                            (b.NID).val as NID, 
+                            (b.TRE).val as TRE 
                         ) t                
                     ) as properties
                     FROM (
@@ -64,6 +65,7 @@ class MapController extends Controller
                             c.UID as UID,
                             c.TID as TID,
                             c.NID as NID,
+                            c.TRE as TRE,
                             ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-99,ST_Y((c.UID).geom)-99),2056),4326) AS BBOX_BL,
                             ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)+99,ST_Y((c.UID).geom)-99),2056),4326) AS BBOX_BR,
                             ST_Transform(ST_SetSRID(ST_MakePoint(ST_X((c.UID).geom)-99,ST_Y((c.UID).geom)+99),2056),4326) AS BBOX_TL,
@@ -72,7 +74,8 @@ class MapController extends Controller
                             SELECT
                                 (ST_PixelAsCentroids(u.r,1,false)) As UID,
                                 (ST_PixelAsCentroids(u.r,2,false)) As TID,
-                                (ST_PixelAsCentroids(u.r,3,false)) As NID
+                                (ST_PixelAsCentroids(u.r,3,false)) As NID,
+                                (ST_PixelAsCentroids(u.r,4,false)) As TRE
                             FROM(
                                 SELECT ST_Union(rast) as r
                                 FROM gameField

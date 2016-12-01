@@ -13,8 +13,14 @@ class OverviewController extends Controller
         $user=$this->getUser();
         $em = $this->get('neo4j.graph_manager')->getClient();
 
-        $tiles = $em->getRepository(Tile::class)->findAll();
-        
+        $result = $em->getDatabaseDriver()->run("match (m:Team)<-[:IN_TEAM]-(u:User)-[:CAPTURED]->(t:Tile) return t.bBox, m.name");
+
+        $tiles = array();
+        foreach($result->records() as $record){
+            array_push($tiles,$record->values());
+        }
+
+
         return $this->render(
             'AppBundle:Overview:overview.html.twig',array('user'=>$user, 'tiles' => $tiles)
         );

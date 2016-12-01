@@ -35,25 +35,14 @@ class CollectController extends Controller
                 if ($tile->getUser()->getUid() == $a && $tile->getCollected() + 86400 < time()) {
                     array_push($tidarray,"'".$tile->getTile()->getTid()."'");
                     foreach($tile->getTile()->getTileStructures() as $tileStructure){
+                        /**
+                         *  @var $s \AppBundle\Entity\Structure
+                         */
                         $s = $tileStructure->getStructure();
-                        if($s->getName() == 'nova_s' || $s->getName() == 'neutron_shield'){
-                            $stardust += 5;
-                        }elseif($s->getName() == 'nova_m' || $s->getName() == 'nova_l' || $s->getName() == 'electron_shield'){
-                            $stardust += 10;
-                        }elseif($s->getName() == 'outpost' || $s->getName() == 'proton_shield'){
-                            $stardust += 20;
-                        }elseif($s->getName() == 'infohub'){
-                            $stardust += 30;
-                        }elseif($s->getName() == 'starport'){
-                            $stardust += 50;
-                        }elseif($s->getName() == 'starmine'){
-                            $stardust += 100;
-                        }elseif($s->getName() == 'ethermine'){
-                            $stardust += 40;
-                            $ethertoken += 1;
-                        }
+                        $stardust += $s->getBsd();
+                        $ethertoken += $s->getBet();
                     }
-                    $stardust += 40;
+                    $stardust += 10;
                 }
             }
         }else{
@@ -63,24 +52,10 @@ class CollectController extends Controller
                 array_push($tidarray,"'".$tile->getTid()."'");
                 foreach($tile->getTileStructures() as $tileStructure){
                     $s = $tileStructure->getStructure();
-                    if($s->getName() == 'nova_s' || $s->getName() == 'neutron_shield'){
-                        $stardust += 5;
-                    }elseif($s->getName() == 'nova_m' || $s->getName() == 'nova_l' || $s->getName() == 'electron_shield'){
-                        $stardust += 10;
-                    }elseif($s->getName() == 'outpost' || $s->getName() == 'proton_shield'){
-                        $stardust += 20;
-                    }elseif($s->getName() == 'infohub'){
-                        $stardust += 30;
-                    }elseif($s->getName() == 'starport'){
-                        $stardust += 50;
-                    }elseif($s->getName() == 'starmine'){
-                        $stardust += 100;
-                    }elseif($s->getName() == 'ethermine'){
-                        $stardust += 40;
-                        $ethertoken += 1;
-                    }
+                    $stardust += $s->getBsd();
+                    $ethertoken += $s->getBet();
                 }
-                $stardust += 40;
+                $stardust += 10;
             }
         }
 

@@ -85,6 +85,44 @@ class CaptureController extends Controller
                     
                     $em->clear();
 
+                    $hreb=0;
+                    $hrsb=0;
+
+                    $q=   " SELECT 
+                                rid, 
+                                ST_Value(rast, 4, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat."),4326),2056),false) val 
+                            FROM 
+                                gameField 
+                            WHERE
+                                ST_Intersects(rast, 4, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat.") ,4326),2056))";
+
+                    $statement = $connection->prepare($q);
+                    $statement->execute();
+                    $results = $statement->fetchAll();
+
+                    if($results[0]['val'] == 1){
+                        $hreb=3;
+                        $hrsb=500;
+                    }elseif($results[0]['val'] == 2){
+                        $hreb=6;
+                        $hrsb=1500;
+                    }elseif($results[0]['val'] == 3) {
+                        $hreb = 10;
+                        $hrsb = 3000;
+                    }
+
+                if($results[0]['val'] != 0){
+                    $q=   " UPDATE 
+                                gameField 
+                            SET 
+                                rast = ST_SetValue(rast,4,ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056),0)
+                            WHERE 
+                                ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
+                    $statement = $connection->prepare($q);
+                    $statement->execute();
+                }
+
+
                     $q=   " SELECT 
                                 rid, 
                                 ST_Value(rast, 3, ST_Transform(ST_SetSRID(ST_MakePoint(".$uLng.",".$uLat."),4326),2056),false) val 
@@ -97,15 +135,15 @@ class CaptureController extends Controller
                     $statement->execute();
                     $results = $statement->fetchAll();
                     // var_dump("9 ".time());
-                    
+
                     // get the tile and create the things
                     if($results[0]['val'] != -9999){
                         $tid=$results[0]['val'];
-                        $em->getDatabaseDriver()->run("match (s:Structure{name:'nova_xs'}),(u:User{uid:'".$this->getUser()->getUid()."'})-[hrs:HAS_RESOURCE]->(rs:Resources{name:'stardust'}), (u)-[hre:HAS_RESOURCE]->(re:Resources{name:'ethertoken'}), (t:Tile{tid:'".$tid."'}) create (u)-[c:CAPTURED{landcover:'".$landcover."', captured:'".time()."', collected:'".time()."'}]->(t) create (t)-[hs:HAS_STRUCTURE{hp:'10'}]->(s) set u.xp=(u.xp+4), hrs.amount=(hrs.amount+50), hre.amount=(hre.amount+1)");
+                        $em->getDatabaseDriver()->run("match (s:Structure{name:'nova_xs'}),(u:User{uid:'".$this->getUser()->getUid()."'})-[hrs:HAS_RESOURCE]->(rs:Resources{name:'stardust'}), (u)-[hre:HAS_RESOURCE]->(re:Resources{name:'ethertoken'}), (t:Tile{tid:'".$tid."'}) create (u)-[c:CAPTURED{landcover:'".$landcover."', captured:'".time()."', collected:'".time()."'}]->(t) create (t)-[hs:HAS_STRUCTURE{hp:'10'}]->(s) set u.xp=(u.xp+4), hrs.amount=(hrs.amount+50+".$hrsb."), hre.amount=(hre.amount+1+".$hreb.")");
                     }else{
                         $tokenGenerator=$this->get('tile.token_generator');
                         $tid=$tokenGenerator->generateTileToken(9);
-                        $em->getDatabaseDriver()->run("match (s:Structure{name:'nova_xs'}), (u:User{uid:'".$this->getUser()->getUid()."'})-[hrs:HAS_RESOURCE]->(rs:Resources{name:'stardust'}), (u)-[hre:HAS_RESOURCE]->(re:Resources{name:'ethertoken'}) create (t:Tile{tid:'".$tid."', rid:'".$results[0]['rid']."', tLat:'".$tLat."', tLng:'".$tLng."', bBox:'".$bBox."'}), (u)-[c:CAPTURED{landcover:'".$landcover."', captured:'".time()."', collected:'".time()."'}]->(t), (t)-[hs:HAS_STRUCTURE{hp:'10'}]->(s) set u.xp=(u.xp+4), hrs.amount=(hrs.amount+50), hre.amount=(hre.amount+1)");
+                        $em->getDatabaseDriver()->run("match (s:Structure{name:'nova_xs'}), (u:User{uid:'".$this->getUser()->getUid()."'})-[hrs:HAS_RESOURCE]->(rs:Resources{name:'stardust'}), (u)-[hre:HAS_RESOURCE]->(re:Resources{name:'ethertoken'}) create (t:Tile{tid:'".$tid."', rid:'".$results[0]['rid']."', tLat:'".$tLat."', tLng:'".$tLng."', bBox:'".$bBox."'}), (u)-[c:CAPTURED{landcover:'".$landcover."', captured:'".time()."', collected:'".time()."'}]->(t), (t)-[hs:HAS_STRUCTURE{hp:'10'}]->(s) set u.xp=(u.xp+4), hrs.amount=(hrs.amount+50+".$hrsb."), hre.amount=(hre.amount+1+".$hreb.")");
                     }
 
 

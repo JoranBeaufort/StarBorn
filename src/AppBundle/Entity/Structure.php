@@ -58,6 +58,27 @@ class Structure
      */
      
     protected $name_DE;
+	
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+     
+    protected $desc;
+	
+    /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+     
+    protected $bsd;
+	
+    /**
+     * @OGM\Property(type="int")
+     * @var int
+     */
+     
+    protected $bet;
     
     /**
      * @OGM\Relationship(relationshipEntity="\AppBundle\Entity\TileStructure", type="HAS_STRUCTURE", direction="INCOMING", collection=true, mappedBy="structure")
@@ -100,6 +121,21 @@ class Structure
     public function getHp()
     {
         return $this->hp;
+    }
+
+    public function getDesc()
+    {
+        return $this->desc;
+    }
+
+    public function getBsd()
+    {
+        return $this->bsd;
+    }
+
+    public function getBet()
+    {
+        return $this->bet;
     }
     
     public function getName()

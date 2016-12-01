@@ -65,8 +65,8 @@ class AttackController extends Controller
             if($w === 'primary'){
                 $cd = time()-($user->getPrimary()+10);
                 if($cd>=0) {
-                    // $dmg = 20;
-                    $dmg = 40;
+                    $dmg = 20;
+                    // $dmg = 40;
                     if(intval($user->getLvl()) < 8){
                         $dmg = $dmg*1.5;
                     }
@@ -74,8 +74,8 @@ class AttackController extends Controller
             }elseif($w === 'secondary'){
                 $cd = time()-($user->getSecondary()+180);
                 if($cd>=0) {
-                    // $dmg = 100;
-                    $dmg = 200;
+                    $dmg = 100;
+                    // $dmg = 200;
                     if(intval($user->getLvl()) < 8){
                         $dmg = $dmg*1.5;
                     }

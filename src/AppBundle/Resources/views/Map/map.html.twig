@@ -529,6 +529,39 @@
 
                         }
 
+                        if(feature.properties.tre == 1){
+
+                            var treasureIcon = L.icon({
+                                iconUrl: '{{ asset('img/treasure/Gold Pot-96.png') }}',
+                                iconSize:     [40, 40], // size of the icon
+                                iconAnchor:   [20, 20], // point of the icon which will correspond to marker's location
+                            });
+
+                            var m = L.marker([coords.tLat,coords.tLng], {icon: treasureIcon}).addTo(map);
+                        }
+
+                        if(feature.properties.tre == 2){
+
+                            var treasureIcon = L.icon({
+                                iconUrl: '{{ asset('img/treasure/Treasure Chest-96.png') }}',
+                                iconSize:     [60, 60], // size of the icon
+                                iconAnchor:   [30, 30], // point of the icon which will correspond to marker's location
+                            });
+
+                            var m = L.marker([coords.tLat,coords.tLng], {icon: treasureIcon}).addTo(map);
+                        }
+
+                        if(feature.properties.tre == 3){
+
+                            var treasureIcon = L.icon({
+                                iconUrl: '{{ asset('img/treasure/Diamond-96.png') }}',
+                                iconSize:     [80, 80], // size of the icon
+                                iconAnchor:   [40, 40], // point of the icon which will correspond to marker's location
+                            });
+
+                            var m = L.marker([coords.tLat,coords.tLng], {icon: treasureIcon}).addTo(map);
+                        }
+
                         popupOptions = {maxWidth: 200};
                         if (uLat > coords.tbly && uLat < coords.ttry && uLng > coords.tblx && uLng < coords.ttrx) {
 

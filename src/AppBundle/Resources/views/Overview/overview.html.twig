@@ -32,10 +32,10 @@
         "geometry": {"type": "Point", "coordinates": [null, null]},
         "properties": {"team": null}
         }
-		{% for tile in tiles %}
+		{% for t in tiles %}
 		,{ "type": "Feature",
-        "geometry": {"type": "Polygon", "coordinates": [[{{ tile.getBBox }}]]},
-        "properties": {"team": "{% if tile.getUserTile != null %}{{ tile.getUserTile.getUser.getUserTeam.getTeam.getName }}{% else %}neutral{% endif %}"}
+        "geometry": {"type": "Polygon", "coordinates": [[{{ t[0] }}]]},
+        "properties": {"team": "{% if t[1] != null %}{{ t[1] }}{% else %}neutral{% endif %}"}
         }
 		{% endfor %}
        ]
