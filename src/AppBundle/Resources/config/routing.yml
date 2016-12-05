@@ -106,3 +106,7 @@ admin:
 admin_resetpg:
     path:  /admin/resetpg
     defaults: { _controller: AppBundle:Admin:resetpg }
+
+admin_addtreasure:
+    path:  /admin/addtreasure
+    defaults: { _controller: AppBundle:Admin:addTreasure }

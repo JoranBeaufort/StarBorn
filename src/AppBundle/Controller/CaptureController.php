@@ -101,14 +101,14 @@ class CaptureController extends Controller
                     $results = $statement->fetchAll();
 
                     if($results[0]['val'] == 1){
-                        $hreb=3;
-                        $hrsb=500;
-                    }elseif($results[0]['val'] == 2){
-                        $hreb=6;
+                        $hreb=5;
                         $hrsb=1500;
+                    }elseif($results[0]['val'] == 2){
+                        $hreb=10;
+                        $hrsb=3000;
                     }elseif($results[0]['val'] == 3) {
-                        $hreb = 10;
-                        $hrsb = 3000;
+                        $hreb = 15;
+                        $hrsb = 6000;
                     }
 
                 if($results[0]['val'] != 0){
@@ -120,6 +120,23 @@ class CaptureController extends Controller
                                 ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326),2056));";
                     $statement = $connection->prepare($q);
                     $statement->execute();
+
+                    $q=   " UPDATE
+                                treasure
+                            SET 
+                                timefound = ".time().",
+                                uint = ".$this->getUser()->getUint()."
+                            FROM    
+                               (SELECT treasure.*
+                                FROM treasure,
+                                  (select ST_SetSRID(ST_MakePoint(".$tLng.",".$tLat."),4326) as poi) as poi
+                                WHERE ST_DWithin(geom, poi, 300)
+                                ORDER BY ST_Distance(geom, poi)
+                                LIMIT 1) as u
+                            WHERE treasure.tid = u.tid";
+                    $statement = $connection->prepare($q);
+                    $statement->execute();
+
                 }
 
 

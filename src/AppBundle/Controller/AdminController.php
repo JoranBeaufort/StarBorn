@@ -84,4 +84,43 @@ class AdminController extends Controller
             );
         }
     }
+
+    public function addTreasureAction()
+    {
+        $em = $this->get('neo4j.graph_manager')->getClient();
+        $user = $em->getRepository(User::class)->findOneBy('usernameCanonical', $this->getUser()->getUsernameCanonical());
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $em = $this->getDoctrine()->getManager();
+            $connection = $em->getConnection();
+
+            for($i = 0; $i <=1000; $i++){
+                // Create random coords
+                $lng = 5.95587+((10.49203-5.95587)*(mt_rand(0, 32767)/32767));
+                $lat = 45.81802+((47.80838-45.81802)*(mt_rand(0, 32767)/32767));
+
+            // save treasure to gamefield
+            $q = "  UPDATE 
+                        gameField 
+                    SET 
+                        rast = ST_SetValue(rast,4,ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat."),4326),2056),3)
+                    WHERE 
+                        ST_Intersects(rast, ST_Transform(ST_SetSRID(ST_MakePoint(".$lng.",".$lat."),4326),2056));";
+            $statement = $connection->prepare($q);
+            $statement->execute();
+
+            // save treasure to log table
+            $q = "  INSERT INTO
+                        treasure (geom, timeset, timefound,tlvl)
+                    VALUES 
+                        (ST_SetSRID(ST_MakePoint(".$lng.",".$lat."),4326),".time().",0,3);";
+
+            $statement = $connection->prepare($q);
+            $statement->execute();
+            }
+            dump($lng.",".$lat);
+
+            return false;
+        }
+    }
 }

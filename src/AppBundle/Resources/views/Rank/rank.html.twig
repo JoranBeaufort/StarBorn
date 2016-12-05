@@ -194,6 +194,39 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="medal-alien" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-xs-center">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card rgba-stylish-light white-text">
+                                <div class="row" style="padding-top:10px;">
+                                    <img  class="img-circle" style="background-color:white; border:solid grey; margin-bottom:-75px; padding:10px; width:150px; height:150px" src="{{ asset('img/medals/Sci-Fi-96.png')}}"/>
+                                </div>
+                                <h3 style="padding-top:75px; margin-top:10px; margin-bottom:0px;" class="elegant-color card-header white-text"><strong>AUSSERIRDISCH!</strong></h3>
+                                <div  class="card-block elegant-color">
+                                    <div class="row">
+                                        Mehr als 800 Gebiete eingenommen!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="help" role="dialog">
@@ -291,7 +324,12 @@
                                         {% for key,value in ranklist %}
                                             <div class="row">
                                                 <div class="col-xs-4">
-                                                    {% if value[1] >= 500 %}
+                                                    {% if value[1] >= 800 %}
+                                                       {{ key+1 }} &nbsp;&nbsp;&nbsp;
+                                                        <a data-toggle="modal" data-target="#medal-alien">
+                                                            <img  class="img-circle" style="background-color:white; padding:1px; width:40px; height:40px" src="{{ asset('img/medals/Sci-Fi-96.png')}}"/>
+                                                        </a>
+                                                    {% elseif value[1] >= 500 %}
                                                        {{ key+1 }} &nbsp;&nbsp;&nbsp;
                                                         <a data-toggle="modal" data-target="#medal-legendar">
                                                             <img  class="img-circle" style="background-color:white; padding:1px; width:40px; height:40px" src="{{ asset('img/medals/Trophy-96.png')}}"/>
