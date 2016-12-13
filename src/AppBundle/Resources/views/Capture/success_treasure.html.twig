@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+{% block title %}Erfolg{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <!-- capture interface css -->
+    <style>
+
+        .main-content {
+            padding-bottom:80px;
+        }
+
+    </style>
+
+{% endblock css %}
+    {% block content %}
+
+        <!--Mask-->
+        <div class="container ">
+            <div class="row">
+                <div class="col-md-12 main-content" style="color:#fff" >
+                    <div style="background: rgba(44, 62, 80, 0.85);" class="card text-xs-center">
+                        <h3 style="background: rgba(44, 62, 80, 1)" class="card-header white-text">Gebiet erfolgreich eingenommen!&nbsp;&nbsp;
+                            <!-- Trigger the modal with a button -->
+                            <a style="color:white" data-toggle="modal" data-target="#help"><strong><i class="fa fa-question-circle" aria-hidden="true"></i></strong></a>
+                        </h3>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-3 text-xs-center">
+                                <img style="height:200px;" src="{{ asset('img/droid-153990.svg') }}">
+                            </div>
+                            <div class="col-xs-12 col-lg-8 text-xs-left">
+                                <br>
+                                <div class="bubble">
+                                    <h2>Du hast einen Schatz gefunden!</h2>
+                                    <div class="col-md-12 text-xs-center">
+                                        {% if treasure == 's' %}
+                                            <img src="{{ asset('img/treasure/Gold Pot-96.png') }}">
+                                        {% elseif treasure == 'm' %}
+                                            <img src="{{ asset('img/treasure/Treasure Chest-96.png') }}">
+                                        {% elseif treasure == 'l' %}
+                                            <img src="{{ asset('img/treasure/Diamond-96.png') }}">
+                                        {% endif %}
+                                    </div>
+                                    <h4> Gut gemacht {{ user.getScreenname }}!</h4>
+                                    <p>
+                                        Schätze enthalten die seltensten Elemente des Universums und sind sehr begehrt!
+                                        Das Sternenarchiv und dein Team sind dir dankbar!
+                                        Die Aufklärungsdrohne wurde erfolgreich kalibriert und ist nun auf dem Weg.
+                                    </p>
+                                    <p>
+                                        Du hast folgende Belohnung erhalten:<br>
+                                    {% if treasure == 's' %}
+                                        <p style="color:#fff">Sternenstaub: 1550 X <i style="color:#fdd835 !important" class="fa fa-star"></i></p>
+                                        <p style="color:#fff">Äthermarke: 6 X <i style="color:#69f0ae !important" class="fa fa-cubes"></i></p>
+                                        <p style="color:#fff">Erfahrungspunkte: <strong>4</strong></p>
+                                    {% elseif treasure == 'm' %}
+                                        <p style="color:#fff">Sternenstaub: 3050 X <i style="color:#fdd835 !important" class="fa fa-star"></i></p>
+                                        <p style="color:#fff">Äthermarke: 11 X <i style="color:#69f0ae !important" class="fa fa-cubes"></i></p>
+                                        <p style="color:#fff">Erfahrungspunkte: <strong>4</strong></p>
+                                    {% elseif treasure == 'l' %}
+                                        <p style="color:#fff">Sternenstaub: 6050 X <i style="color:#fdd835 !important" class="fa fa-star"></i></p>
+                                        <p style="color:#fff">Äthermarke: 15 X <i style="color:#69f0ae !important" class="fa fa-cubes"></i></p>
+                                        <p style="color:#fff">Erfahrungspunkte: <strong>4</strong></p>
+                                    {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="col-md-12">
+                            <a href="{{ path('map') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #2BBBAD ; margin-left:0px !important">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/.Mask-->
+    {% endblock content %}
+

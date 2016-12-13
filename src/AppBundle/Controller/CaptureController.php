@@ -77,7 +77,7 @@ class CaptureController extends Controller
                 $results = $statement->fetchAll();
             // var_dump("6 ".time());
                 if(!$results || $results[0]['val'] === '0' || $results[0]['val'] === 0){                    
-                    
+                    $treasure = null;
                     // get potential resources
                     $landcover = $form->get('landcover')->getData();
                     
@@ -103,12 +103,15 @@ class CaptureController extends Controller
                     if($results[0]['val'] == 1){
                         $hreb=5;
                         $hrsb=1500;
+                        $treasure = 's';
                     }elseif($results[0]['val'] == 2){
                         $hreb=10;
                         $hrsb=3000;
+                        $treasure = 'm';
                     }elseif($results[0]['val'] == 3) {
                         $hreb = 15;
                         $hrsb = 6000;
+                        $treasure = 'l';
                     }
 
                 if($results[0]['val'] != 0){
@@ -197,9 +200,11 @@ class CaptureController extends Controller
                     $statement->execute();
                     // var_dump("14 ".time());
                     
-
-                    return $this->render('AppBundle:Capture:success.html.twig',array('user' => $this->getUser()));
-                
+                    if($treasure){
+                        return $this->render('AppBundle:Capture:success_treasure.html.twig',array('user' => $this->getUser(),'treasure' => $treasure));
+                    }else{
+                        return $this->render('AppBundle:Capture:success.html.twig',array('user' => $this->getUser()));
+                    }
                 }elseif($results[0]['val'] !== '0' || $results[0]['val'] !== 0){
                     $user = $this->getUser();
                     $tileUser = $em->getRepository(User::class)->findOneBy('uint',intval($results[0]['val']));

@@ -430,6 +430,14 @@
             </div>
         </div>
     </div>
+    <div class="menu-toggle-wrap">
+        <div class="col-md-2 col-md-offset-5">
+        {% if app.user %}
+            <a href="{{ path('map') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Zurück</a>
+        {% else %}
+            <a href="{{ path('home') }}" class="btn btn-inverse btn-lg btn-block" style="border-radius: 20px; background-color: #e57373 ; margin-left:0px !important">Zurück</a>
+        {% endif %}
+            </div>
     </div>
 {% endblock content %}
 {% block navigation %}
